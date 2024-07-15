@@ -1,6 +1,6 @@
 # ARMATAK
 
-Arma 3 addons for streaming unit positions to TAK Clients
+Arma 3 addons for streaming unit positions to TAK Clients in sessions on real locations maps.
 
 ## Project Concept
 
