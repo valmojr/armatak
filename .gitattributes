@@ -1,0 +1,4 @@
+*.paa filter=lfs diff=lfs merge=lfs -text
+*.p3d filter=lfs diff=lfs merge=lfs -text
+*.jpeg filter=lfs diff=lfs merge=lfs -text
+*.png filter=lfs diff=lfs merge=lfs -text

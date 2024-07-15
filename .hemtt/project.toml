@@ -1,0 +1,43 @@
+author = "ARMATAK Team"
+mainprefix = "armatak"
+name = "ARMA Team Awareness Kit"
+prefix = "core"
+
+[version]
+path = "addons/main/script_version.hpp" # Default
+
+build = 0 # Optional
+major = 0 # Overrides path when set
+minor = 0 
+patch = 0 
+
+git_hash = 0 # Default: 8
+
+[files]
+exclude = [
+  "source/*",
+  "*.png",
+  "*.tga",
+  "*.psd",
+  "*.fbx",
+  "*.obj",
+]
+
+include = []
+
+[properties]
+author = "ARMATAK Team"
+url = "https://github.com/valmojr/armatak"
+
+[hemtt.config]
+preset = "Hemtt"
+
+[hemtt.launch]
+workshop = [
+  "450814997", # CBA_A3
+]
+
+[binarize]
+exclude = [
+  "*.jpg"
+]
