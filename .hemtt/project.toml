@@ -23,7 +23,11 @@ exclude = [
   "*.obj",
 ]
 
-include = []
+include = [
+  "LICENSE",
+  "*/*.dll",
+  "*/*.so"
+]
 
 [properties]
 author = "ARMATAK Team"
@@ -34,7 +38,14 @@ preset = "Hemtt"
 
 [hemtt.launch]
 workshop = [
-  "450814997", # CBA_A3
+  "450814997", # CBA
+]
+parameters = [
+  "-skipIntro",
+  "-noSplash",
+  "-showScriptErrors",
+  "-debug",
+  "-filePatching",
 ]
 
 [binarize]
