@@ -1,5 +1,5 @@
 class CfgPatches {
-  class braf_main {
+  class armatak_main {
     units[] = {""};
     weapons[] = {""};
     author = "ARMATAK Team";
