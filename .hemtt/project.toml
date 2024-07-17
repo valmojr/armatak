@@ -1,7 +1,7 @@
 author = "ARMATAK Team"
 mainprefix = "armatak"
 name = "ARMA Team Awareness Kit"
-prefix = "core"
+prefix = "armatak"
 
 [version]
 path = "addons/main/script_version.hpp" # Default
@@ -36,7 +36,7 @@ url = "https://github.com/valmojr/armatak"
 [hemtt.config]
 preset = "Hemtt"
 
-[hemtt.launch]
+[hemtt.launch.Default]
 workshop = [
   "450814997", # CBA
 ]
