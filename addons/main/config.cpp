@@ -8,6 +8,8 @@ class CfgPatches {
       {
         "cba_common"
       };
-    requiredVersion = 0.1;
+    requiredVersion = 0.5;
   };
 };
+
+#include "CfgCommands.hpp"
