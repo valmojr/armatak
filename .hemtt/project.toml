@@ -27,7 +27,7 @@ include = [
   "LICENSE",
   "*/*.dll",
   "*/*.so",
-  "files/*"
+  "files/*.paa"
 ]
 
 [properties]
