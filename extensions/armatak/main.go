@@ -5,75 +5,98 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"path"
+	"strings"
 
 	"github.com/indig0fox/a3go/a3interface"
 	"github.com/indig0fox/a3go/assemblyfinder"
+	"github.com/joho/godotenv"
 )
 
-// modulePath is the absolute path to the compiled DLL, which should be the addon folder
 var modulePath string = assemblyfinder.GetModulePath()
-
-// modulePathDir is the containing folder
 var modulePathDir string = path.Dir(modulePath)
 
-var EXTENSION_NAME = "STATS_LOGGER"
+var EXTENSION_NAME = "ARMATAK"
 
-var mission Mission
+var a3ErrorChannel chan []string = make(chan []string)
 
-var RVExtensionChannels = map[string]chan string{
-	":timeNow:": make(chan string),
+func main() {
+	fmt.Scanln()
 }
-
-var RVExtensionArgsChannels = map[string]chan []string{
-	":RESET:":   make(chan []string),
-	":MISSION:": make(chan []string),
-	":WIN:":     make(chan []string),
-	":PLAYER:":  make(chan []string),
-	":KILL:":    make(chan []string),
-	":SHOT:":    make(chan []string),
-	":HIT:":     make(chan []string),
-	":EXPORT:":  make(chan []string),
-	":FPS:":     make(chan []string),
-}
-
-var a3ErrorChan = make(chan error)
 
 func init() {
-	a3interface.SetVersion("1.0.0")
-	a3interface.RegisterRvExtensionArgsChannels(RVExtensionArgsChannels)
+	godotenv.Load(".env")
 
-	webhookURL := "YOUR_WEBHOOK_URL"
+	a3interface.SetVersion("0.0.0")
+	a3interface.RegisterErrorChan(a3ErrorChannel)
 
-	// Create the payload with the message
-	payload := DiscordPayload{
-		Content: "Hello World!",
+	a3interface.NewRegistration("ping").
+		SetDefaultResponse("[Received PING Command, starting background process]").
+		SetRunInBackground(true).
+		SetFunction(PingCommand).
+		SetArgsFunction(PingCommandArgs).
+		Register()
+}
+
+func PingCommand(
+	ctx a3interface.ArmaExtensionContext,
+	data string,
+) (string, error) {
+	dataSlice := strings.Split(data, "|")
+	dataSliceWithoutPrefix := dataSlice[1:]
+	for i, v := range dataSliceWithoutPrefix {
+		dataSliceWithoutPrefix[i] = a3interface.RemoveEscapeQuotes(v)
 	}
 
-	// Convert the payload to JSON format
+	s := fmt.Sprintf(ctx.SteamID + ` called the ping command to use the dll inside ` + ctx.ServerName + modulePathDir)
+
+	pingDiscord(s)
+	return s, nil
+}
+
+func PingCommandArgs(
+	ctx a3interface.ArmaExtensionContext,
+	command string,
+	args []string,
+) (string, error) {
+	for i, v := range args {
+		args[i] = a3interface.RemoveEscapeQuotes(v)
+	}
+
+	pingDiscord(strings.Join(args, " || "))
+
+	return fmt.Sprintf(`["Called by %s", %q, %q]`,
+		ctx.SteamID,
+		command,
+		args,
+	), nil
+}
+
+func pingDiscord(content string) {
+	webhookURL := os.Getenv("DISCORD_WEBHOOK")
+
+	payload := Payload{
+		Content:  content,
+		Username: "ARMATAK",
+	}
+
 	jsonData, err := json.Marshal(payload)
 	if err != nil {
 		fmt.Println("Error marshalling payload:", err)
 		return
 	}
 
-	// Create a POST request to the Discord webhook URL
 	req, err := http.Post(webhookURL, "application/json", bytes.NewReader(jsonData))
 	if err != nil {
 		fmt.Println("Error creating request:", err)
 		return
 	}
 
-	// Close the request body
 	defer req.Body.Close()
 
-	// Check the response status code
 	if req.StatusCode != http.StatusOK {
 		fmt.Println("Error sending request:", req.Status)
 		return
 	}
-}
-
-func main() {
-	fmt.Scanln()
 }
