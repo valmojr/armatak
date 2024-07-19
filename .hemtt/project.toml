@@ -4,14 +4,14 @@ name = "ARMA Team Awareness Kit"
 prefix = "armatak"
 
 [version]
-path = "addons/main/script_version.hpp" # Default
+path = "addons/main/script_version.hpp"
 
-build = 0 # Optional
-major = 0 # Overrides path when set
+build = 0
+major = 0
 minor = 0 
 patch = 0 
 
-git_hash = 0 # Default: 8
+git_hash = 0
 
 [files]
 exclude = [
