@@ -1,5 +1,4 @@
 const dllDir = HEMTT_RFS.join("extensions").join("armatak").join("dist");
-
 const dll = dllDir.join("armatak.dll");
 const dll_x64 = dllDir.join("armatak_x64.dll");
 
