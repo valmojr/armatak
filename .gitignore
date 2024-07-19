@@ -6,5 +6,5 @@ hemtt.exe
 source/
 .vscode
 releases/
-
+dist/
 *.env
