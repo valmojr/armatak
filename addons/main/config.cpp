@@ -13,3 +13,4 @@ class CfgPatches {
 };
 
 #include "CfgCommands.hpp"
+#include "CfgFunctions.hpp"
