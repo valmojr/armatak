@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
 	"path"
 	"strings"
 
@@ -51,7 +50,7 @@ func PingCommand(
 
 	s := fmt.Sprintf(ctx.SteamID + ` called the ping command to use the dll inside ` + ctx.ServerName + modulePathDir)
 
-	pingDiscord(s)
+	postRequest(s)
 	return s, nil
 }
 
@@ -64,7 +63,7 @@ func PingCommandArgs(
 		args[i] = a3interface.RemoveEscapeQuotes(v)
 	}
 
-	pingDiscord(strings.Join(args, " || "))
+	postRequest(strings.Join(args, " || "))
 
 	return fmt.Sprintf(`["Called by %s", %q, %q]`,
 		ctx.SteamID,
@@ -73,12 +72,11 @@ func PingCommandArgs(
 	), nil
 }
 
-func pingDiscord(content string) {
-	webhookURL := os.Getenv("DISCORD_WEBHOOK")
+func postRequest(content string) {
+	webhookURL := "http://localhost:3000/ping"
 
 	payload := Payload{
-		Content:  content,
-		Username: "ARMATAK",
+		Content: content,
 	}
 
 	jsonData, err := json.Marshal(payload)
