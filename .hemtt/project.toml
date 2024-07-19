@@ -37,10 +37,11 @@ url = "https://github.com/valmojr/armatak"
 [hemtt.config]
 preset = "Hemtt"
 
-[hemtt.launch.Default]
+[hemtt.launch.default]
 workshop = [
   "450814997", # CBA
 ]
+
 parameters = [
   "-skipIntro",
   "-noSplash",
