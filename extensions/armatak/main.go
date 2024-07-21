@@ -26,112 +26,111 @@ func init() {
 	a3interface.SetVersion("0.0.0")
 	a3interface.RegisterErrorChan(a3ErrorChannel)
 
-	//	ManageAPI/getHelp
 	a3interface.NewRegistration("ManageAPI/getHelp").
 		SetDefaultResponse("[Requested Get Help Command, starting background process]").
 		SetRunInBackground(false).
 		SetFunction(armatak_controller_ManageAPI_getHelp).
 		SetArgsFunction(armatak_controller_args_ManageAPI_getHelp).
 		Register()
-	//	ManageGeoObject/postGeoObject
+
 	a3interface.NewRegistration("ManageGeoObject/postGeoObject").
 		SetDefaultResponse("[Requested postGeoObject Command, starting background process]").
 		SetRunInBackground(false).
 		SetFunction(armatak_controller_ManageGeoObject_postGeoObject).
 		SetArgsFunction(armatak_controller_args_ManageGeoObject_postGeoObject).
 		Register()
-	//	ManageGeoObject/putGeoObject
+
 	a3interface.NewRegistration("ManageGeoObject/putGeoObject").
 		SetDefaultResponse("[Requested putGeoObject Command, starting background process]").
 		SetRunInBackground(false).
 		SetFunction(armatak_controller_ManageGeoObject_putGeoObject).
 		SetArgsFunction(armatak_controller_args_ManageGeoObject_putGeoObject).
 		Register()
-	//	ManageGeoObject/getGeoObject
+
 	a3interface.NewRegistration("ManageGeoObject/getGeoObject").
 		SetDefaultResponse("[Requested getGeoObject Command, starting background process]").
 		SetRunInBackground(false).
 		SetFunction(armatak_controller_ManageGeoObject_getGeoObject).
 		SetArgsFunction(armatak_controller_args_ManageGeoObject_getGeoObject).
 		Register()
-	//	ManageGeoObject/getGeoObjectByZone
+
 	a3interface.NewRegistration("ManageGeoObject/getGeoObjectByZone").
 		SetDefaultResponse("[Requested getGeoObjectByZone Command, starting background process]").
 		SetRunInBackground(false).
 		SetFunction(armatak_controller_ManageGeoObject_getGeoObjectByZone).
 		SetArgsFunction(armatak_controller_args_ManageGeoObject_getGeoObjectByZone).
 		Register()
-	//	ManageEmergency/postEmergency
+
 	a3interface.NewRegistration("ManageEmergency/postEmergency").
 		SetDefaultResponse("[Requested postEmergency Command, starting background process]").
 		SetRunInBackground(false).
 		SetFunction(armatak_controller_ManageEmergency_postEmergency).
 		SetArgsFunction(armatak_controller_args_ManageEmergency_postEmergency).
 		Register()
-	//	ManageEmergency/getEmergency
+
 	a3interface.NewRegistration("ManageEmergency/getEmergency").
 		SetDefaultResponse("[Requested getEmergency Command, starting background process]").
 		SetRunInBackground(false).
 		SetFunction(armatak_controller_ManageEmergency_getEmergency).
 		SetArgsFunction(armatak_controller_args_ManageEmergency_getEmergency).
 		Register()
-	//	ManageEmergency/deleteEmergency
+
 	a3interface.NewRegistration("ManageEmergency/deleteEmergency").
 		SetDefaultResponse("[Requested deleteEmergency Command, starting background process]").
 		SetRunInBackground(false).
 		SetFunction(armatak_controller_ManageEmergency_deleteEmergency).
 		SetArgsFunction(armatak_controller_args_ManageEmergency_deleteEmergency).
 		Register()
-	//	ManageChat/postChatToAll
+
 	a3interface.NewRegistration("ManageChat/postChatToAll").
 		SetDefaultResponse("[Requested postChatToAll Command, starting background process]").
 		SetRunInBackground(false).
 		SetFunction(armatak_controller_ManageChat_postChatToAll).
 		SetArgsFunction(armatak_controller_args_ManageChat_postChatToAll).
 		Register()
-	//	ManageRoute/postRoute
+
 	a3interface.NewRegistration("ManageRoute/postRoute").
 		SetDefaultResponse("[Requested postRoute Command, starting background process]").
 		SetRunInBackground(false).
 		SetFunction(armatak_controller_ManageRoute_postRoute).
 		SetArgsFunction(armatak_controller_args_ManageRoute_postRoute).
 		Register()
-	//	ManagePresence/postPresence
+
 	a3interface.NewRegistration("ManagePresence/postPresence").
 		SetDefaultResponse("[Requested postPresence Command, starting background process]").
 		SetRunInBackground(false).
 		SetFunction(armatak_controller_ManagePresence_postPresence).
 		SetArgsFunction(armatak_controller_args_ManagePresence_postPresence).
 		Register()
-	//	ManagePresence/putPresence
+
 	a3interface.NewRegistration("ManagePresence/putPresence").
 		SetDefaultResponse("[Requested putPresence Command, starting background process]").
 		SetRunInBackground(false).
 		SetFunction(armatak_controller_ManagePresence_putPresence).
 		SetArgsFunction(armatak_controller_args_ManagePresence_putPresence).
 		Register()
-	//	ManageVideoStream/postVideoStream
+
 	a3interface.NewRegistration("ManageVideoStream/postVideoStream").
 		SetDefaultResponse("[Requested postVideoStream Command, starting background process]").
 		SetRunInBackground(false).
 		SetFunction(armatak_controller_ManageVideoStream_postVideoStream).
 		SetArgsFunction(armatak_controller_args_ManageVideoStream_postVideoStream).
 		Register()
-	//	Sensor/postDrone
+
 	a3interface.NewRegistration("Sensor/postDrone").
 		SetDefaultResponse("[Requested postDrone Command, starting background process]").
 		SetRunInBackground(false).
 		SetFunction(armatak_controller_Sensor_postDrone).
 		SetArgsFunction(armatak_controller_args_Sensor_postDrone).
 		Register()
-	//	Sensor/postSPI
+
 	a3interface.NewRegistration("Sensor/postSPI").
 		SetDefaultResponse("[Requested postSPI Command, starting background process]").
 		SetRunInBackground(false).
 		SetFunction(armatak_controller_Sensor_postSPI).
 		SetArgsFunction(armatak_controller_args_Sensor_postSPI).
 		Register()
-	//	ManageKML/postKML
+
 	a3interface.NewRegistration("ManageKML/postKML").
 		SetDefaultResponse("[Requested postKML Command, starting background process]").
 		SetRunInBackground(false).
