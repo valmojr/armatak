@@ -21,6 +21,8 @@ func main() {
 }
 
 func init() {
+	fmt.Printf("Module Path Directory => " + modulePathDir)
+
 	godotenv.Load(".env")
 
 	a3interface.SetVersion("0.0.0")
