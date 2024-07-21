@@ -8,7 +8,8 @@ ARMATAK is a server side Arma 3 addons for streaming unit positions to TAK Clien
 
 ## Disclaimer
 
-If you read the Project concept, there is a obvious limitation on using ARMATAK: it converts the Arma 3 Map location to a real world location, so let's use the Arma 3 Vanilla Maps (Altis...) as an examples, whatever the map developer had done different for real life, won't be showed by your TAK client map imagery, and there are MANY changes to be done in Arma 3 maps just for gameplay proposes, even when simulating real locations.
+If you read the Project concept, there is a obvious limitation on using ARMATAK: it converts the Arma 3 Map location to a real world location, so let's use the Arma 3 Vanilla Maps (Altis...) as an examples, whatever the map developer had done different for real life, won't be showed by your TAK client map imagery, and there are MANY changes to be done in Arma 3 maps just for gameplay proposes, even when simulating real locations.  
+
 Another thing to consider is that each dedicated server also generates a FreeTAKServer instance, and the whole TAK environment is developed to give information for the client, not remove information, so by using ARMATAK, that points to a single FTS instance, you have to assume that every user will be displayed on the TAK platform, even the ones on the other side, and the other side will can connect just by using the same address as the dedicated server, i wish i can have a different approach that could make possible using ARMATAK on PvP sessions, but that is what we have for now.
 
 ## Getting Started
