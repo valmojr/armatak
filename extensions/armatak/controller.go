@@ -1,10 +1,6 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
-	"fmt"
-	"net/http"
 	"os"
 
 	"github.com/indig0fox/a3go/a3interface"
@@ -12,88 +8,12 @@ import (
 
 var FreeTAKServerURL = os.Getenv("FTS_URL")
 
-func sanitazeArgs(args []string) {
-	for i, v := range args {
-		args[i] = a3interface.RemoveEscapeQuotes(v)
-	}
-}
-
-func getRequest(route string) {
-	endpoint := FreeTAKServerURL + route
-
-	req, err := http.Get(endpoint)
-	if err != nil {
-		fmt.Println("Error creating request:", err)
-		return
-	}
-
-	defer req.Body.Close()
-
-	if req.StatusCode != http.StatusOK {
-		fmt.Println("Error sending request:", req.Status)
-		return
-	}
-}
-
-func postRequest(route string, body string) {
-	endpoint := FreeTAKServerURL + route
-
-	payload := Payload{
-		Content: body,
-	}
-
-	jsonData, err := json.Marshal(payload)
-	if err != nil {
-		fmt.Println("Error marshalling payload:", err)
-		return
-	}
-
-	req, err := http.Post(endpoint, "application/json", bytes.NewReader(jsonData))
-	if err != nil {
-		fmt.Println("Error creating request:", err)
-		return
-	}
-
-	defer req.Body.Close()
-
-	if req.StatusCode != http.StatusOK {
-		fmt.Println("Error sending request:", req.Status)
-		return
-	}
-}
-
-func putRequest(route string, body string) {
-	endpoint := FreeTAKServerURL + route
-
-	payload := Payload{
-		Content: body,
-	}
-
-	jsonData, err := json.Marshal(payload)
-	if err != nil {
-		fmt.Println("Error marshalling payload:", err)
-		return
-	}
-
-	req, err := http.Post(endpoint, "application/json", bytes.NewReader(jsonData))
-	if err != nil {
-		fmt.Println("Error creating request:", err)
-		return
-	}
-
-	defer req.Body.Close()
-
-	if req.StatusCode != http.StatusOK {
-		fmt.Println("Error sending request:", req.Status)
-		return
-	}
-}
-
 func armatak_controller_ManageAPI_getHelp(
 	ctx a3interface.ArmaExtensionContext,
 	data string,
 ) (string, error) {
-	return "a", nil
+
+	return armatak_service_ManageAPI_getHelp()
 }
 
 func armatak_controller_args_ManageAPI_getHelp(
@@ -101,7 +21,7 @@ func armatak_controller_args_ManageAPI_getHelp(
 	command string,
 	args []string,
 ) (string, error) {
-	return "a", nil
+	return armatak_service_ManageAPI_getHelp()
 }
 
 func armatak_controller_ManageGeoObject_postGeoObject(

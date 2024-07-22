@@ -1,6 +1,8 @@
 package main
 
-func armatak_service_ManageAPI_getHelp() {}
+func armatak_service_ManageAPI_getHelp() (string, error) {
+	return getRequest("manageAPI/getHelp")
+}
 
 func armatak_service_ManageGeoObject_postGeoObject() {}
 
