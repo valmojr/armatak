@@ -12,6 +12,8 @@ If you read the Project concept, there is a obvious limitation on using ARMATAK:
 
 Another thing to consider is that each dedicated server also generates a FreeTAKServer instance, and the whole TAK environment is developed to give information for the client, not remove information, so by using ARMATAK, that points to a single FTS instance, you have to assume that every user will be displayed on the TAK platform, even the ones on the other side, and the other side will can connect just by using the same address as the dedicated server, i wish i can have a different approach that could make possible using ARMATAK on PvP sessions, but that is what we have for now.
 
+The TAK ecosystem have a slow learning curve (so does Arma), some channels i recommend is The TAK Syndicate, Dirty Civilian and TRex Labs to start learning, i don't think it's the perfect tool for situation awareness, but is the best tool we have publicly available right now, just remember that you must focus on data feeds, packages, planning and map editing tools, that is what you will use on ARMATAK addon.
+
 ## Getting Started
 
 1. Add ARMATAK to the Mod Preset of your mission.
