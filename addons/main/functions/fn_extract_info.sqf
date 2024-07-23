@@ -1,14 +1,32 @@
+// function name: armatak_fnc_extract_info
+// function author: Valmo
+// function description: Receives a player's unit as param and return the information array needed to send the HTTP request 
+
 params["_unit"];
 
-// ATAK UTIL INFOS
-private _atak_uid = getPlayerUID _unit;			// ATAK Get Player UID
-private _atak_callsign = name _unit;			// ATAK Display Name
-private _atak_team_color = "team_color"; 		// ATAK Team Colors -> White, Yellow, Orange, Magenta, Red, Maroon, Purple, Dark Blue, Blue, Cyan, Teal, Green, Dark Green, Brown || Change it on every squad? make it customizable?
-private _atak_role = "role";					// ATAK Roles -> Team Member, Team Lead, HQ, Sniper, Medic, Forward Observer, RTO, K9
-private _atak_display_type = "display_type";	// ATAK Display Types -> Ground Troop, Armored Vehicle, Civilian Vehicle, Generic Air Unit, Generic Ground Unit, Generic Sea Surface Unit
-private _atak_location = worldName;				// ATAK Location in Real World -> Already stored in a database or array
-private _atak_position = getPos _unit;			// ATAK Position -> Converted Arma 3 XYZ Coords to Geographic Coords
+private _atak_uid = getPlayerUID _unit;
+private _atak_callsign = [_unit] call armatak_fnc_extract_callsign;
+private _atak_bearing = getDir _unit;
+private _atak_team_color = "team_color";
+private _atak_role = [_unit] call armatak_fnc_extract_role;
+private _atak_location = worldName;
+private _atak_position = getPos _unit;
 
-_unit_info = [_atak_uid, _atak_callsign, _atak_team_color, _atak_role, _atak_display_type, _atak_location, _atak_position];
+/*
+desired object
+{
+  "longitude": -77.0104,
+  "latitude": 38.889,
+  "attitude": "hostile",
+  "bearing": 132, getDir function
+  "geoObject": "Gnd Combat Infantry Sniper", extract_role function
+  "how": "nonCoT", -- default and won't change
+  "name": "Putin",
+  "timeout": 600  
+}
+*/
+
+
+_unit_info = [_atak_uid, _atak_callsign, _atak_bearing ,_atak_team_color, _atak_role, _atak_display_type, _atak_location, _atak_position];
 
 _unit_info
