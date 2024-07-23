@@ -21,46 +21,48 @@ func getRequest(route string) (string, error) {
 
 	req, err := http.Get(endpoint)
 	if err != nil {
-		return "", fmt.Errorf("Error creating request: %w", err)
+		return "", fmt.Errorf("getting Error creating request: %w", err)
 	}
 
 	defer req.Body.Close()
 
 	if req.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("Error sending request: %w", req.Status)
+		return "", fmt.Errorf("getting Error sending request " + req.Status)
 	}
 
 	body, err := io.ReadAll(req.Body)
 	if err != nil {
-		return "", fmt.Errorf("Error reading response body: %w", err)
+		return "", fmt.Errorf("getting Error reading response body %w", err)
 	}
 
 	return string(body), nil
 }
 
-func postRequest(route string, body string) {
-	endpoint := FreeTAKServerURL + route
+func postRequest(route string, body any) (string, error) {
+	jsonData, err := json.Marshal(body)
 
-	payload := Payload{
-		Content: body,
-	}
-
-	jsonData, err := json.Marshal(payload)
 	if err != nil {
 		fmt.Println("Error marshalling payload:", err)
-		return
+		return "", err
 	}
 
-	req, err := http.Post(endpoint, "application/json", bytes.NewReader(jsonData))
+	req, err := http.Post(route, "application/json", bytes.NewReader(jsonData))
 	if err != nil {
 		fmt.Println("Error creating request:", err)
-		return
+		return "", err
 	}
 
 	defer req.Body.Close()
 
 	if req.StatusCode != http.StatusOK {
 		fmt.Println("Error sending request:", req.Status)
-		return
+		return "", nil
 	}
+
+	parsedBody, err := io.ReadAll(req.Body)
+	if err != nil {
+		return "", fmt.Errorf("getting Error reading response body: %w", err)
+	}
+
+	return string(parsedBody), nil
 }
