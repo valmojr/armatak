@@ -17,7 +17,7 @@ class CfgFunctions {
 				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_extract_side.sqf";
 			};
 			class extract_info {
-				file = "\armatak\armatak\armatak_main\functions\fn_extract_info.sqf";
+				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_extract_info.sqf";
 			};
 
 			class convert_location {
