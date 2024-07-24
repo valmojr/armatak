@@ -7,8 +7,8 @@ type Payload struct {
 
 type GeoObject struct {
 	UID       string  `json:"uid,omitempty"`
-	Longitude float32 `json:"longitude"`
-	Latitude  float32 `json:"latitude"`
+	Longitude float64 `json:"longitude"`
+	Latitude  float64 `json:"latitude"`
 	Attitude  string  `json:"attitude"`
 	Bearing   int     `json:"bearing,omitempty"`
 	Distance  int     `json:"distance,omitempty"`
