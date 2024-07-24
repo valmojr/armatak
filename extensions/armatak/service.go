@@ -7,32 +7,35 @@ func armatak_service_ManageAPI_getHelp() (string, error) {
 }
 
 func armatak_service_ManageGeoObject_postGeoObject(args []string) (string, error) {
-	longitude, longitudeError := strconv.ParseFloat(args[1], 32)
+	sanitazeArgs(args)
 
-	if longitudeError != nil {
-		return "", longitudeError
-	}
-
-	latitude, latitudeError := strconv.ParseFloat(args[2], 32)
+	latitude, latitudeError := strconv.ParseFloat(args[1], 32)
 
 	if latitudeError != nil {
 		return "", latitudeError
 	}
 
-	bearing, bearingError := strconv.Atoi(args[3])
+	longitude, longitudeError := strconv.ParseFloat(args[2], 32)
+
+	if longitudeError != nil {
+		return "", longitudeError
+	}
+
+	bearing, bearingError := strconv.ParseFloat(args[4], 32)
 
 	if bearingError != nil {
 		return "", bearingError
 	}
 
 	payload := GeoObject{
-		UID:       args[0],
-		Longitude: float32(longitude),
-		Latitude:  float32(latitude),
-		Attitude:  "friendly",
-		Bearing:   bearing,
-		GeoObject: args[4],
-		Name:      args[5],
+		Longitude: longitude,
+		Latitude:  latitude,
+		Attitude:  args[3],
+		Bearing:   int(bearing),
+		GeoObject: args[5],
+		How:       "nonCoT",
+		Name:      args[6],
+		Timeout:   600,
 	}
 
 	return postRequest("http://localhost:3000/ManageGeoObject/postGeoObject", payload)
