@@ -40,26 +40,37 @@ func getRequest(route string) (string, error) {
 
 func postRequest(route string, body any) (string, error) {
 	jsonData, err := json.Marshal(body)
-
 	if err != nil {
 		fmt.Println("Error marshalling payload:", err)
 		return "", err
 	}
 
-	req, err := http.Post(route, "application/json", bytes.NewReader(jsonData))
+	client := &http.Client{}
+
+	req, err := http.NewRequest(http.MethodPost, route, bytes.NewReader(jsonData))
 	if err != nil {
 		fmt.Println("Error creating request:", err)
 		return "", err
 	}
 
-	defer req.Body.Close()
+	req.Header.Set("Content-Type", "application/json")
 
-	if req.StatusCode != http.StatusOK {
-		fmt.Println("Error sending request:", req.Status)
+	req.Header.Set("Authorization", "Bearer token")
+
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Println("Error sending request:", err)
+		return "", err
+	}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		fmt.Println("Error sending request:", resp.Status)
 		return "", nil
 	}
 
-	parsedBody, err := io.ReadAll(req.Body)
+	parsedBody, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return "", fmt.Errorf("getting Error reading response body: %w", err)
 	}
