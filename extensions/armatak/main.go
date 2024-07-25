@@ -2,12 +2,10 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"path"
 
 	"github.com/indig0fox/a3go/a3interface"
 	"github.com/indig0fox/a3go/assemblyfinder"
-	"github.com/joho/godotenv"
 )
 
 var modulePath string = assemblyfinder.GetModulePath()
@@ -23,20 +21,6 @@ func main() {
 
 func init() {
 	fmt.Printf("Module Path Directory => " + modulePathDir)
-
-	err := godotenv.Load()
-	if err != nil {
-		fmt.Println("Error loading .env file:", err)
-	} else {
-		fmt.Println(".env file loaded successfully")
-	}
-
-	FTS_URL := os.Getenv("FTS_URL")
-	if FTS_URL == "" {
-		fmt.Println("FTS_URL not found in environment variables or .env file (if used).")
-	} else {
-		fmt.Println("FTS URL:", FTS_URL)
-	}
 
 	a3interface.SetVersion("0.0.0")
 	a3interface.RegisterErrorChan(a3ErrorChannel)
