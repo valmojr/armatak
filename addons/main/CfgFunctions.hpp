@@ -1,12 +1,10 @@
 class CfgFunctions {
 	class Armatak {
 		class functions {
-			class core {
-				file = "\armatak\armatak\armatak_main\functions\fn_core.sqf";
-			};
 			class init {
 				file = "\armatak\armatak\armatak_main\functions\fn_init.sqf";
 			};
+
 			class extract_callsign {
 				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_extract_callsign.sqf";
 			};
@@ -25,6 +23,13 @@ class CfgFunctions {
 			};
 			class convert_to_altis {
 				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_altis.sqf";
+			};
+
+			class postGeoObject {
+				file = "\armatak\armatak\armatak_main\functions\api\fn_postGeoObject.sqf";
+			};
+			class putGeoObject {
+				file = "\armatak\armatak\armatak_main\functions\api\fn_putGeoObject.sqf";
 			};
 		};
 	};
