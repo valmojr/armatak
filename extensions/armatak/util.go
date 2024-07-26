@@ -38,7 +38,7 @@ func getRequest(route string) (string, error) {
 	return string(body), nil
 }
 
-func postRequest(route string, body any) (string, error) {
+func postRequest(route string, body any, token string) (string, error) {
 	jsonData, err := json.Marshal(body)
 	if err != nil {
 		fmt.Println("Error marshalling payload:", err)
@@ -55,7 +55,7 @@ func postRequest(route string, body any) (string, error) {
 
 	req.Header.Set("Content-Type", "application/json")
 
-	req.Header.Set("Authorization", "Bearer token")
+	req.Header.Set("Authorization", "Bearer "+token)
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -78,7 +78,7 @@ func postRequest(route string, body any) (string, error) {
 	return string(parsedBody), nil
 }
 
-func putRequest(route string, body any) (string, error) {
+func putRequest(route string, body any, token string) (string, error) {
 	jsonData, err := json.Marshal(body)
 	if err != nil {
 		fmt.Println("Error marshalling payload:", err)
@@ -95,7 +95,7 @@ func putRequest(route string, body any) (string, error) {
 
 	req.Header.Set("Content-Type", "application/json")
 
-	req.Header.Set("Authorization", "Bearer token")
+	req.Header.Set("Authorization", "Bearer "+token)
 
 	resp, err := client.Do(req)
 	if err != nil {
