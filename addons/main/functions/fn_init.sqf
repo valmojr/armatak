@@ -1,9 +1,21 @@
-// 1. Create FreeTAKServer instance
-// ....
-if (!isServer) exitWith {};
+if ((!isServer) && (player != player)) then {
+	waitUntil {
+		player == player
+	};
+};
 
-private _armatak_fts_server_url = "armatak" callExtension ["init",[]];
+if (isDedicated) exitWith {};
 
-if (!_armatak_fts_server_url) exitWith {};
-
-missionNamespace setVariable ["armatak_fts_server_url", _armatak_fts_server_url];
+if (player != player) then {
+	waitUntil {
+		player == player
+	};
+};
+ 
+{
+	[{if (_x getVariable "_atak_uid" == "") then {
+		[_x] call armatak_fnc_postGeoObject;
+	} else {
+		[_x] call armatak_fnc_putGeoObject;
+	}},0,[]] call CBA_fnc_addPerFrameHandler;
+} forEach playableUnits;
