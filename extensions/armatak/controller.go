@@ -43,14 +43,14 @@ func armatak_controller_ManageGeoObject_putGeoObject(
 	ctx a3interface.ArmaExtensionContext,
 	data string,
 ) (string, error) {
-	return "a", nil
+	return "You must use the armatak_fnc_extract_info function as param", nil
 }
 func armatak_controller_args_ManageGeoObject_putGeoObject(
 	ctx a3interface.ArmaExtensionContext,
 	command string,
 	args []string,
 ) (string, error) {
-	return "a", nil
+	return armatak_service_ManageGeoObject_putGeoObject(args)
 }
 
 func armatak_controller_ManageGeoObject_getGeoObject(
