@@ -12,9 +12,9 @@ private _atak_side = [_unit] call armatak_fnc_extract_side;
 private _atak_bearing = parseNumber ((getDir _unit) toFixed 0);
 private _atak_role = [_unit] call armatak_fnc_extract_role;
 private _atak_callsign = [_unit] call armatak_fnc_extract_callsign;
-private _atak_server_instance = missionNamespace getVariable ["_atak_server_instance"];
-private _atak_server_instance_token = missionNamespace getVariable ["_atak_server_instance_token"];
+private _atak_server_instance = missionNamespace getVariable "_atak_server_instance";
+private _atak_server_instance_token = missionNamespace getVariable "_atak_server_instance_token";
 
-_unit_info = [_atak_uid, _atak_latitude, _atak_longitude, _atak_side, _atak_bearing, _atak_role, _atak_callsign, _atak_server_instance];
+_unit_info = [_atak_uid, _atak_latitude, _atak_longitude, _atak_side, _atak_bearing, _atak_role, _atak_callsign, _atak_server_instance, _atak_server_instance_token];
 
 _unit_info
