@@ -2,14 +2,9 @@ package main
 
 import (
 	"fmt"
-	"path"
 
 	"github.com/indig0fox/a3go/a3interface"
-	"github.com/indig0fox/a3go/assemblyfinder"
 )
-
-var modulePath string = assemblyfinder.GetModulePath()
-var modulePathDir string = path.Dir(modulePath)
 
 var EXTENSION_NAME = "ARMATAK"
 
@@ -20,8 +15,6 @@ func main() {
 }
 
 func init() {
-	fmt.Printf("Module Path Directory => " + modulePathDir)
-
 	a3interface.SetVersion("0.0.0")
 	a3interface.RegisterErrorChan(a3ErrorChannel)
 
