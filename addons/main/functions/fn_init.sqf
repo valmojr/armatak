@@ -15,15 +15,18 @@ if (_activated) exitWith {
 	_atak_fts_fulladdress = _atak_fts_protocol + ":" + "/" + "/" + _atak_fts_address + ":" + (str _atak_fts_port);
 	_atak_fts_bearer_token = _logic getVariable "armatak_module_fts_api_instance_token";
 
-	missionNamespace setVariable ["_atak_server_instance",_atak_fts_fulladdress];
-	missionNamespace setVariable ["_atak_server_instance_token",_atak_fts_bearer_token];
+	missionNamespace setVariable ["_atak_server_instance", _atak_fts_fulladdress];
+	missionNamespace setVariable ["_atak_server_instance_token", _atak_fts_bearer_token];
 
-	[{
-		_uid = _x getVariable "_atak_uid";
-		if (isNull _uid) then {
-			player call armatak_fnc_postGeoObject;
-		} else {
-			player call armatak_fnc_putGeoObject;
-		};
-	},2,[]] call CBA_fnc_addPerFrameHandler;
+	{
+		[{
+			_uid = _x getVariable "_atak_uid";
+
+			if (isNull _uid) then {
+				_x call armatak_fnc_postGeoObject;
+			} else {
+				_x call armatak_fnc_putGeoObject;
+			};
+		}, 2, []] call CBA_fnc_addPerFrameHandler;
+	} forEach playableUnits;
 };
