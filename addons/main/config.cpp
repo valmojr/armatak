@@ -1,6 +1,6 @@
 class CfgPatches {
   class armatak_main {
-    units[] = {"armatak_module_core","armatak_module_callsign"};
+    units[] = {"TAG_Module_Nuke","armatak_module_callsign"};
     weapons[] = {""};
     author = "ARMATAK Team";
     url = "https://github.com/valmojr/armatak";
