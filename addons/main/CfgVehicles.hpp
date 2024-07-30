@@ -1,3 +1,10 @@
+class CfgFactionClasses {
+	class NO_CATEGORY;
+	class armatak_module_category: NO_CATEGORY {
+		displayName = "Team Awareness Kit";
+	};
+};
+
 class CfgVehicles {
 	class Logic;
 	class Module_F : Logic
@@ -20,11 +27,10 @@ class CfgVehicles {
 	};
 	class armatak_module_core: Module_F {
 		scope = 2;
-		scopeCurator = 2;
 		displayname = "ARMATAK Core";
-		//icon = "";
-		category = "Strategic";
-		function = "armatak_fnc_core";
+		icon = "\a3\Modules_F_Curator\Data\iconRadio_ca.paa";
+		category = "armatak_module_category";
+		function = "armatak_fnc_init";
 		functionPriority = 1;
 		isGlobal = 2;
 		isTriggerActivated = 0;
@@ -43,15 +49,18 @@ class CfgVehicles {
 		};
 
 		class Attributes: AttributesBase {
+			class Units: Units {
+				property = "armatak_module_property_attached_units";
+			};
 			class armatak_module_fts_api_instance_protocol: Combo {
 				property = "armatak_module_property_fts_api_instance_protocol";
 				displayname = "FTS Protocol";
 				tooltip = "FreeTAKServer instance protocol";
 				typeName = "STRING";
 				defaultValue = "http";
-
+			
 				class Values {
-					class http { name = "HTTP"; value = "http"; };
+					class http { name = "HTTP"; value = "http"; default = 1; };
 					class https { name = "HTTPS"; value = "https"; };
 				};
 			};
@@ -69,10 +78,38 @@ class CfgVehicles {
 				typeName = "NUMBER";
 				defaultValue = "19023";
 			};
+			class armatak_module_fts_api_instance_token: Edit {
+				property = "armatak_module_property_fts_api_instance_token";
+				displayname = "API Token";
+				tooltip = "API Bearer Token for authorization";
+				typeName = "STRING";
+				defaultValue = "token";
+			};
+			class ModuleDescription: ModuleDescription {};
 		};
-		
-		
-	
+
+		class ModuleDescription: ModuleDescription {
+			description = "Generate the initial ARMATAK configuration, syncronizing all players to the FTS instance";
+			sync[] = {"LocationArea_F"};
+
+			class LocationArea_F {
+				description[] = {
+					"First line",
+					"Second line"
+				};
+				position = 1;
+				direction = 1;
+				optional = 1;
+				duplicate = 1;
+				synced[] = { "BluforUnit", "AnyBrain" };
+			};
+			class BluforUnit
+			{
+				description = "Short description";
+				displayName = "Any BLUFOR unit";
+				icon = "iconMan";
+				side = 1;
+			};
+		};
 	};
-	class armatak_module_callsign: Module_F {};
 };
