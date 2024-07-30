@@ -30,6 +30,7 @@ func armatak_service_ManageGeoObject_postGeoObject(args []string) (string, error
 	}
 
 	payload := GeoObject{
+		UID:       args[0],
 		Longitude: longitude,
 		Latitude:  latitude,
 		Attitude:  args[3],
@@ -64,8 +65,14 @@ func armatak_service_ManageGeoObject_putGeoObject(args []string) (string, error)
 		bearing = 0
 	}
 
+	uid := ""
+
+	if args[0] != "<null>" {
+		uid = args[0]
+	}
+
 	payload := GeoObject{
-		UID:       args[0],
+		UID:       uid,
 		Longitude: longitude,
 		Latitude:  latitude,
 		Attitude:  args[3],
