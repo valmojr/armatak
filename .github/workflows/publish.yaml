@@ -1,0 +1,52 @@
+name: Publish
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    lint:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout the source code
+              uses: actions/checkout@v3
+            - name: Lint (sqflint)
+              uses: arma-actions/sqflint@master
+              continue-on-error: true
+
+    publish:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout the source code
+              uses: actions/checkout@v3
+            - name: Setup HEMTT
+              uses: arma-actions/hemtt@v1
+            - name: Run HEMTT build
+              run: hemtt release
+            - name: Extract Zipped Mod
+              run: unzip releases/braf_factions-latest.zip -d releases
+            - uses: arma-actions/workshop-upload@v1
+              with:
+                  appId: '107410'
+                  itemId: ${{ secrets.STEAM_WORKSHOP_ITEM_ID }}
+                  contentPath: releases/@braf_factions
+                  changelog: 'Update'
+              env:
+                  STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
+                  STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
+            - name: Discord notification
+              uses: tsickert/discord-webhook@v5.3.0
+              with:
+                  webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
+                  username: ARMATAK
+                  avatar-url: https://media.githubusercontent.com/media/valmojr/armatak/main/files/picture.png
+                  embed-title: ${{ github.repository }} Updated and Published
+                  embed-url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+                  embed-description: Commit ${{ github.sha }} - ${{ github.event.head_commit.message }} authorized and updated on Steam Workshop!
+                  embed-author-name: ${{ github.actor }}
+                  embed-author-url: https://github.com/${{ github.actor }}
+                  embed-author-icon-url: https://avatars.githubusercontent.com/${{ github.actor }}
+                  embed-footer-icon-url: https://avatars.githubusercontent.com/${{ github.repository_owner }}
+                  embed-footer-text: ${{ github.repository_owner }}
+                  embed-color: 4849919
