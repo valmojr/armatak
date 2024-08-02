@@ -29,4 +29,7 @@ if (_activated) exitWith {
 			};
 		}, 2, []] call CBA_fnc_addPerFrameHandler;
 	} forEach playableUnits;
+
+	private _warning = format ["<t color='#FF8021'>ARMATAK</t><br/> %1", "Connected!"];
+    [[_warning, 1.5]] call CBA_fnc_notify;
 };
