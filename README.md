@@ -4,13 +4,13 @@
 
 ## Project Concept
 
-ARMATAK is a server side Arma 3 addons for streaming unit positions to TAK Clients in sessions on real locations maps. It basically setup a FreeTAKServer instance on your Server (Must be a Linux Arma 3 Dedicated Server), convert the useful information in your game sessions and send it as HTTP Post Requests right into the FreeTAKServer REST API as TAK entities soo the players can connect their WinTAK/ATAK/iTAK and game using the TAK features for situation awareness/planning right on the map.
+ARMATAK is a server side Arma 3 addons for streaming unit positions to TAK Clients in sessions on real locations maps. It basically sends HTTP requests to a FreeTAKServer API instance from your Game Server, converting the useful information as HTTP Requests right into the FreeTAKServer REST API as TAK entities soo the players can connect their WinTAK/ATAK/iTAK and game using the TAK features as a Blue Force Tracker or mission planning tool for Arma 3.
 
 ## Disclaimer
 
 If you read the Project concept, there is a obvious limitation on using ARMATAK: it converts the Arma 3 Map location to a real world location, so let's use the Arma 3 Vanilla Maps (Altis...) as an examples, whatever the map developer had done different for real life, won't be showed by your TAK client map imagery, and there are MANY changes to be done in Arma 3 maps just for gameplay proposes, even when simulating real locations.  
 
-Another thing to consider is that each dedicated server also generates a FreeTAKServer instance, and the whole TAK environment is developed to give information for the client, not remove information, so by using ARMATAK, that points to a single FTS instance, you have to assume that every user will be displayed on the TAK platform, even the ones on the other side, and the other side will can connect just by using the same address as the dedicated server, i wish i can have a different approach that could make possible using ARMATAK on PvP sessions, but that is what we have for now.
+Another thing to consider is that each dedicated server also needs a FreeTAKServer instance, check the [FTS Docs](https://freetakteam.github.io/FreeTAKServer-User-Docs/) for more intel. Also, the whole TAK environment is developed to give information for the client, not remove information, so by using ARMATAK, that points to a single FTS instance, you have to assume that every user will be displayed on the TAK platform, even the ones on the other side, and the other side will can connect just by using the same address as the dedicated server, i wish i can have a different approach that could make possible using ARMATAK on PvP sessions, but that is what we have for now.
 
 The TAK ecosystem have a slow learning curve (so does Arma), some channels i recommend is The TAK Syndicate, Dirty Civilian and TRex Labs to start learning, i don't think it's the perfect tool for situation awareness, but is the best tool we have publicly available right now, just remember that you must focus on data feeds, packages, planning and map editing tools, that is what you will use on ARMATAK addon.
 
@@ -27,8 +27,8 @@ The TAK ecosystem have a slow learning curve (so does Arma), some channels i rec
 
 ### Get in Touch
 
-[Join the Discord Server for ARMATAK!](https://discord.gg/aZK9VSJ8)
+[Join the Discord Server for ARMATAK!](https://discord.gg/svK64PCycU)
 
 ## License
 
-The whole Project is licensed under MIT License.
+The whole Project is licensed under GPL License.
