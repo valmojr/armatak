@@ -25,12 +25,12 @@ jobs:
             - name: Run HEMTT build
               run: hemtt release
             - name: Extract Zipped Mod
-              run: unzip releases/braf_factions-latest.zip -d releases
+              run: unzip releases/armatak-latest.zip -d releases
             - uses: arma-actions/workshop-upload@v1
               with:
                   appId: '107410'
                   itemId: ${{ secrets.STEAM_WORKSHOP_ITEM_ID }}
-                  contentPath: releases/@braf_factions
+                  contentPath: releases/@armatak
                   changelog: 'Update'
               env:
                   STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
