@@ -8,3 +8,5 @@ source/
 releases/
 dist/
 *.env
+
+*.sh
