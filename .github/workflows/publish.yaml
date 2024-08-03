@@ -26,6 +26,50 @@ jobs:
               run: hemtt release
             - name: Extract Zipped Mod
               run: unzip releases/armatak-latest.zip -d releases
+            - name: Pull GO Builder Docker Image
+              run: docker pull x1unix/go-mingw:1.20
+            # Build x64 Windows DLL
+            - name: Build armatak_x64.dll Extension
+              run: |
+                docker run --rm -it \
+                  -v /home/runner/work/armatak/extensions/armatak:/go/work \
+                  -w /go/work \
+                  -e GOARCH=amd64 \
+                  -e CGO_ENABLED=1 \
+                  x1unix/go-mingw:1.20 \
+                  go build -o releases/@armatak/armatak_x64.dll -buildmode=c-shared -ldflags '-w -s' .
+            # Build x86 Windows DLL
+            - name: Build armatak.dll Extension
+              run: |
+                docker run --rm -it \
+                  -v /home/runner/work/armatak/extensions/armatak:/go/work \
+                  -w /go/work \
+                  -e GOARCH=386 \
+                  -e CGO_ENABLED=1 \
+                  x1unix/go-mingw:1.20 \
+                  go build -o releases/@armatak/armatak.dll -buildmode=c-shared -ldflags '-w -s' .
+            - name: Build armatak.so Extension
+              run: |
+                docker run --rm -it \
+                  -v /home/runner/work/armatak/extensions/armatak:/app \
+                  -w /app \
+                  -e GOOS=linux \
+                  -e GOARCH=386 \
+                  -e CGO_ENABLED=1 \
+                  -e CC=gcc \
+                  indifox926/build-a3go:linux-so \
+                  go build -o releases/@armatak/armatak.so -linkshared -ldflags '-w -s' .
+            - name: Build armatak_x64.so Extension
+              run: |
+                docker run --rm -it \
+                  -v /home/runner/work/armatak/extensions/armatak:/app \
+                  -w /app \
+                  -e GOOS=linux \
+                  -e GOARCH=amd64 \
+                  -e CGO_ENABLED=1 \
+                  -e CC=gcc \
+                  indifox926/build-a3  :linux-so \
+                  go build -o releases/@armatak/armatak_x64.so -linkshared -ldflags '-w -s' .
             - uses: arma-actions/workshop-upload@v1
               with:
                   appId: '107410'
@@ -40,9 +84,9 @@ jobs:
               with:
                   webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
                   username: ARMATAK
-                  avatar-url: https://github.com/valmojr
+                  avatar-url: https://media.githubusercontent.com/media/${{ github.actor }}/${{ github.repository }}/main/files/picture.png
                   embed-title: ${{ github.repository }} Updated and Published
-                  embed-url: 'https://github.com/valmojr/armatak'
+                  embed-url: 'https://github.com/${{ github.actor }}/${{ github.repository }}'
                   embed-description: Commit ${{ github.sha }} - ${{ github.event.head_commit.message }} authorized and updated on Steam Workshop!
                   embed-author-name: ${{ github.actor }}
                   embed-author-url: https://github.com/${{ github.actor }}
