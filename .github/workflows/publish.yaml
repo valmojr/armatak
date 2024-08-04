@@ -33,7 +33,7 @@ jobs:
               with:
                 go-version: '1.20'
             - name: Build armatak.dll
-              run: go build -v /home/runner/work/armatak:/go/work -w /go/work -o releases/@armatak/armatak.dll -buildmode=c-shared -ldflags '-w -s' .
+              run: go build -v /home/runner/work/armatak/extensions/armatak:/go/work -w /go/work -o releases/@armatak/armatak.dll -buildmode=c-shared -ldflags '-w -s' .
               env:
                 GOARCH: amd64
                 CGO_ENABLED: 1
