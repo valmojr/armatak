@@ -9,9 +9,10 @@ class CfgPatches {
     url = "https://github.com/valmojr/armatak";
     requiredAddons[] =
       {
-        "cba_common"
+        "cba_main",
+        "ace_main"
       };
-    requiredVersion = 0.5;
+    requiredVersion = 1.0;
   };
 };
 
