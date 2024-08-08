@@ -24,22 +24,22 @@ if (_activated) exitWith {
 				_uid = _x getVariable "_atak_uid";
 
 				if (_uid == "") then {
-					_x call armatak_fnc_postGeoObject;
+					[_x] call armatak_fnc_postGeoObject;
 				} else {
-					_x call armatak_fnc_putGeoObject;
+					[_x] call armatak_fnc_putGeoObject;
 				};
-			}, 2, []] call CBA_fnc_addPerFrameHandler;
+			}, 1, []] call CBA_fnc_addPerFrameHandler;
 		} forEach playableUnits;
 	} else {
 		[{
 			_uid = player getVariable "_atak_uid";
 
 			if (_uid == "") then {
-				player call armatak_fnc_postGeoObject;
+				[player] call armatak_fnc_postGeoObject;
 			} else {
-				player call armatak_fnc_putGeoObject;
+				[player] call armatak_fnc_putGeoObject;
 			};
-		}, 2, []] call CBA_fnc_addPerFrameHandler;
+		}, 1, []] call CBA_fnc_addPerFrameHandler;
 	};
 
 	private _warning = format ["<t color='#FF8021'>ARMATAK</t><br/> %1", "Connected!"];
