@@ -3,16 +3,16 @@ params["_unit"];
 _side = "friendly";
 
 switch (side _unit) do {
-	case WEST: {
+	case "WEST": {
 		_side = "friendly";
 	};
-	case EAST: {
+	case "EAST": {
 		_side = "hostile";
 	};
-	case INDEPENDENT: {
+	case "INDEPENDENT": {
 		_side = "neutral";
 	};
-	case CIVILIAN: {
+	case "CIVILIAN": {
 		_side = "unknown";
 	};
 	default {
