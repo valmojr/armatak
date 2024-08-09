@@ -1,12 +1,8 @@
 package main
 
 import (
-	"os"
-
 	"github.com/indig0fox/a3go/a3interface"
 )
-
-var FreeTAKServerURL = os.Getenv("FTS_URL")
 
 func armatak_controller_ManageAPI_getHelp(
 	ctx a3interface.ArmaExtensionContext,
