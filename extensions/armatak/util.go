@@ -17,7 +17,7 @@ func sanitazeArgs(args []string) {
 }
 
 func getRequest(route string) (string, error) {
-	endpoint := FreeTAKServerURL + route
+	endpoint := route
 
 	req, err := http.Get(endpoint)
 	if err != nil {

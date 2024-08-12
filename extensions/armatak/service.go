@@ -96,7 +96,14 @@ func armatak_service_ManageEmergency_getEmergency() {}
 
 func armatak_service_ManageEmergency_deleteEmergency() {}
 
-func armatak_service_ManageChat_postChatToAll() {}
+func armatak_service_ManageChat_postChatToAll(args []string) (string, error) {
+	payload := Message{
+		Message: args[0],
+		Sender:  "ARMATAK",
+	}
+
+	return postRequest(args[1]+"/ManageChat/postChatToAll", payload, args[2])
+}
 
 func armatak_service_ManageRoute_postRoute() {}
 

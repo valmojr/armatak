@@ -17,3 +17,8 @@ type GeoObject struct {
 	Name      string  `json:"name,omitempty"`
 	Timeout   int     `json:"timeout,omitempty"`
 }
+
+type Message struct {
+	Message string `json:"uid"`
+	Sender  string `json:"sender"`
+}
