@@ -16,10 +16,10 @@ ARMATAK is a server side Arma 3 addons for streaming unit positions to TAK Clien
 
 ## How to use
 
-1. Ensure you have a working FreeTAKServer instance running and reachabed by the Arma 3 server.
+1. Ensure you have a working FreeTAKServer instance running and reachable by the Arma 3 server.
 2. Grab your phone add connect the TAK client to the FTS instance.
 3. Build your A3 mission as you know.
-4. Inser the "ARMATAK CORE" module on the 3den editor.
+4. Insert the "ARMATAK CORE" module on the 3den editor.
 5. Fill your FTS info on the module properties.
 6. The module itself can sync all player slots as TAK entities.
 7. Start the game.
