@@ -1,2 +1,4 @@
+github.com/google/uuid v1.6.0 h1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=
+github.com/google/uuid v1.6.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/indig0fox/a3go v0.3.2 h1:bNL90pffeOnS6Qtjoo5JHpdpZn1f0BZmRZR8nz/xcvQ=
 github.com/indig0fox/a3go v0.3.2/go.mod h1:8htVwBiIAVKpT1Jyb+5dm7GuLAAevTXgw7UKxSlOawY=
