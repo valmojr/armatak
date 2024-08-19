@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
 
 	"github.com/indig0fox/a3go/a3interface"
 )
@@ -16,26 +17,86 @@ func sanitazeArgs(args []string) {
 	}
 }
 
-func getRequest(route string) (string, error) {
-	endpoint := route
+func invalidCallExtensionMethod(complement string) (string, error) {
+	return "Invalid callExtension method" + complement, nil
+}
 
-	req, err := http.Get(endpoint)
+func parseMarkerArgs(args []string) (Marker, error) {
+	sanitazeArgs(args)
+
+	latitude, latitudeError := strconv.ParseFloat(args[1], 32)
+
+	if latitudeError != nil {
+		return Marker{}, latitudeError
+	}
+
+	longitude, longitudeError := strconv.ParseFloat(args[2], 32)
+
+	if longitudeError != nil {
+		return Marker{}, longitudeError
+	}
+
+	speed, speedError := strconv.ParseFloat(args[3], 32)
+
+	if speedError != nil {
+		speed = 0
+	}
+
+	bearing, bearingError := strconv.ParseFloat(args[4], 32)
+
+	if bearingError != nil {
+		bearing = 0
+	}
+
+	marker := Marker{
+		UID:       args[0],
+		Latitude:  latitude,
+		Longitude: longitude,
+		Speed:     int(speed),
+		Azimuth:   int(bearing),
+		Type:      args[5],
+		Name:      args[6],
+	}
+
+	return marker, nil
+}
+
+func postRequestWithoutToken(route string, body any) ([]byte, error) {
+	jsonData, err := json.Marshal(body)
 	if err != nil {
-		return "", fmt.Errorf("getting Error creating request: %w", err)
+		fmt.Println("Error marshalling payload:", err)
+		return nil, err
 	}
 
-	defer req.Body.Close()
+	client := &http.Client{}
 
-	if req.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("getting Error sending request " + req.Status)
-	}
-
-	body, err := io.ReadAll(req.Body)
+	req, err := http.NewRequest(http.MethodPost, route, bytes.NewReader(jsonData))
 	if err != nil {
-		return "", fmt.Errorf("getting Error reading response body %w", err)
+		fmt.Println("Error creating request:", err)
+		return nil, err
 	}
 
-	return string(body), nil
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Println("Error sending request:", err)
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		fmt.Println("Error sending request:", resp.Status)
+		return nil, err
+	}
+
+	parsedBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("getting Error reading response body: %w", err)
+	}
+
+	return (parsedBody), nil
 }
 
 func postRequest(route string, body any, token string) (string, error) {
@@ -48,46 +109,6 @@ func postRequest(route string, body any, token string) (string, error) {
 	client := &http.Client{}
 
 	req, err := http.NewRequest(http.MethodPost, route, bytes.NewReader(jsonData))
-	if err != nil {
-		fmt.Println("Error creating request:", err)
-		return "", err
-	}
-
-	req.Header.Set("Content-Type", "application/json")
-
-	req.Header.Set("Authorization", "Bearer "+token)
-
-	resp, err := client.Do(req)
-	if err != nil {
-		fmt.Println("Error sending request:", err)
-		return "", err
-	}
-
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		fmt.Println("Error sending request:", resp.Status)
-		return "", nil
-	}
-
-	parsedBody, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return "", fmt.Errorf("getting Error reading response body: %w", err)
-	}
-
-	return string(parsedBody), nil
-}
-
-func putRequest(route string, body any, token string) (string, error) {
-	jsonData, err := json.Marshal(body)
-	if err != nil {
-		fmt.Println("Error marshalling payload:", err)
-		return "", err
-	}
-
-	client := &http.Client{}
-
-	req, err := http.NewRequest(http.MethodPut, route, bytes.NewReader(jsonData))
 	if err != nil {
 		fmt.Println("Error creating request:", err)
 		return "", err
