@@ -1,120 +1,45 @@
 package main
 
 import (
-	"strconv"
+	"encoding/json"
+
+	"github.com/google/uuid"
 )
 
-func armatak_service_ManageAPI_getHelp() (string, error) {
-	return getRequest("manageAPI/getHelp") // ERROR - returning unsuported on 2.2 FTS (API is returning this, not my fault)
+func armatak_service_get_uid() (string, error) {
+	return uuid.New().String(), nil
 }
 
-func armatak_service_ManageGeoObject_postGeoObject(args []string) (string, error) {
-	sanitazeArgs(args)
-
-	latitude, latitudeError := strconv.ParseFloat(args[1], 32)
-
-	if latitudeError != nil {
-		return "", latitudeError
+func armatak_service_get_auth_token(args []string) (string, error) {
+	authInfo := AuthInfo{
+		Username: args[1],
+		Password: args[2],
 	}
 
-	longitude, longitudeError := strconv.ParseFloat(args[2], 32)
+	response, responseError := postRequestWithoutToken(args[0]+"/api/login?include_auth_token", authInfo)
 
-	if longitudeError != nil {
-		return "", longitudeError
+	if responseError != nil {
+		return "", responseError
 	}
 
-	bearing, bearingError := strconv.ParseFloat(args[4], 32)
+	jsonString := string(response)
 
-	if bearingError != nil {
-		bearing = 0
+	var data struct {
+		Meta     struct{} `json:"meta"`
+		Response struct {
+			CSRFToken string `json:"csrf_token"`
+			User      struct {
+				AuthenticationToken string `json:"authentication_token"`
+			} `json:"user"`
+		} `json:"response"`
 	}
 
-	payload := GeoObject{
-		UID:       args[0],
-		Longitude: longitude,
-		Latitude:  latitude,
-		Attitude:  args[3],
-		Bearing:   int(bearing),
-		GeoObject: args[5],
-		How:       "nonCoT",
-		Name:      args[6],
-		Timeout:   600,
+	err := json.Unmarshal([]byte(jsonString), &data)
+	if err != nil {
+		return "", err
 	}
 
-	return postRequest(args[7]+"/ManageGeoObject/postGeoObject", payload, args[8])
+	authToken := data.Response.User.AuthenticationToken
+
+	return authToken, nil
 }
-
-func armatak_service_ManageGeoObject_putGeoObject(args []string) (string, error) {
-	sanitazeArgs(args)
-
-	latitude, latitudeError := strconv.ParseFloat(args[1], 32)
-
-	if latitudeError != nil {
-		return "", latitudeError
-	}
-
-	longitude, longitudeError := strconv.ParseFloat(args[2], 32)
-
-	if longitudeError != nil {
-		return "", longitudeError
-	}
-
-	bearing, bearingError := strconv.ParseFloat(args[4], 32)
-
-	if bearingError != nil {
-		bearing = 0
-	}
-
-	uid := ""
-
-	if args[0] != "<null>" {
-		uid = args[0]
-	}
-
-	payload := GeoObject{
-		UID:       uid,
-		Longitude: longitude,
-		Latitude:  latitude,
-		Attitude:  args[3],
-		Bearing:   int(bearing),
-		GeoObject: args[5],
-		How:       "nonCoT",
-		Name:      args[6],
-		Timeout:   600,
-	}
-
-	return putRequest(args[7]+"/ManageGeoObject/putGeoObject", payload, args[8])
-}
-
-func armatak_service_ManageGeoObject_getGeoObject() {}
-
-func armatak_service_ManageGeoObject_getGeoObjectByZone() {}
-
-func armatak_service_ManageEmergency_postEmergency() {}
-
-func armatak_service_ManageEmergency_getEmergency() {}
-
-func armatak_service_ManageEmergency_deleteEmergency() {}
-
-func armatak_service_ManageChat_postChatToAll(args []string) (string, error) {
-	payload := Message{
-		Message: args[0],
-		Sender:  "ARMATAK",
-	}
-
-	return postRequest(args[1]+"/ManageChat/postChatToAll", payload, args[2])
-}
-
-func armatak_service_ManageRoute_postRoute() {}
-
-func armatak_service_ManagePresence_postPresence() {}
-
-func armatak_service_ManagePresence_putPresence() {}
-
-func armatak_service_ManageVideoStream_postVideoStream() {}
-
-func armatak_service_Sensor_postDrone() {}
-
-func armatak_service_Sensor_postSPI() {}
-
-func armatak_service_ManageKML_postKML() {}
