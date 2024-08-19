@@ -7,6 +7,6 @@ if (vehicle _unit isKindOf "plane") then {
 	_type = "A";
 };
 
-_role = "a-" + _affiliation + "-" + _type
+_role = "a-" + _affiliation + "-" + _type;
 
 _role
