@@ -20,4 +20,19 @@ if (isServer && _activated) exitWith {
 	missionNamespace setVariable ["_atak_server_instance_password", _atak_ots_api_password];
 
 	_atak_server_instance_token = call armatak_fnc_extract_auth_token;
+
+	if (isMultiplayer) then {
+		{
+			[{
+				[_x] call armatak_fnc_postMarker;
+			}, 1, []] call CBA_fnc_addPerFrameHandler;
+		} forEach playableUnits;
+	} else {
+		[{
+			[player] call armatak_fnc_postMarker;
+		}, 1, []] call CBA_fnc_addPerFrameHandler;
+	};
+
+	private _warning = format ["<t color='#2B7319'>ARMATAK</t><br/> %1", "Connected"];
+	[[_warning, 2]] call CBA_fnc_notify;
 };
