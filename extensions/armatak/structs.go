@@ -25,3 +25,8 @@ type Message struct {
 	Message string `json:"uid"`
 	Sender  string `json:"sender"`
 }
+
+type AuthInfo struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
