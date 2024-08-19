@@ -3,8 +3,7 @@ params [
 	["_units", [], [[]]],
 	["_activated", true, [true]]
 ];
-
-if (_activated) exitWith {
+if (isServer && _activated) exitWith {
 	private _warning = format ["<t color='#FF8021'>ARMATAK</t><br/> %1", "Connecting..."];
 	[[_warning, 1.5]] call CBA_fnc_notify;
 
