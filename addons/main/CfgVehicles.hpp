@@ -52,10 +52,10 @@ class CfgVehicles {
 			class Units: Units {
 				property = "armatak_module_property_attached_units";
 			};
-			class armatak_module_fts_api_instance_protocol: Combo {
-				property = "armatak_module_property_fts_api_instance_protocol";
-				displayname = "FTS Protocol";
-				tooltip = "FreeTAKServer instance protocol";
+			class armatak_module_ots_api_instance_protocol: Combo {
+				property = "armatak_module_property_ots_api_instance_protocol";
+				displayname = "OTS Protocol";
+				tooltip = "OpenTAKServer instance protocol";
 				typeName = "STRING";
 				defaultValue = "http";
 			
@@ -64,32 +64,39 @@ class CfgVehicles {
 					class https { name = "HTTPS"; value = "https"; };
 				};
 			};
-			class armatak_module_fts_api_instance_address: Edit {
-				property = "armatak_module_property_fts_api_instance_address";
-				displayname = "FTS Address";
-				tooltip = "FreeTAKServer Instance Address";
+			class armatak_module_ots_api_instance_address: Edit {
+				property = "armatak_module_property_ots_api_instance_address";
+				displayname = "OTS Address";
+				tooltip = "OpenTAKServer Instance Address";
 				typeName = "STRING";
 				defaultValue = "localhost";
 			};
-			class armatak_module_fts_api_instance_port: Edit {
-				property = "armatak_module_property_fts_api_instance_port";
-				displayname = "FTS Port";
-				tooltip = "FreeTAKServer Instance Port";
+			class armatak_module_ots_api_instance_port: Edit {
+				property = "armatak_module_property_ots_api_instance_port";
+				displayname = "OTS Port";
+				tooltip = "OpenTAKServer Instance Port";
 				typeName = "NUMBER";
-				defaultValue = "19023";
+				defaultValue = "8080";
 			};
-			class armatak_module_fts_api_instance_token: Edit {
-				property = "armatak_module_property_fts_api_instance_token";
-				displayname = "API Token";
-				tooltip = "API Bearer Token for authorization";
+			class armatak_module_ots_api_instance_username: Edit {
+				property = "armatak_module_property_ots_api_instance_username";
+				displayname = "API Username";
+				tooltip = "API Username for authorization";
 				typeName = "STRING";
-				defaultValue = "token";
+				defaultValue = "administrator";
+			};
+			class armatak_module_ots_api_instance_password: Edit {
+				property = "armatak_module_property_ots_api_instance_password";
+				displayname = "API Password";
+				tooltip = "API Password for authorization";
+				typeName = "STRING";
+				defaultValue = "password";
 			};
 			class ModuleDescription: ModuleDescription {};
 		};
 
 		class ModuleDescription: ModuleDescription {
-			description = "Generate the initial ARMATAK configuration, syncronizing all players to the FTS instance";
+			description = "Generate the initial ARMATAK configuration, syncronizing all players to the OTS instance";
 			sync[] = {"LocationArea_F"};
 
 			class LocationArea_F {
