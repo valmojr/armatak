@@ -17,6 +17,9 @@ class CfgFunctions {
 			class extract_info {
 				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_extract_info.sqf";
 			};
+			class extract_uuid {
+				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_extract_uuid.sqf";
+			};
 
 			class convert_location {
 				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_location.sqf";
