@@ -99,7 +99,7 @@ func postRequestWithoutToken(route string, body any) ([]byte, error) {
 	return (parsedBody), nil
 }
 
-func postRequest(route string, body any, token string) (string, error) {
+func postRequest(route string, body any) (string, error) {
 	jsonData, err := json.Marshal(body)
 	if err != nil {
 		fmt.Println("Error marshalling payload:", err)
@@ -115,8 +115,6 @@ func postRequest(route string, body any, token string) (string, error) {
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-
-	req.Header.Set("Authorization", "Bearer "+token)
 
 	resp, err := client.Do(req)
 	if err != nil {

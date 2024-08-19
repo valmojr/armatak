@@ -40,7 +40,7 @@ func armatak_controller_post_marker(
 	ctx a3interface.ArmaExtensionContext,
 	data string,
 ) (string, error) {
-	return invalidCallExtensionMethod("post market requires args")
+	return invalidCallExtensionMethod("post marker requires args")
 }
 
 func armatak_controller_args_post_marker(
@@ -50,5 +50,5 @@ func armatak_controller_args_post_marker(
 ) (string, error) {
 	sanitazeArgs(args)
 
-	return "", nil
+	return armatak_service_post_marker(args)
 }

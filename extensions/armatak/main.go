@@ -31,4 +31,11 @@ func init() {
 		SetFunction(armatak_controller_get_auth_token).
 		SetArgsFunction(armatak_controller_args_get_auth_token).
 		Register()
+
+	a3interface.NewRegistration("post_marker").
+		SetDefaultResponse("getting uuid4").
+		SetRunInBackground(true).
+		SetFunction(armatak_controller_post_marker).
+		SetArgsFunction(armatak_controller_args_post_marker).
+		Register()
 }
