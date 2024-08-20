@@ -33,6 +33,10 @@ if (isServer && _activated) exitWith {
 		}, 1, []] call CBA_fnc_addPerFrameHandler;
 	};
 
+	{
+		[_x] call armatak_fnc_postDroneMarker;
+	} forEach allUnitsUAV;
+
 	private _warning = format ["<t color='#2B7319'>ARMATAK</t><br/> %1", "Connected"];
 	[[_warning, 2]] call CBA_fnc_notify;
 };
