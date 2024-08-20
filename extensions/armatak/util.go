@@ -48,6 +48,12 @@ func parseMarkerArgs(args []string) (Marker, error) {
 		bearing = 0
 	}
 
+	altitude, altitudeError := strconv.ParseFloat(args[7], 32)
+
+	if altitudeError != nil {
+		altitude = 0
+	}
+
 	marker := Marker{
 		UID:       args[0],
 		Latitude:  latitude,
@@ -56,6 +62,7 @@ func parseMarkerArgs(args []string) (Marker, error) {
 		Azimuth:   int(bearing),
 		Type:      args[5],
 		Name:      args[6],
+		HAE:       int(altitude),
 	}
 
 	return marker, nil

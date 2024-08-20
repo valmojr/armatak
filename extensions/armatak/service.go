@@ -51,7 +51,7 @@ func armatak_service_post_marker(args []string) (string, error) {
 		return "", markerError
 	}
 
-	response, responseError := postRequest(args[7]+"/api/markers?auth_token="+args[8], marker)
+	response, responseError := postRequest(args[8]+"/api/markers?auth_token="+args[9], marker)
 
 	if responseError != nil {
 		return "", responseError
