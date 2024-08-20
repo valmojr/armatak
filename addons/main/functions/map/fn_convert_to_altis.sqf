@@ -20,4 +20,4 @@ _LatitudeDifference = _MapMaxLatitude - _MapMinLatitude;
 _RealLongitude = (_playerLongitude / _playerMaxLongitude) * _LongitudeDifference + _MapMinLongitude;
 _RealLatitude = (_playerLatitude / _playerMaxLatitude) * _LatitudeDifference + _MapMinLatitude;
 
-[_RealLongitude, _RealLatitude]
+[_RealLongitude, _RealLatitude, _playerPosition select 2]
