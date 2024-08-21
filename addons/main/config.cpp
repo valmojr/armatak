@@ -1,7 +1,7 @@
 class CfgPatches {
   class armatak_main {
     units[] = {
-      "TAG_Module_Nuke",
+      "armatak_module_core",
       "armatak_module_callsign"
     };
     weapons[] = {""};
