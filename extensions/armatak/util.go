@@ -58,7 +58,7 @@ func parseMarkerArgs(args []string) (Marker, error) {
 		UID:       args[0],
 		Latitude:  latitude,
 		Longitude: longitude,
-		Speed:     int(speed),
+		Speed:     int(speed / 4),
 		Azimuth:   int(bearing),
 		Type:      args[5],
 		Name:      args[6],
