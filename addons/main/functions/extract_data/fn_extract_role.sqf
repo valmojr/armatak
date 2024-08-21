@@ -19,6 +19,10 @@ if (vehicle _unit isKindOf "Helicopter") then {
 	_type = "A-M-H";
 };
 
+if (vehicle _unit isKindOf "tank") then {
+	_type = "G-U-C-A-T";
+};
+
 _role = "a-" + _affiliation + "-" + _type;
 
 _role
