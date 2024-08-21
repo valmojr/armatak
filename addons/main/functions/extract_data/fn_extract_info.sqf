@@ -3,7 +3,7 @@
 // function description: Receives a player's unit as param and return the information array needed to send the HTTP request 
 
 params["_unit"];
-private _location = [_unit] call armatak_fnc_convert_location;
+private _location = (getPos _unit) call armatak_fnc_convert_location;
 
 private _atak_uid = [_unit] call armatak_fnc_extract_uuid;
 private _atak_latitude = _location select 0;

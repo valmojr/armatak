@@ -1,12 +1,14 @@
-params["_unit"];
+params["_latitude", "_longitude", "_altitude"];
 
-_location = null;
+_position = [_latitude, _longitude, _altitude];
+
+_realLocation = null;
 
 switch (worldName) do {
 	case "Altis": {
-		_location = [_unit] call armatak_fnc_convert_to_altis;
+		_realLocation = _position call armatak_fnc_convert_to_altis;
 	};
 	default {};
 };
 
-_location
+_realLocation

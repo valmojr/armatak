@@ -1,6 +1,6 @@
-params["_unit"];
+params["_latitude", "_longitude", "_altitude"];
 
-_playerPosition = getPos _unit;
+_playerPosition = [_latitude, _longitude, _altitude];
 
 _playerLatitude = _playerPosition select 0;
 _playerLongitude = _playerPosition select 1;
