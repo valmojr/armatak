@@ -3,6 +3,7 @@ params [
 	["_units", [], [[]]],
 	["_activated", true, [true]]
 ];
+
 if (isServer && _activated) exitWith {
 	private _warning = format ["<t color='#FF8021'>ARMATAK</t><br/> %1", "Connecting..."];
 	[[_warning, 1.5]] call CBA_fnc_notify;
@@ -22,16 +23,19 @@ if (isServer && _activated) exitWith {
 	_atak_server_instance_token = call armatak_fnc_extract_auth_token;
 
 	if (isMultiplayer) then {
-		{
+		[{
 			[{
-				[_x] call armatak_fnc_postMarker;
-				[_x] call armatak_fnc_postDroneMarker;
+				{
+					private _unit = _x;
+					_unit call armatak_fnc_postMarker;
+					_unit call armatak_fnc_postDroneMarker;
+				} forEach playableUnits;
 			}, 1, []] call CBA_fnc_addPerFrameHandler;
-		} forEach playableUnits;
+		}, [], 1] call CBA_fnc_waitAndExecute;
 	} else {
 		[{
-			[player] call armatak_fnc_postMarker;
-			[player] call armatak_fnc_postDroneMarker;
+			player call armatak_fnc_postMarker;
+			player call armatak_fnc_postDroneMarker;
 		}, 1, []] call CBA_fnc_addPerFrameHandler;
 	};
 
