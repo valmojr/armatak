@@ -8,7 +8,7 @@ path = "addons/main/script_version.hpp"
 
 build = 0
 major = 0
-minor = 0 
+minor = 5 
 patch = 0 
 
 git_hash = 0
