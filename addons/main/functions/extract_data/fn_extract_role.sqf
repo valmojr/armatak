@@ -8,19 +8,41 @@ switch (side _unit) do {
 	case "EAST": { _affiliation = "h"; };
 	case "INDEPENDENT": { _affiliation = "n"; };
 	case "CIVILIAN": { _affiliation = "u"; };
-	default { };
+	default { _affiliation = "f"; };
 };
 
-if (vehicle _unit isKindOf "plane") then {
-	_type = "A-M-F";
+_unit_type = _unit call BIS_fnc_objectType;
+
+switch (_unit_type) do {
+	case "AT": { _type = "G-U-C-F-R"; };
+	case "Civilian": { _type = "G-E-V-C"; };
+	case "Diver": { _type = "U-S"; };
+	case "Infantry": { _type = "G-U-C-I"; };
+	case "Medic": { _type = "a-f-G-U-C"; };
+	case "MG": { _type = "G-U-C-I"; };
+	case "Officer": { _type = "G-U-C-I"; };
+	case "Pilot": {_type = "G-U-C-V"; };
+	case "Sniper": { _type = "G-U-C-R-X"; };
+	case "SpecialForces": { _type = ""; };
+	case "UAVPilot": { _type = "G-U-C-V-U"; };
+	default { _type = "G-U-C-I"; };
 };
 
-if (vehicle _unit isKindOf "Helicopter") then {
-	_type = "A-M-H";
-};
+if (vehicle _unit) then {
+	_vehicle_type = vehicle _unit call BIS_fnc_objectType;
 
-if (vehicle _unit isKindOf "tank") then {
-	_type = "G-U-C-A-T";
+	switch (_vehicle_type) do {
+		case "Car": { _type = "G-U-C-I-M"; };
+		case "Helicopter": { _type = "A-M-H"; };
+		case "Motorcycle": { _type = "G-U-C-I-M"; };
+		case "Plane": { _type = "A-M-F"; };
+		case "StaticWeapon": { _type = "G-U-C-F-M"; };
+		case "Submarine": { _type = "U-S"; };
+		case "TrackedAPC": { _type = "G-U-C-I-I"; };
+		case "Tank": { _type = "G-U-C-A-T"; };
+		case "WheeledAPC": { _type = "a-f-G-U-C-R-V-A"; };
+		default { _type = "G-U-C-I-M"; };
+	};
 };
 
 _role = "a-" + _affiliation + "-" + _type;
