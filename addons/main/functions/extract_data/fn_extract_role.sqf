@@ -21,7 +21,7 @@ switch (side _unit) do {
 	};
 };
 
-_unit_type = _unit call BIS_fnc_objectType;
+_unit_type = _unit call BIS_fnc_objectType select 1;
 
 switch (_unit_type) do {
 	case "AT": {
@@ -62,8 +62,8 @@ switch (_unit_type) do {
 	};
 };
 
-if (!isNull vehicle player) then {
-	_vehicle_type = vehicle _unit call BIS_fnc_objectType;
+if (!isNull vehicle _unit) then {
+	_vehicle_type = (vehicle _unit) call BIS_fnc_objectType select 1;
 
 	switch (_vehicle_type) do {
 		case "Car": {
@@ -78,6 +78,9 @@ if (!isNull vehicle player) then {
 		case "Plane": {
 			_type = "A-M-F";
 		};
+		case "Ship": {
+			_type = "S";
+		};
 		case "StaticWeapon": {
 			_type = "G-U-C-F-M";
 		};
@@ -91,7 +94,7 @@ if (!isNull vehicle player) then {
 			_type = "G-U-C-A-T";
 		};
 		case "WheeledAPC": {
-			_type = "a-f-G-U-C-R-V-A";
+			_type = "G-U-C-I-A";
 		};
 		default {};
 	};
