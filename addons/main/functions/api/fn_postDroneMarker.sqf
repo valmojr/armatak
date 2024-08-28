@@ -1,6 +1,6 @@
 params["_unit"];
 
-_drone = getConnectedUAVUnit _unit;
+_drone = vehicle (getConnectedUAVUnit _unit);
 
 if (isNull _drone) exitWith {};
 
@@ -12,7 +12,7 @@ private _atak_longitude = _location select 1;
 private _atak_speed = speed _drone;
 private _atak_bearing = parseNumber ((getDir _drone) toFixed 0);
 private _atak_role = "a-f-A";
-private _atak_callsign = "[UAV]" + typeOf _drone;
+private _atak_callsign = "[UAV]" + name _unit;
 private _atak_server_instance = missionNamespace getVariable "_atak_server_instance";
 private _atak_server_instance_token = missionNamespace getVariable "_atak_server_instance_token";
 private _atak_altitude = _location select 2;
