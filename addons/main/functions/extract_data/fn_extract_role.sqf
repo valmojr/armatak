@@ -94,7 +94,7 @@ if (!isNull vehicle _unit) then {
 			_type = "G-U-C-A-T";
 		};
 		case "WheeledAPC": {
-			_type = "G-U-C-I-A";
+			_type = "G-U-C-I-Z";
 		};
 		default {};
 	};
