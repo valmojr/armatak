@@ -59,7 +59,7 @@ func parseMarkerArgs(args []string) (Marker, error) {
 		Latitude:  latitude,
 		Longitude: longitude,
 		Speed:     int(speed / 4),
-		Azimuth:   int(bearing),
+		Course:    int(bearing) + 6,
 		Type:      args[5],
 		Name:      args[6],
 		HAE:       int(altitude),
