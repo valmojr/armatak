@@ -43,6 +43,9 @@ class CfgFunctions {
 			class postDroneMarker {
 				file = "\armatak\armatak\armatak_main\functions\api\fn_postDroneMarker.sqf";
 			};
+			class deleteMarker {
+				file = "\armatak\armatak\armatak_main\functions\api\fn_deleteMarker.sqf";
+			};
 		};
 	};
 };

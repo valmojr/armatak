@@ -32,11 +32,22 @@ if (isServer && _activated) exitWith {
 				} forEach playableUnits;
 			}, 1, []] call CBA_fnc_addPerFrameHandler;
 		}, [], 1] call CBA_fnc_waitAndExecute;
+
+		addMissionEventHandler ["MPEnded", {
+			{
+				private _unit = _x;
+				_unit call armatak_fnc_deleteMarker;
+			} forEach playableUnits;
+		}];
 	} else {
 		[{
 			player call armatak_fnc_postMarker;
 			player call armatak_fnc_postDroneMarker;
 		}, 1, []] call CBA_fnc_addPerFrameHandler;
+
+		addMissionEventHandler ["Ended", {
+			player call armatak_fnc_deleteMarker;
+		}];
 	};
 
 	private _warning = format ["<t color='#2B7319'>ARMATAK</t><br/> %1", "Connected"];
