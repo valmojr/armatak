@@ -11,6 +11,9 @@ switch (worldName) do {
 	case "Stratis": {
 		_realLocation = _position call armatak_fnc_convert_to_stratis;
 	};
+	case "VR": {
+		_realLocation = _position call armatak_fnc_convert_to_vr;
+	};
 	default {};
 };
 
