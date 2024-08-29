@@ -30,6 +30,9 @@ class CfgFunctions {
 			class convert_to_altis {
 				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_altis.sqf";
 			};
+			class convert_to_stratis {
+				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_stratis.sqf";
+			};
 
 			class postMarker {
 				file = "\armatak\armatak\armatak_main\functions\api\fn_postMarker.sqf";
