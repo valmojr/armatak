@@ -41,6 +41,7 @@ preset = "Hemtt"
 workshop = [
   "450814997", # CBA
   "463939057", # ACE
+  "623475643", # 3den
 ]
 
 parameters = [
