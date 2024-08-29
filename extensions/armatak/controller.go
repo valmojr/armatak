@@ -52,3 +52,37 @@ func armatak_controller_args_post_marker(
 
 	return armatak_service_post_marker(args)
 }
+
+func armatak_controller_post_marker_debug(
+	ctx a3interface.ArmaExtensionContext,
+	data string,
+) (string, error) {
+	return invalidCallExtensionMethod("post marker requires args")
+}
+
+func armatak_controller_args_post_marker_debug(
+	ctx a3interface.ArmaExtensionContext,
+	command string,
+	args []string,
+) (string, error) {
+	sanitazeArgs(args)
+
+	return armatak_service_post_marker(args)
+}
+
+func armatak_controller_delete_marker(
+	ctx a3interface.ArmaExtensionContext,
+	data string,
+) (string, error) {
+	return invalidCallExtensionMethod("post marker requires args")
+}
+
+func armatak_controller_args_delete_marker(
+	ctx a3interface.ArmaExtensionContext,
+	command string,
+	args []string,
+) (string, error) {
+	sanitazeArgs(args)
+
+	return armatak_service_delete_marker(args)
+}

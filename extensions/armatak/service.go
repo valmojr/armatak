@@ -59,3 +59,19 @@ func armatak_service_post_marker(args []string) (string, error) {
 
 	return response, nil
 }
+
+func armatak_service_delete_marker(args []string) (string, error) {
+	marker, markerError := parseMarkerArgs(args)
+
+	if markerError != nil {
+		return "", markerError
+	}
+
+	response, responseError := deleteRequest(args[8]+"/api/markers?auth_token="+args[9], marker)
+
+	if responseError != nil {
+		return "", responseError
+	}
+
+	return response, nil
+}

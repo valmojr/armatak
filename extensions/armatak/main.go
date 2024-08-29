@@ -26,16 +26,30 @@ func init() {
 		Register()
 
 	a3interface.NewRegistration("get_auth_token").
-		SetDefaultResponse("getting uuid4").
+		SetDefaultResponse("getting auth token").
 		SetRunInBackground(false).
 		SetFunction(armatak_controller_get_auth_token).
 		SetArgsFunction(armatak_controller_args_get_auth_token).
 		Register()
 
 	a3interface.NewRegistration("post_marker").
-		SetDefaultResponse("getting uuid4").
+		SetDefaultResponse("posting marker").
 		SetRunInBackground(true).
 		SetFunction(armatak_controller_post_marker).
 		SetArgsFunction(armatak_controller_args_post_marker).
+		Register()
+
+	a3interface.NewRegistration("post_marker_debug").
+		SetDefaultResponse("posting marker (debug mode)").
+		SetRunInBackground(false).
+		SetFunction(armatak_controller_post_marker_debug).
+		SetArgsFunction(armatak_controller_args_post_marker_debug).
+		Register()
+
+	a3interface.NewRegistration("delete_marker").
+		SetDefaultResponse("deleting marker").
+		SetRunInBackground(false).
+		SetFunction(armatak_controller_delete_marker).
+		SetArgsFunction(armatak_controller_args_delete_marker).
 		Register()
 }
