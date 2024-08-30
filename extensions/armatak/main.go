@@ -40,7 +40,7 @@ func init() {
 		Register()
 
 	a3interface.NewRegistration("post_marker_debug").
-		SetDefaultResponse("posting marker (debug mode)").
+		SetDefaultResponse("posting marker debug mode").
 		SetRunInBackground(false).
 		SetFunction(armatak_controller_post_marker_debug).
 		SetArgsFunction(armatak_controller_args_post_marker_debug).
