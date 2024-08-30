@@ -22,6 +22,14 @@ if (isServer && _activated) exitWith {
 
 	_atak_server_instance_token = call armatak_fnc_extract_auth_token;
 
+	if (isNull _atak_server_instance_token) then {
+		private _warning = format ["<t color='#2B7319'>ARMATAK</t><br/> %1", "Connected"];
+		[[_warning, 2]] call CBA_fnc_notify;
+	} else {
+		private _warning = format ["<t color='#FF0000'>ARMATAK</t><br/> %1", "Connection Failed"];
+		[[_warning, 2]] call CBA_fnc_notify;
+	};
+
 	if (isMultiplayer) then {
 		[{
 			[{
@@ -49,7 +57,4 @@ if (isServer && _activated) exitWith {
 			player call armatak_fnc_deleteMarker;
 		}];
 	};
-
-	private _warning = format ["<t color='#2B7319'>ARMATAK</t><br/> %1", "Connected"];
-	[[_warning, 2]] call CBA_fnc_notify;
 };
