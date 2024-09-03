@@ -22,11 +22,11 @@ if (isServer && _activated) exitWith {
 
 	_atak_server_instance_token = call armatak_fnc_extract_auth_token;
 
-	if (isNull _atak_server_instance_token) then {
-		private _warning = format ["<t color='#2B7319'>ARMATAK</t><br/> %1", "Connected"];
+	if (_atak_server_instance_token == "") then {
+		private _warning = format ["<t color='#FF0000'>ARMATAK</t><br/> %1", "Connection Failed"];
 		[[_warning, 2]] call CBA_fnc_notify;
 	} else {
-		private _warning = format ["<t color='#FF0000'>ARMATAK</t><br/> %1", "Connection Failed"];
+		private _warning = format ["<t color='#2B7319'>ARMATAK</t><br/> %1", "Connected"];
 		[[_warning, 2]] call CBA_fnc_notify;
 	};
 
@@ -36,8 +36,14 @@ if (isServer && _activated) exitWith {
 				{
 					private _unit = _x;
 					_unit call armatak_fnc_postMarker;
-					_unit call armatak_fnc_postDroneMarker;
+					_unit call armatak_fnc_extract_drone_info;
 				} forEach playableUnits;
+				{
+					private _drone = _x;
+					if (_drone getVariable "_atak_uav_connected") then {
+						_drone call armatak_fnc_postDroneMarker;
+					};
+				} forEach allUnitsUAV;
 			}, 1, []] call CBA_fnc_addPerFrameHandler;
 		}, [], 1] call CBA_fnc_waitAndExecute;
 
@@ -46,15 +52,28 @@ if (isServer && _activated) exitWith {
 				private _unit = _x;
 				_unit call armatak_fnc_deleteMarker;
 			} forEach playableUnits;
+			{
+				private _drone = _x;
+				_drone call armatak_fnc_deleteMarker;
+			} forEach allUnitsUAV;
 		}];
 	} else {
 		[{
 			player call armatak_fnc_postMarker;
-			player call armatak_fnc_postDroneMarker;
+			{
+				private _drone = _x;
+				if (_drone getVariable "_atak_uav_connected") then {
+					_drone call armatak_fnc_postDroneMarker;
+				};
+			} forEach allUnitsUAV;
 		}, 1, []] call CBA_fnc_addPerFrameHandler;
 
 		addMissionEventHandler ["Ended", {
 			player call armatak_fnc_deleteMarker;
+			{
+				private _drone = _x;
+				_drone call armatak_fnc_deleteMarker;
+			} forEach allUnitsUAV;
 		}];
 	};
 };
