@@ -12,6 +12,8 @@ if ((_atak_server_instance_token != "") and !(["error", _atak_server_instance_to
 	private _warning = format ["<t color='#2B7319'>ARMATAK</t><br/> %1", "Authorized"];
 	[[_warning, 1.5]] call CBA_fnc_notify;
 } else {
+	missionNamespace setVariable ["_atak_server_instance_token", _atak_server_instance_token];
+
 	private _warning = format ["<t color='#FF0000'>ARMATAK</t><br/> %1", "Failed to get Auth Token"];
 	[[_warning, 1.5]] call CBA_fnc_notify;
 };
