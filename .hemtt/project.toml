@@ -9,7 +9,7 @@ path = "addons/main/script_version.hpp"
 build = 0
 major = 0
 minor = 5 
-patch = 0 
+patch = 2
 
 git_hash = 0
 
