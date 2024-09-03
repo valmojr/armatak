@@ -52,7 +52,7 @@ switch (_unit_type) do {
 		_type = "G-U-C-R-X";
 	};
 	case "SpecialForces": {
-		_type = "";
+		_type = "G-U-C-R-X";
 	};
 	case "UAVPilot": {
 		_type = "G-U-C-V-U";
