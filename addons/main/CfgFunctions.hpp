@@ -17,6 +17,9 @@ class CfgFunctions {
 			class extract_info {
 				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_extract_info.sqf";
 			};
+			class extract_drone_info {
+				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_extract_drone_info.sqf";
+			};
 			class extract_uuid {
 				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_extract_uuid.sqf";
 			};
@@ -37,14 +40,11 @@ class CfgFunctions {
 				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_vr.sqf";
 			};
 
-			class postMarker {
-				file = "\armatak\armatak\armatak_main\functions\api\fn_postMarker.sqf";
+			class postMarkers {
+				file = "\armatak\armatak\armatak_main\functions\api\fn_postMarkers.sqf";
 			};
-			class postDroneMarker {
-				file = "\armatak\armatak\armatak_main\functions\api\fn_postDroneMarker.sqf";
-			};
-			class deleteMarker {
-				file = "\armatak\armatak\armatak_main\functions\api\fn_deleteMarker.sqf";
+			class deleteMarkers {
+				file = "\armatak\armatak\armatak_main\functions\api\fn_deleteMarkers.sqf";
 			};
 		};
 	};
