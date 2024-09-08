@@ -1,8 +1,9 @@
 use arma_rs::{arma, Extension, Group};
 
 #[arma]
-fn init() -> Extension {
+pub fn init() -> Extension {
     Extension::build()
+        .command("uuid", get_uuid)
         .group(
             "markers",
             Group::new()
@@ -20,43 +21,35 @@ fn init() -> Extension {
         .finish()
 }
 
-#[derive(Debug, Clone)]
-pub struct Marker {
-    pub longitude: f64,
-    pub latitude: f64,
-    pub name: String,
-    pub uid: String,
-    pub r#type: Option<String>,
-    pub course: Option<i32>,
-    pub azimuth: Option<i32>,
-    pub speed: Option<i32>,
-    pub battery: Option<i32>,
-    pub fov: Option<i32>,
-    pub ce: Option<i32>,
-    pub hae: Option<i32>,
-    pub le: Option<i32>,
+mod tests;
+mod structs;
+
+fn get_uuid() -> String {
+    use uuid::Uuid;
+
+    Uuid::new_v4().to_string()
 }
 
 mod markers {
     pub fn get(placeholder: String) -> String {
-        format!("Not implemented yet, {}", placeholder)
+        format!("ERROR: Not implemented yet, {}", placeholder)
     }
     pub fn post(placeholder: String) -> String {
-        format!("Not implemented yet, {}", placeholder)
+        format!("ERROR: Not implemented yet, {}", placeholder)
     }
     pub fn delete(placeholder: String) -> String {
-        format!("Not implemented yet, {}", placeholder)
+        format!("ERROR: Not implemented yet, {}", placeholder)
     }
 }
 
 mod casevac {
     pub fn get(placeholder: String) -> String {
-        format!("Not implemented yet, {}", placeholder)
+        format!("ERROR: Not implemented yet, {}", placeholder)
     }
     pub fn post(placeholder: String) -> String {
-        format!("Not implemented yet, {}", placeholder)
+        format!("ERROR: Not implemented yet, {}", placeholder)
     }
     pub fn delete(placeholder: String) -> String {
-        format!("Not implemented yet, {}", placeholder)
+        format!("ERROR: Not implemented yet, {}", placeholder)
     }
 }
