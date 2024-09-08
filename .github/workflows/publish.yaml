@@ -1,4 +1,4 @@
-name: Publish
+name: Publish_stable
 
 on:
     push:

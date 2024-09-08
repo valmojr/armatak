@@ -1,0 +1,54 @@
+name: Pack_beta
+
+on:
+  pull_request:
+    branches: [ main, dev ]
+
+jobs:
+  build_extension:
+    strategy:
+      matrix:
+        arrays: [
+          os: { tag: "windows-latest", target: "i686-pc-windows-msvc" },
+          os: { tag: "windows-latest", target: "x86_64-pc-windows-msvc" },
+        ]
+    runs-on: ${{ matrix.arrays.os.tag }}
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Install latest
+        uses: actions-rs/toolchain@v1
+        with:
+          target: ${{ matrix.arrays.os.target }}
+          toolchain: stable
+          default: true
+      - name: Cargo Build
+        run: cargo build --release
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.arrays.os.target }}
+          path: target/release/armatak.dll
+          if-no-files-found: error
+          retention-days: 30
+  package:
+    needs: build_extension
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      
+      - uses: actions/download-artifact@v2
+        with:
+          name: x86_64-pc-windows-msvc
+      - run: mv armatak.dll armatak_x64.dll
+      - uses: actions/download-artifact@v2
+        with:
+          name: i686-pc-windows-msvc
+      - name: Setup HEMTT
+        uses: arma-actions/hemtt@v1
+      - name: Build
+        run: hemtt release
+      - uses: actions/upload-artifact@v2
+        with:
+          name: armatak.zip
+          path: 'releases/armatak-latest.zip'
