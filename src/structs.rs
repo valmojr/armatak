@@ -1,4 +1,6 @@
-#[derive(Debug, Clone, Serialize, Deserialize)]
+use serde::Serialize;
+
+#[derive(Serialize)]
 pub struct Marker {
   pub longitude: f64,
   pub latitude: f64,
