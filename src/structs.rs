@@ -16,3 +16,9 @@ pub struct Marker {
   pub hae: Option<i32>,
   pub le: Option<i32>,
 }
+
+pub struct MarkerPayload {
+  pub api_address: String,
+  pub api_auth_token: String,
+  pub markers: [Marker],
+}
