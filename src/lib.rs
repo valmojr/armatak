@@ -1,55 +1,48 @@
 use arma_rs::{arma, Extension, Group};
-
+use util::get_uuid;
+mod commands;
+mod services;
+mod structs;
+mod tests;
+mod util;
 #[arma]
 pub fn init() -> Extension {
+    use log4rs::append::file::FileAppender;
+    use log4rs::config::{Appender, Config, Root};
+    use log4rs::encode::pattern::PatternEncoder;
+
+    let file_appender = FileAppender::builder()
+        .append(true)
+        .encoder(Box::new(PatternEncoder::new("{d} {t} {l} - {m}{n}")))
+        .build("armatak.log")
+        .unwrap();
+
+    let config = Config::builder()
+        .appender(Appender::builder().build("file", Box::new(file_appender)))
+        .build(
+            Root::builder()
+                .appender("file")
+                .build(log::LevelFilter::Info),
+        )
+        .unwrap();
+
+    log4rs::init_config(config).unwrap();
+
     Extension::build()
         .command("uuid", get_uuid)
         .group(
             "markers",
             Group::new()
-                .command("get", markers::get)
-                .command("post", markers::post)
-                .command("delete", markers::delete),
+                .command("get", commands::markers::get)
+                .command("post", commands::markers::post)
+                .command("delete", commands::markers::delete),
         )
         .group(
             "casevac",
             Group::new()
-                .command("get", casevac::get)
-                .command("post", casevac::post)
-                .command("delete", casevac::delete),
+                .command("get", commands::casevac::get)
+                .command("post", commands::casevac::post)
+                .command("delete", commands::casevac::delete),
         )
         .finish()
-}
-
-mod tests;
-mod structs;
-
-fn get_uuid() -> String {
-    use uuid::Uuid;
-
-    Uuid::new_v4().to_string()
-}
-
-mod markers {
-    pub fn get(placeholder: String) -> String {
-        format!("ERROR: Not implemented yet, {}", placeholder)
-    }
-    pub fn post(placeholder: String) -> String {
-        format!("ERROR: Not implemented yet, {}", placeholder)
-    }
-    pub fn delete(placeholder: String) -> String {
-        format!("ERROR: Not implemented yet, {}", placeholder)
-    }
-}
-
-mod casevac {
-    pub fn get(placeholder: String) -> String {
-        format!("ERROR: Not implemented yet, {}", placeholder)
-    }
-    pub fn post(placeholder: String) -> String {
-        format!("ERROR: Not implemented yet, {}", placeholder)
-    }
-    pub fn delete(placeholder: String) -> String {
-        format!("ERROR: Not implemented yet, {}", placeholder)
-    }
 }
