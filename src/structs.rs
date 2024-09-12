@@ -57,13 +57,18 @@ impl FromArma for Marker {
 
 #[derive(Serialize)]
 pub struct LoginPayload {
+    pub address: String,
     pub username: String,
     pub password: String,
 }
 
 impl FromArma for LoginPayload {
     fn from_arma(data: String) -> Result<Self, String> {
-        let (username, password) = <(String, String)>::from_arma(data)?;
-        Ok(Self { username, password })
+        let (address, username, password) = <(String, String, String)>::from_arma(data)?;
+        Ok(Self {
+            address,
+            username,
+            password,
+        })
     }
 }
