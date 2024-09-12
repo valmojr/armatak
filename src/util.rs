@@ -4,10 +4,6 @@ pub fn get_uuid() -> String {
     Uuid::new_v4().to_string()
 }
 
-pub(crate) mod data_parsing {
-
-}
-
 mod request {
     pub fn post(data: String) -> &'static str {
         return "not implemented yet";
