@@ -1,12 +1,12 @@
-use serde::Serialize;
 use arma_rs::FromArma;
+use serde::Serialize;
 
 #[derive(Serialize)]
 pub struct Marker {
+    pub uid: String,
     pub longitude: f64,
     pub latitude: f64,
     pub name: String,
-    pub uid: String,
     pub r#type: String,
     pub course: f64,
     pub speed: f64,
@@ -14,7 +14,6 @@ pub struct Marker {
     pub api_address: String,
     pub api_auth_token: String,
 }
-
 
 impl FromArma for Marker {
     fn from_arma(data: String) -> Result<Self, String> {
@@ -53,5 +52,18 @@ impl FromArma for Marker {
             api_address,
             api_auth_token,
         })
+    }
+}
+
+#[derive(Serialize)]
+pub struct LoginPayload {
+    pub username: String,
+    pub password: String,
+}
+
+impl FromArma for LoginPayload {
+    fn from_arma(data: String) -> Result<Self, String> {
+        let (username, password) = <(String, String)>::from_arma(data)?;
+        Ok(Self { username, password })
     }
 }
