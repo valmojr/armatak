@@ -1,4 +1,5 @@
 use serde::Serialize;
+use arma_rs::FromArma;
 
 #[derive(Serialize)]
 pub struct Marker {
@@ -7,14 +8,13 @@ pub struct Marker {
     pub name: String,
     pub uid: String,
     pub r#type: String,
-    pub course: i32,
-    pub speed: i32,
-    pub hae: i32,
+    pub course: f64,
+    pub speed: f64,
+    pub hae: f64,
     pub api_address: String,
     pub api_auth_token: String,
 }
 
-use arma_rs::FromArma;
 
 impl FromArma for Marker {
     fn from_arma(data: String) -> Result<Self, String> {
@@ -33,11 +33,11 @@ impl FromArma for Marker {
             String,
             f64,
             f64,
-            i32,
-            i32,
+            f64,
+            f64,
             String,
             String,
-            i32,
+            f64,
             String,
             String,
         )>::from_arma(data)?;
