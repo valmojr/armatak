@@ -34,3 +34,9 @@ ARMATAK is a server side Arma 3 addons for streaming unit positions to TAK Clien
 ## License
 
 The whole Project is licensed under GPL License.
+
+## Acknowledgment
+
+* Ind3goFox - for releasing a3go, used to build the first versions of this project's extensions and for teaching me how extensions works.
+* The Folks on the ACE Dev Team - for awnsering my large number of questions about this project's architecture and given me many tips about it, especially for
+* BrettMayson - for building HEMTT and ARMA-RS, the tools i used to get this project to life, also for taking some time to teach a non-rust programmer how to make things work.
