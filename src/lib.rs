@@ -29,6 +29,7 @@ pub fn init() -> Extension {
 
     Extension::build()
         .command("uuid", get_uuid)
+        .command("get_auth_token", commands::get_auth_token)
         .group(
             "markers",
             Group::new()
