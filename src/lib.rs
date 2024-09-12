@@ -1,7 +1,6 @@
 use arma_rs::{arma, Extension, Group};
 use util::get_uuid;
 mod commands;
-mod services;
 mod structs;
 mod tests;
 mod util;

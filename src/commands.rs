@@ -1,15 +1,17 @@
 pub(crate) mod markers {
     use log::info;
 
+    use crate::structs::Marker;
+
     pub fn get(placeholder: String) -> &'static str {
         info!("{}", placeholder);
 
         return "not implemented yet";
     }
 
-    pub fn post(placeholder: Vec<String>) -> &'static str {
-        for item in placeholder {
-            info!("Item: {}", item)
+    pub fn post(data: Vec<Marker>) -> &'static str {
+        for item in data {
+            info!("{} - {}", item.uid, item.name)
         }
 
         return "not implemented yet";
