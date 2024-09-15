@@ -4,7 +4,13 @@ pub fn get_uuid() -> String {
     Uuid::new_v4().to_string()
 }
 
-mod request {
+mod sync_request {
+    pub fn get(address: String, token: String) -> String {
+        let par = address + &token;
+
+        return par;
+    }
+
     pub fn post(data: String) -> &'static str {
         return "not implemented yet";
     }
