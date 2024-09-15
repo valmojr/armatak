@@ -1,5 +1,5 @@
 use arma_rs::FromArma;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize)]
 pub struct Marker {
@@ -55,11 +55,17 @@ impl FromArma for Marker {
     }
 }
 
-#[derive(Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct LoginPayload {
     pub address: String,
     pub username: String,
     pub password: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct LoginInfo {
+    pub username: String,
+    pub password: String
 }
 
 impl FromArma for LoginPayload {
