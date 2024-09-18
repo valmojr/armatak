@@ -1,5 +1,4 @@
 use crate::structs::{LoginInfo, LoginPayload};
-use log::info;
 use reqwest;
 use serde_json;
 
@@ -10,17 +9,20 @@ pub fn get_auth_token(payload: LoginPayload) -> String {
     };
 
     let parsed_address = payload.address + "/api/login";
-
     let request_body = serde_json::to_string(&login_info).unwrap();
     let client = reqwest::blocking::Client::new();
-    let response: Result<reqwest::blocking::Response, reqwest::Error> = client
-        .get(&parsed_address)
-        .body(request_body.to_owned())
-        .send();
+    let response = client
+        .post(&parsed_address)
+        .body(request_body)
+        .header("Content-Type", "application/json")
+        .send()
+        .unwrap();
 
-    let response_body = response.unwrap().text().unwrap();
-    info!("{}", response_body);
-    return response_body;
+    let response_body: serde_json::Value = serde_json::from_str(&response.text().unwrap()).unwrap();
+
+    let csrf_token = response_body["response"]["csrf_token"].as_str().unwrap();
+
+    return csrf_token.to_string()
 }
 
 pub(crate) mod markers {
