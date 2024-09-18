@@ -4,6 +4,7 @@ mod commands;
 mod structs;
 mod tests;
 mod util;
+
 #[arma]
 pub fn init() -> Extension {
     use log4rs::append::file::FileAppender;
