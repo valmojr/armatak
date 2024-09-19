@@ -1,6 +1,9 @@
 name: Pack_beta
 
 on:
+  push:
+    branches:
+      - dev
   pull_request:
     branches: [ main, dev ]
 
