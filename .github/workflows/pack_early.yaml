@@ -28,7 +28,7 @@ jobs:
       - name: Cargo Build
         run: cargo build --release
       - name: Upload
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.arrays.os.target }}
           path: target/release/armatak.dll
@@ -51,7 +51,7 @@ jobs:
         uses: arma-actions/hemtt@v1
       - name: Build
         run: hemtt release
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: armatak.zip
           path: 'releases/armatak-latest.zip'
