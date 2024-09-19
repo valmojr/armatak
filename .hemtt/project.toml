@@ -4,10 +4,10 @@ name = "ARMA Team Awareness Kit"
 prefix = "armatak"
 
 [version]
-build = "0"
-major = "0"
-minor = "6" 
-patch = "0"
+build = 0
+major = 0
+minor = 6 
+patch = 0
 
 git_hash = 0
 
