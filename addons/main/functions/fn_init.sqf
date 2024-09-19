@@ -19,16 +19,17 @@ if (isServer && _activated) exitWith {
 	missionNamespace setVariable ["_atak_server_instance_username", _atak_ots_api_username];
 	missionNamespace setVariable ["_atak_server_instance_password", _atak_ots_api_password];
 
-	/*
-		_atak_server_instance_token = call armatak_fnc_extract_auth_token;
+	_atak_server_instance_token = call armatak_fnc_extract_auth_token;
 		
-		if (_atak_server_instance_token == "") then {
-			private _warning = format ["<t color='#FF0000'>ARMATAK</t><br/> %1", "Connection Failed"];
-			[[_warning, 2]] call CBA_fnc_notify;
-		} else {
-			private _warning = format ["<t color='#2B7319'>ARMATAK</t><br/> %1", "Connected"];
-			[[_warning, 2]] call CBA_fnc_notify;
-		};
+	if (_atak_server_instance_token == "") then {
+		private _warning = format ["<t color='#FF0000'>ARMATAK</t><br/> %1", "Connection Failed"];
+		[[_warning, 2]] call CBA_fnc_notify;
+	} else {
+		private _warning = format ["<t color='#2B7319'>ARMATAK</t><br/> %1", "Connected"];
+		[[_warning, 2]] call CBA_fnc_notify;
+	};
+
+	/*
 		
 		if (isMultiplayer) then {
 			[{

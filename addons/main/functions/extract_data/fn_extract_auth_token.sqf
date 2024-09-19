@@ -4,9 +4,9 @@ private _atak_server_instance_password = missionNamespace getVariable "_atak_ser
 
 private _authentication = [_atak_server_instance, _atak_server_instance_username, _atak_server_instance_password];
 
-_atak_server_instance_token = ("armatak" callExtension ["get_auth_token", _authentication]) select 0;
+_atak_server_instance_token = ("armatak" callExtension ["get_auth_token", [_authentication]]) select 0;
 
-if ((_atak_server_instance_token != "") and !(["error", _atak_server_instance_token, false] call BIS_fnc_inString)) then {
+if ((_atak_server_instance_token != "") and !(["ERROR", _atak_server_instance_token, false] call BIS_fnc_inString)) then {
 	missionNamespace setVariable ["_atak_server_instance_token", _atak_server_instance_token];
 
 	private _warning = format ["<t color='#2B7319'>ARMATAK</t><br/> %1", "Authorized"];

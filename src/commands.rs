@@ -1,4 +1,5 @@
 use crate::structs::{LoginInfo, LoginPayload};
+use log::error;
 use reqwest;
 use serde_json;
 
@@ -15,20 +16,48 @@ pub fn get_auth_token(payload: LoginPayload) -> String {
         .post(&parsed_address)
         .body(request_body)
         .header("Content-Type", "application/json")
-        .send()
-        .unwrap();
+        .send();
 
-    let response_body: serde_json::Value = serde_json::from_str(&response.text().unwrap()).unwrap();
+    match response {
+        Ok(result) => {
+            let response_body: Result<serde_json::Value, _> =
+                serde_json::from_str(&result.text().unwrap());
 
-    let csrf_token = response_body["response"]["csrf_token"].as_str().unwrap();
+            match response_body {
+                Ok(result) => {
+                    let csrf_token = result["response"]["csrf_token"].as_str();
 
-    return csrf_token.to_string()
+                    match csrf_token {
+                        Some(result) => {
+                            return result.to_string();
+                        }
+                        None => {
+                            let message = "ERROR: Provided JSON doesnt match a valid CSRF Token";
+                            error!("{}", message);
+
+                            return message.to_string();
+                        }
+                    }
+                }
+                Err(error) => {
+                    error!("{}", error);
+
+                    return "ERROR: failed to parse the response body to a valid JSON".to_string();
+                }
+            }
+        }
+        Err(error) => {
+            error!("{}", error);
+
+            return "ERROR: failed to fetch the OTS API".to_string();
+        }
+    }
 }
 
 pub(crate) mod markers {
     use log::info;
 
-    use crate::structs::Marker;
+    use crate::{structs::Marker, util::post_marker};
 
     pub fn get(placeholder: String) -> &'static str {
         info!("{}", placeholder);
@@ -38,7 +67,7 @@ pub(crate) mod markers {
 
     pub fn post(data: Vec<Marker>) -> &'static str {
         for item in data {
-            info!("{} - {}", item.uid, item.name)
+            post_marker(item);
         }
 
         return "not implemented yet";
