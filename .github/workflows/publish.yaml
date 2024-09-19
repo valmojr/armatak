@@ -40,7 +40,7 @@ jobs:
               with:
                   webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
                   username: ARMATAK
-                  avatar-url: https://media.githubusercontent.com/media/${{ github.repository }}/main/files/picture.png
+                  avatar-url: https://media.githubusercontent.com/media/${{ github.repository }}/main/picture.png
                   embed-title: ${{ github.repository }} Updated and Published
                   embed-url: 'https://github.com/${{ github.repository }}'
                   embed-description: Commit ${{ github.sha }} - ${{ github.event.head_commit.message }} authorized and updated on Steam Workshop!
