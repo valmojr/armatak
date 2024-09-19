@@ -1,6 +1,6 @@
 # ARMATAK
 
-![ARMATAK FRAME LOGO](./files/picture.png)
+![ARMATAK FRAME LOGO](./picture.png)
 
 ## Project Concept
 
