@@ -43,7 +43,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: x86_64-pc-windows-msvc
-      - run: mv armatak.dll armatak_x64.dll
+      - run: mv ./armatak.dll ./armatak_x64.dll
       - uses: actions/download-artifact@v4
         with:
           name: i686-pc-windows-msvc
