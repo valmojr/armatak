@@ -33,7 +33,7 @@ jobs:
           name: ${{ matrix.arrays.os.target }}
           path: target/release/armatak.dll
           if-no-files-found: error
-          retention-days: 15
+          retention-days: 7
   package:
     needs: build_extension
     runs-on: ubuntu-latest
