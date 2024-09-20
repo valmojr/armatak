@@ -55,9 +55,9 @@ checksum = "69f7f8c3906b62b754cd5326047894316021dcfe5a194c8ea52bdd94934a3457"
 
 [[package]]
 name = "arma-rs"
-version = "1.10.5"
+version = "1.11.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fdda6c2cf1237405dd57f82875c77b4159d415445471b903a901d8a37a61b30c"
+checksum = "e722ed20b6266ceccf4334d32a528fcef9a2dca341b8bbcceb99eb7152081239"
 dependencies = [
  "arma-rs-proc",
  "crossbeam-channel",
@@ -66,14 +66,15 @@ dependencies = [
  "log",
  "seq-macro",
  "state",
- "windows 0.51.1",
+ "winapi",
+ "windows 0.58.0",
 ]
 
 [[package]]
 name = "arma-rs-proc"
-version = "1.10.0"
+version = "1.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "517b1a9cc16bc93896216ffeed0c692df4af022ee55ec45e8fc31c90a201dcb4"
+checksum = "936ed035ff4e775bd50ff94ccdb44f236d1ca012c376347b048fb6b9861833b7"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -82,7 +83,7 @@ dependencies = [
 
 [[package]]
 name = "armatak"
-version = "0.1.0"
+version = "0.6.0"
 dependencies = [
  "arma-rs",
  "log",
@@ -91,6 +92,7 @@ dependencies = [
  "reqwest",
  "serde",
  "serde_json",
+ "tokio",
  "uuid",
 ]
 
@@ -528,7 +530,7 @@ dependencies = [
  "iana-time-zone-haiku",
  "js-sys",
  "wasm-bindgen",
- "windows-core",
+ "windows-core 0.51.1",
 ]
 
 [[package]]
@@ -1794,12 +1796,12 @@ dependencies = [
 
 [[package]]
 name = "windows"
-version = "0.51.1"
+version = "0.58.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ca229916c5ee38c2f2bc1e9d8f04df975b4bd93f9955dc69fabb5d91270045c9"
+checksum = "dd04d41d93c4992d421894c18c8b43496aa748dd4c081bac0dc93eb0489272b6"
 dependencies = [
- "windows-core",
- "windows-targets 0.48.5",
+ "windows-core 0.58.0",
+ "windows-targets 0.52.6",
 ]
 
 [[package]]
@@ -1809,6 +1811,41 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f1f8cf84f35d2db49a46868f947758c7a1138116f7fac3bc844f43ade1292e64"
 dependencies = [
  "windows-targets 0.48.5",
+]
+
+[[package]]
+name = "windows-core"
+version = "0.58.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6ba6d44ec8c2591c134257ce647b7ea6b20335bf6379a27dac5f1641fcf59f99"
+dependencies = [
+ "windows-implement",
+ "windows-interface",
+ "windows-result",
+ "windows-strings",
+ "windows-targets 0.52.6",
+]
+
+[[package]]
+name = "windows-implement"
+version = "0.58.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2bbd5b46c938e506ecbce286b6628a02171d56153ba733b6c741fc627ec9579b"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.77",
+]
+
+[[package]]
+name = "windows-interface"
+version = "0.58.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "053c4c462dc91d3b1504c6fe5a726dd15e216ba718e84a0e46a88fbe5ded3515"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.77",
 ]
 
 [[package]]
