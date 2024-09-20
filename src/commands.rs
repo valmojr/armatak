@@ -14,8 +14,8 @@ pub(crate) mod markers {
     use log::{error, info};
 
     use crate::{
-        structs::{LoginInfo, Marker},
-        util::{blocking_fetch_auth_token, parse_marker_to_payload},
+        structs::Marker,
+        util::parse_marker_to_payload,
     };
 
     pub fn get(placeholder: String) -> &'static str {
@@ -33,17 +33,10 @@ pub(crate) mod markers {
     }
 
     pub fn post_debug(data: Vec<Marker>) -> String {
-        let parsed_address = data[0].api_address.clone() + "/api/markers";
-        let token_parsed_address = data[0].api_address.clone() + "/api/login";
         let client = reqwest::blocking::Client::new();
 
-        let authentication_token = blocking_fetch_auth_token(
-            LoginInfo {
-                username: data[0].api_auth_username.clone(),
-                password: data[0].api_auth_password.clone(),
-            },
-            token_parsed_address,
-        );
+        let authentication_token = data[0].api_auth_token.clone();
+        let parsed_address: String = data[0].api_address.clone() + "/api/markers?auth_token=" + &authentication_token;
 
         let mut status: String = "fetching".to_string();
 
@@ -62,7 +55,6 @@ pub(crate) mod markers {
                 .post(parsed_address)
                 .body(request_body)
                 .header("Content-Type", "application/json")
-                .header("X-CSRF-Token", authentication_token)
                 .send();
 
             match response {
