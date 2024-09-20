@@ -1,4 +1,4 @@
-use log::error;
+use log::{error, info};
 
 use crate::structs::{LoginInfo, LoginPayload, Marker, MarkerPayload};
 
@@ -49,7 +49,7 @@ pub fn blocking_fetch_auth_token(payload: LoginInfo, api_address: String) -> Str
             match response_body {
                 Ok(result) => {
                     let csrf_token = result["response"]["user"]["authentication_token"].as_str();
-
+                    info!("Provided JSON: {:?}", result.as_str());
                     match csrf_token {
                         Some(result) => {
                             return result.to_string();
@@ -63,14 +63,14 @@ pub fn blocking_fetch_auth_token(payload: LoginInfo, api_address: String) -> Str
                     }
                 }
                 Err(error) => {
-                    error!("{}", error);
+                    error!("ERROR: failed to parse the response body to a valid JSON: {}", error);
 
                     return "ERROR: failed to parse the response body to a valid JSON".to_string();
                 }
             }
         }
         Err(error) => {
-            error!("{}", error);
+            error!("ERROR: failed to fetch the OTS API: {}", error);
 
             return "ERROR: failed to fetch the OTS API".to_string();
         }
