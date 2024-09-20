@@ -1,63 +1,22 @@
-use crate::structs::{LoginInfo, LoginPayload};
-use log::error;
-use reqwest;
-use serde_json;
+use crate::{
+    structs::LoginPayload,
+    util::{blocking_fetch_auth_token, parse_login_to_payload},
+};
 
-pub fn get_auth_token(payload: LoginPayload) -> String {
-    let login_info = LoginInfo {
-        username: payload.username,
-        password: payload.password,
-    };
+pub fn get_auth_token(login_payload: LoginPayload) -> String {
+    let api_address = login_payload.address.clone();
+    let login_info = parse_login_to_payload(login_payload);
 
-    let parsed_address = payload.address + "/api/login";
-    let request_body = serde_json::to_string(&login_info).unwrap();
-    let client = reqwest::blocking::Client::new();
-    let response = client
-        .post(&parsed_address)
-        .body(request_body)
-        .header("Content-Type", "application/json")
-        .send();
-
-    match response {
-        Ok(result) => {
-            let response_body: Result<serde_json::Value, _> =
-                serde_json::from_str(&result.text().unwrap());
-
-            match response_body {
-                Ok(result) => {
-                    let csrf_token = result["response"]["csrf_token"].as_str();
-
-                    match csrf_token {
-                        Some(result) => {
-                            return result.to_string();
-                        }
-                        None => {
-                            let message = "ERROR: Provided JSON doesnt match a valid CSRF Token";
-                            error!("{}", message);
-
-                            return message.to_string();
-                        }
-                    }
-                }
-                Err(error) => {
-                    error!("{}", error);
-
-                    return "ERROR: failed to parse the response body to a valid JSON".to_string();
-                }
-            }
-        }
-        Err(error) => {
-            error!("{}", error);
-
-            return "ERROR: failed to fetch the OTS API".to_string();
-        }
-    }
+    return blocking_fetch_auth_token(login_info, api_address);
 }
 
 pub(crate) mod markers {
-    use log::info;
+    use log::{error, info};
 
-    use crate::{structs::Marker, util::post_marker};
+    use crate::{
+        structs::{LoginInfo, Marker},
+        util::{blocking_fetch_auth_token, parse_marker_to_payload},
+    };
 
     pub fn get(placeholder: String) -> &'static str {
         info!("{}", placeholder);
@@ -67,10 +26,60 @@ pub(crate) mod markers {
 
     pub fn post(data: Vec<Marker>) -> &'static str {
         for item in data {
-            post_marker(item);
+            info!("{} - {}", item.uid, item.name);
         }
 
         return "not implemented yet";
+    }
+
+    pub fn post_debug(data: Vec<Marker>) -> String {
+        let parsed_address = data[0].api_address.clone() + "/api/markers";
+        let token_parsed_address = data[0].api_address.clone() + "/api/login";
+        let client = reqwest::blocking::Client::new();
+
+        let authentication_token = blocking_fetch_auth_token(
+            LoginInfo {
+                username: data[0].api_auth_username.clone(),
+                password: data[0].api_auth_password.clone(),
+            },
+            token_parsed_address,
+        );
+
+        let mut status: String = "fetching".to_string();
+
+        info!("{}", status);
+
+        for marker in data {
+            let payload = parse_marker_to_payload(marker);
+            let request_body = serde_json::to_string(&payload).unwrap();
+
+            info!(
+                "Parsing: {}, to {} with {}",
+                request_body, parsed_address, authentication_token
+            );
+
+            let response = client
+                .post(parsed_address)
+                .body(request_body)
+                .header("Content-Type", "application/json")
+                .header("X-CSRF-Token", authentication_token)
+                .send();
+
+            match response {
+                Ok(result) => {
+                    status = result.status().to_string();
+                    info!("Received: {}", result.text().unwrap());
+                }
+                Err(error) => {
+                    status = "fetch failed".to_string();
+                    error!("Error: {}", error)
+                }
+            }
+
+            return status;
+        }
+
+        return "ok".to_string();
     }
 
     pub fn delete(placeholder: String) -> &'static str {
