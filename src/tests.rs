@@ -1,6 +1,5 @@
 #[cfg(test)]
 mod tests {
-    mod uuid_tests {
         use crate::init;
         use uuid::Uuid;
         use std::vec;
@@ -14,7 +13,6 @@ mod tests {
 
             assert!(validation.is_ok())
         }
-
         
         #[test]
         fn uuid_output_throws_if_passed_args() {
@@ -24,7 +22,4 @@ mod tests {
 
             assert_eq!(output,"")
         }
-    }
-
-    mod markers_tests {}
 }
