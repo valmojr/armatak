@@ -36,6 +36,7 @@ pub fn init() -> Extension {
             Group::new()
                 .command("get", commands::markers::get)
                 .command("post", commands::markers::post)
+                .command("post_debug", commands::markers::post_debug)
                 .command("delete", commands::markers::delete),
         )
         .group(
