@@ -13,8 +13,6 @@ pub struct Marker {
     pub hae: f64,
     pub api_address: String,
     pub api_auth_token: String,
-    pub api_auth_username: String,
-    pub api_auth_password: String,
 }
 
 impl FromArma for Marker {
@@ -30,8 +28,6 @@ impl FromArma for Marker {
             hae,
             api_address,
             api_auth_token,
-            api_auth_username,
-            api_auth_password
         ) = <(
             String,
             f64,
@@ -41,8 +37,6 @@ impl FromArma for Marker {
             String,
             String,
             f64,
-            String,
-            String,
             String,
             String
         )>::from_arma(data)?;
@@ -56,9 +50,7 @@ impl FromArma for Marker {
             name,
             hae,
             api_address,
-            api_auth_token,
-            api_auth_username,
-            api_auth_password
+            api_auth_token
         })
     }
 }
