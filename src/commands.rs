@@ -11,12 +11,10 @@ pub fn get_auth_token(login_payload: LoginPayload) -> String {
 }
 
 pub(crate) mod markers {
+    use crate::{structs::Marker, util::{async_post_markers, parse_marker_to_payload}};
     use log::{error, info};
-
-    use crate::{
-        structs::Marker,
-        util::parse_marker_to_payload,
-    };
+    use std::thread;
+    use tokio::runtime::Runtime;
 
     pub fn get(placeholder: String) -> &'static str {
         info!("{}", placeholder);
@@ -25,18 +23,20 @@ pub(crate) mod markers {
     }
 
     pub fn post(data: Vec<Marker>) -> &'static str {
-        for item in data {
-            info!("{} - {}", item.uid, item.name);
-        }
+        thread::spawn(move || {
+            let rt = Runtime::new().unwrap();
+            rt.block_on(async_post_markers(data));
+        });
 
-        return "not implemented yet";
+        "loading"
     }
 
     pub fn post_debug(data: Vec<Marker>) -> String {
         let client = reqwest::blocking::Client::new();
 
         let authentication_token = data[0].api_auth_token.clone();
-        let parsed_address: String = data[0].api_address.clone() + "/api/markers?auth_token=" + &authentication_token;
+        let parsed_address: String =
+            data[0].api_address.clone() + "/api/markers?auth_token=" + &authentication_token;
 
         let mut status: String = "fetching".to_string();
 
