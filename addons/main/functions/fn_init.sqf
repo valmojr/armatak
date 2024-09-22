@@ -20,7 +20,7 @@ if (isServer && _activated) exitWith {
 	missionNamespace setVariable ["_atak_server_instance_password", _atak_ots_api_password];
 
 	_atak_server_instance_token = call armatak_fnc_extract_auth_token;
-		
+
 	if (_atak_server_instance_token == "") then {
 		private _warning = format ["<t color='#FF0000'>ARMATAK</t><br/> %1", "Connection Failed"];
 		[[_warning, 2]] call CBA_fnc_notify;
@@ -29,66 +29,40 @@ if (isServer && _activated) exitWith {
 		[[_warning, 2]] call CBA_fnc_notify;
 	};
 
-	/*
-		
+	[{
 		if (isMultiplayer) then {
 			[{
-				[{
-					private _markers = [];
-					{
-						private _unit = _x;
-						private _m = _unit call armatak_fnc_extract_info;
-						_markers append _m;
-					} forEach playableUnits;
-					{
-						private _drone = _x;
-						if (_drone getVariable "_atak_uav_connected") then {
-							private _m = _drone call armatak_fnc_extract_drone_info;
-							_markers append _m;
-						};
-					} forEach allUnitsUAV;
-					
-					private _i = 0;
-					private _toSend = [];
-					{
-						if _i == 10 then {
-							"armatak" callExtension ["sendMarkers", _toSend];
-							_toSend = [];
-						};
-						_toSend append _x;
-						_i = _i + 1;
-					} forEach _markers;
-					"armatak" callExtension ["sendMarkers", _toSend];
-				}, 1, []] call CBA_fnc_addPerFrameHandler;
-			}, [], 1] call CBA_fnc_waitAndExecute;
-		} else {
-			[{
-				private _markers = [];
+				_markers = [];
+
 				{
-					private _unit = player;
-					private _m = _unit call armatak_fnc_extract_info;
-					_markers append _m;
-				};
+					private _unit = _x;
+					_m = _unit call armatak_fnc_extract_info;
+					_markers append [_m];
+				} forEach playableUnits;
 				{
-					private _drone = _x;
-					if (_drone getVariable "_atak_uav_connected") then {
-						private _m = _drone call armatak_fnc_extract_drone_info;
-						_markers append _m;
+					private _unit = _x;
+					if (_unit getVariable "_atak_uav_connected") then {
+						_m = _unit call armatak_fnc_extract_drone_info;
+						_markers append [_m];
 					};
 				} forEach allUnitsUAV;
-				
-				private _i = 0;
-				private _toSend = [];
+				[_markers] call armatak_fnc_postMarkers;
+			}, 1, []] call CBA_fnc_addPerFrameHandler;
+		} else {
+			[{
+				_markers = [];
+
+				_m = player call armatak_fnc_extract_info;
+				_markers append [_m];
+
 				{
-					if _i == 10 then {
-						"armatak" callExtension ["sendMarkers", _toSend];
-						_toSend = [];
+					if (_x getVariable "_atak_uav_connected") then {
+						_m = _x call armatak_fnc_extract_drone_info;
+						_markers append [_m];
 					};
-					_toSend append _x;
-					_i = _i + 1;
-				} forEach _markers;
-				"armatak" callExtension ["sendMarkers", _toSend];
+				} forEach allUnitsUAV;
+				[_markers] call armatak_fnc_postMarkers;
 			}, 1, []] call CBA_fnc_addPerFrameHandler;
 		};
-	*/
+	}, [], 1] call CBA_fnc_waitAndExecute;
 };
