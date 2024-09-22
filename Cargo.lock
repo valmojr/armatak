@@ -88,6 +88,7 @@ dependencies = [
  "arma-rs",
  "log",
  "log4rs",
+ "once_cell",
  "regex",
  "reqwest",
  "serde",

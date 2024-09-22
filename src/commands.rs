@@ -1,7 +1,14 @@
+use once_cell::sync::Lazy;
+use tokio::runtime::Runtime;
+
 use crate::{
     structs::LoginPayload,
     util::{blocking_fetch_auth_token, parse_login_to_payload},
 };
+
+pub static RUNTIME: Lazy<Runtime> = Lazy::new(|| {
+    Runtime::new().expect("Failed to build the Tokio Runtime")
+});
 
 pub fn get_auth_token(login_payload: LoginPayload) -> String {
     let api_address = login_payload.address.clone();
@@ -14,7 +21,8 @@ pub(crate) mod markers {
     use crate::{structs::Marker, util::{async_post_markers, parse_marker_to_payload}};
     use log::{error, info};
     use std::thread;
-    use tokio::runtime::Runtime;
+
+    use super::RUNTIME;
 
     pub fn get(placeholder: String) -> &'static str {
         info!("{}", placeholder);
@@ -24,8 +32,7 @@ pub(crate) mod markers {
 
     pub fn post(data: Vec<Marker>) -> &'static str {
         thread::spawn(move || {
-            let rt = Runtime::new().unwrap();
-            rt.block_on(async_post_markers(data));
+            RUNTIME.block_on(async_post_markers(data));
         });
 
         "loading"
