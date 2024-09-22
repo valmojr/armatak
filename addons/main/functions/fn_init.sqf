@@ -3,7 +3,6 @@ params [
 	["_units", [], [[]]],
 	["_activated", true, [true]]
 ];
-
 if (isServer && _activated) exitWith {
 	private _warning = format ["<t color='#FF8021'>ARMATAK</t><br/> %1", "Connecting..."];
 	[[_warning, 1.5]] call CBA_fnc_notify;
@@ -30,50 +29,40 @@ if (isServer && _activated) exitWith {
 		[[_warning, 2]] call CBA_fnc_notify;
 	};
 
-	if (isMultiplayer) then {
-		[{
+	[{
+		if (isMultiplayer) then {
 			[{
+				_markers = [];
+
 				{
 					private _unit = _x;
-					_unit call armatak_fnc_postMarker;
-					_unit call armatak_fnc_extract_drone_info;
+					_m = _unit call armatak_fnc_extract_info;
+					_markers append [_m];
 				} forEach playableUnits;
 				{
-					private _drone = _x;
-					if (_drone getVariable "_atak_uav_connected") then {
-						_drone call armatak_fnc_postDroneMarker;
+					private _unit = _x;
+					if (_unit getVariable "_atak_uav_connected") then {
+						_m = _unit call armatak_fnc_extract_drone_info;
+						_markers append [_m];
 					};
 				} forEach allUnitsUAV;
+				[_markers] call armatak_fnc_postMarkers;
 			}, 1, []] call CBA_fnc_addPerFrameHandler;
-		}, [], 1] call CBA_fnc_waitAndExecute;
+		} else {
+			[{
+				_markers = [];
 
-		addMissionEventHandler ["MPEnded", {
-			{
-				private _unit = _x;
-				_unit call armatak_fnc_deleteMarker;
-			} forEach playableUnits;
-			{
-				private _drone = _x;
-				_drone call armatak_fnc_deleteMarker;
-			} forEach allUnitsUAV;
-		}];
-	} else {
-		[{
-			player call armatak_fnc_postMarker;
-			{
-				private _drone = _x;
-				if (_drone getVariable "_atak_uav_connected") then {
-					_drone call armatak_fnc_postDroneMarker;
-				};
-			} forEach allUnitsUAV;
-		}, 1, []] call CBA_fnc_addPerFrameHandler;
+				_m = player call armatak_fnc_extract_info;
+				_markers append [_m];
 
-		addMissionEventHandler ["Ended", {
-			player call armatak_fnc_deleteMarker;
-			{
-				private _drone = _x;
-				_drone call armatak_fnc_deleteMarker;
-			} forEach allUnitsUAV;
-		}];
-	};
+				{
+					if (_x getVariable "_atak_uav_connected") then {
+						_m = _x call armatak_fnc_extract_drone_info;
+						_markers append [_m];
+					};
+				} forEach allUnitsUAV;
+				[_markers] call armatak_fnc_postMarkers;
+			}, 1, []] call CBA_fnc_addPerFrameHandler;
+		};
+	}, [], 1] call CBA_fnc_waitAndExecute;
 };
