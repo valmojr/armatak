@@ -1,101 +1,145 @@
-use once_cell::sync::Lazy;
-use tokio::runtime::Runtime;
+use std::{sync::Arc, thread};
+use log::{error, info};
+use tokio::{net::TcpListener, sync::{Mutex, oneshot}, task::JoinHandle, runtime::Runtime};
+use tokio_tungstenite::{accept_async, tungstenite::protocol::Message, WebSocketStream};
+use futures::{SinkExt, StreamExt};
+use tokio::net::TcpStream;
+use serde_json::json;
+use lazy_static::lazy_static;
 
-use crate::{
-    structs::LoginPayload,
-    util::{blocking_fetch_auth_token, parse_login_to_payload},
-};
+type WebSocket = WebSocketStream<TcpStream>;
 
-pub static RUNTIME: Lazy<Runtime> = Lazy::new(|| {
-    Runtime::new().expect("Failed to build the Tokio Runtime")
-});
-
-pub fn get_auth_token(login_payload: LoginPayload) -> String {
-    let api_address = login_payload.address.clone();
-    let login_info = parse_login_to_payload(login_payload);
-
-    return blocking_fetch_auth_token(login_info, api_address);
+struct ServerState {
+    handle: Option<JoinHandle<()>>,
+    stop_sender: Option<oneshot::Sender<()>>,
+    clients: Vec<Arc<Mutex<WebSocket>>>,
 }
 
-pub(crate) mod markers {
-    use crate::{structs::Marker, util::{async_post_markers, parse_marker_to_payload}};
-    use log::{error, info};
-    use std::thread;
-
-    use super::RUNTIME;
-
-    pub fn get(placeholder: String) -> &'static str {
-        info!("{}", placeholder);
-
-        return "not implemented yet";
+impl ServerState {
+    fn new() -> Self {
+        ServerState {
+            handle: None,
+            stop_sender: None,
+            clients: vec![],
+        }
     }
+}
 
-    pub fn post(data: Vec<Marker>) -> &'static str {
-        thread::spawn(move || {
-            RUNTIME.block_on(async_post_markers(data));
-        });
+lazy_static! {
+    static ref SERVER_STATE: Arc<Mutex<ServerState>> = Arc::new(Mutex::new(ServerState::new()));
+}
 
-        "loading"
-    }
+fn create_tokio_runtime() -> Runtime {
+    tokio::runtime::Builder::new_multi_thread()
+        .enable_all()
+        .build()
+        .expect("Failed to create Tokio runtime")
+}
 
-    pub fn post_debug(data: Vec<Marker>) -> String {
-        let client = reqwest::blocking::Client::new();
+pub fn start() -> &'static str {
+    let rt = create_tokio_runtime();
+    let server_state = SERVER_STATE.clone();
 
-        let authentication_token = data[0].api_auth_token.clone();
-        let parsed_address: String =
-            data[0].api_address.clone() + "/api/markers?auth_token=" + &authentication_token;
+    thread::spawn(move || {
+        rt.block_on(async {
+            let mut state = server_state.lock().await;
 
-        let mut status: String = "fetching".to_string();
-
-        info!("{}", status);
-
-        for marker in data {
-            let payload = parse_marker_to_payload(marker);
-            let request_body = serde_json::to_string(&payload).unwrap();
-
-            info!(
-                "Parsing: {}, to {} with {}",
-                request_body, parsed_address, authentication_token
-            );
-
-            let response = client
-                .post(parsed_address)
-                .body(request_body)
-                .header("Content-Type", "application/json")
-                .send();
-
-            match response {
-                Ok(result) => {
-                    status = result.status().to_string();
-                    info!("Received: {}", result.text().unwrap());
-                }
-                Err(error) => {
-                    status = "fetch failed".to_string();
-                    error!("Error: {}", error)
-                }
+            if state.handle.is_some() {
+                info!("Server is already running.");
+                return;
             }
 
-            return status;
+            let (stop_tx, stop_rx) = oneshot::channel();
+            state.stop_sender = Some(stop_tx);
+
+            state.handle = Some(tokio::spawn(async move {
+                info!("Starting server...");
+                let listener = TcpListener::bind("192.168.15.8:8080").await.expect("Failed to bind");
+                info!("WebSocket server running on ws://192.168.15.8:8080");
+
+                tokio::select! {
+                    _ = async {
+                        while let Ok((stream, _)) = listener.accept().await {
+                            let ws_stream = accept_async(stream).await.expect("Failed to accept WebSocket connection");
+                            let client = Arc::new(Mutex::new(ws_stream));
+                            SERVER_STATE.lock().await.clients.push(client.clone());
+
+                            tokio::spawn(handle_client(client));
+                        }
+                    } => {}
+                    _ = stop_rx => {
+                        info!("Shutting down WebSocket server.");
+                    }
+                }
+            }));
+        });
+    });
+
+    "Server starting..."
+}
+
+async fn handle_client(client: Arc<Mutex<WebSocket>>) {
+    let mut client = client.lock().await;
+
+    while let Some(Ok(msg)) = client.next().await {
+        if let Message::Text(text) = msg {
+            info!("Received message from client: {}", text);
         }
-
-        return "ok".to_string();
-    }
-
-    pub fn delete(placeholder: String) -> &'static str {
-        info!("{}", placeholder);
-
-        return "not implemented yet";
     }
 }
 
-pub(crate) mod casevac {
-    pub fn get(placeholder: String) -> String {
-        format!("ERROR: Not implemented yet, {}", placeholder)
+pub fn send_ping() -> &'static str {
+    thread::spawn(move || {
+        let rt = create_tokio_runtime();
+        rt.block_on(async {
+            send_to_all_clients(Message::Text("Ping".into())).await;
+        });
+    });
+
+    "sending ping..."
+}
+
+pub fn send_location() -> &'static str {
+    thread::spawn(move || {
+        let rt = create_tokio_runtime();
+        rt.block_on(async {
+            let location_data = json!({ "location": "42.3601, -71.0589" });
+            send_to_all_clients(Message::Text(location_data.to_string())).await;
+        });
+    });
+
+    "sending location..."
+}
+
+async fn send_to_all_clients(message: Message) {
+    let state = SERVER_STATE.lock().await;
+    for client in &state.clients {
+        let mut client = client.lock().await;
+        if let Err(e) = client.send(message.clone()).await {
+            error!("Failed to send message: {:?}", e);
+        }
     }
-    pub fn post(placeholder: String) -> String {
-        format!("ERROR: Not implemented yet, {}", placeholder)
-    }
-    pub fn delete(placeholder: String) -> String {
-        format!("ERROR: Not implemented yet, {}", placeholder)
-    }
+}
+
+pub fn stop() -> &'static str {
+    let server_state = SERVER_STATE.clone();
+
+    thread::spawn(move || {
+        let rt = create_tokio_runtime();
+        rt.block_on(async {
+            let mut state = server_state.lock().await;
+
+            if let Some(stop_tx) = state.stop_sender.take() {
+                let _ = stop_tx.send(());
+            }
+
+            if let Some(handle) = state.handle.take() {
+                let _ = handle.await;
+                state.clients.clear();
+                info!("Server stopped.");
+            }
+        });
+    });
+
+    "Server stopping..."
 }

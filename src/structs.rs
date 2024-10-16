@@ -1,92 +1,22 @@
 use arma_rs::{FromArma, FromArmaError};
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize)]
-pub struct Marker {
-    pub uid: String,
-    pub longitude: f64,
-    pub latitude: f64,
-    pub name: String,
-    pub r#type: String,
-    pub course: f64,
-    pub speed: f64,
-    pub hae: f64,
-    pub api_address: String,
-    pub api_auth_token: String,
-}
-
-impl FromArma for Marker {
-    fn from_arma(data: String) -> Result<Marker, FromArmaError> {
-        let (
-            uid,
-            latitude,
-            longitude,
-            speed,
-            course,
-            r#type,
-            name,
-            hae,
-            api_address,
-            api_auth_token,
-        ) = <(
-            String,
-            f64,
-            f64,
-            f64,
-            f64,
-            String,
-            String,
-            f64,
-            String,
-            String
-        )>::from_arma(data)?;
-        Ok(Self {
-            uid,
-            latitude,
-            longitude,
-            speed,
-            course,
-            r#type,
-            name,
-            hae,
-            api_address,
-            api_auth_token
-        })
-    }
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct MarkerPayload {
-    pub uid: String,
-    pub longitude: f64,
-    pub latitude: f64,
-    pub name: String,
-    pub r#type: String,
-    pub course: f64,
-    pub speed: f64,
-    pub hae: f64,
-}
-
 #[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct LoginPayload {
-    pub address: String,
-    pub username: String,
-    pub password: String,
+pub struct LocationPayload {
+    pub latitude: f32,
+    pub longitude: f32,
+    pub altitude: f32,
+    pub bearing: f32,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct LoginInfo {
-    pub username: String,
-    pub password: String
-}
-
-impl FromArma for LoginPayload {
-    fn from_arma(data: String) -> Result<LoginPayload, FromArmaError> {
-        let (address, username, password) = <(String, String, String)>::from_arma(data)?;
+impl FromArma for LocationPayload {
+    fn from_arma(data: String) -> Result<LocationPayload, FromArmaError> {
+        let (latitude, longitude, altitude, bearing) = <(f32, f32, f32, f32)>::from_arma(data)?;
         Ok(Self {
-            address,
-            username,
-            password,
+            latitude,
+            longitude,
+            altitude,
+            bearing,
         })
     }
 }
