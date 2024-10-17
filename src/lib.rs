@@ -11,7 +11,7 @@ pub fn init() -> Extension {
 
     let file_appender = FileAppender::builder()
         .append(true)
-        .encoder(Box::new(PatternEncoder::new("{d} {t} {l} - {m}{n}")))
+        .encoder(Box::new(PatternEncoder::new("{d} {t} - {m}{n}")))
         .build("armatak.log")
         .unwrap();
 
