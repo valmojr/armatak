@@ -25,11 +25,10 @@ pub fn init() -> Extension {
         .unwrap();
 
     log4rs::init_config(config).unwrap();
-
+ 
     Extension::build()
         .command("start", commands::start)
         .command("stop", commands::stop)
-        .command("ping", commands::send_ping)
-        .command("location", commands::send_location)
+        .command("message", commands::message)
         .finish()
 }

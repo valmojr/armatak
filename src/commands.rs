@@ -1,153 +1,108 @@
-use futures::{SinkExt, StreamExt};
+use std::sync::{Arc, Mutex};
+use std::sync::mpsc::{self, Sender, Receiver};
+use std::thread;
+use log::info;
+use ws::{listen, Message, Result as WsResult};
 use lazy_static::lazy_static;
-use log::{error, info};
-use once_cell::sync::Lazy;
-use serde_json::json;
-use std::{sync::Arc, thread};
-use tokio::net::TcpStream;
-use tokio::{
-    net::TcpListener,
-    runtime::Runtime,
-    sync::{oneshot, Mutex},
-    task::JoinHandle,
-};
-use tokio_tungstenite::{accept_async, tungstenite::protocol::Message, WebSocketStream};
 
-use crate::structs::LocationPayload;
-
-type WebSocket = WebSocketStream<TcpStream>;
-
-struct ServerState {
-    handle: Option<JoinHandle<()>>,
-    stop_sender: Option<oneshot::Sender<()>>,
-    clients: Vec<Arc<Mutex<WebSocket>>>,
+enum WsCommand {
+    SendMessage(String),
+    Stop,
 }
 
-impl ServerState {
-    fn new() -> Self {
-        ServerState {
-            handle: None,
-            stop_sender: None,
-            clients: vec![],
-        }
+struct WsServer {
+    tx: Sender<WsCommand>,
+}
+
+impl WsServer {
+    fn start(&self, rx: Receiver<WsCommand>) {
+        let clients = Arc::new(Mutex::new(Vec::new()));
+        let clients_clone = Arc::clone(&clients);
+
+        thread::spawn(move || {
+            let mut running = true;
+
+            let ws_thread = thread::spawn(move || {
+                listen("127.0.0.1:3012", |out| {
+                    let clients_inner = Arc::clone(&clients_clone);
+                    {
+                        let mut clients_guard = clients_inner.lock().unwrap();
+                        clients_guard.push(out.clone());
+                    }
+                    
+                    move |msg: Message| -> WsResult<()> {
+                        info!("Received: {}", msg);
+                        Ok(())
+                    }
+                }).unwrap();
+            });
+
+            while running {
+                match rx.recv() {
+                    Ok(WsCommand::SendMessage(message)) => {
+                        let clients_guard = clients.lock().unwrap();
+                        for client in clients_guard.iter() {
+                            client.send(message.clone()).unwrap();
+                        }
+                        info!("Broadcasting message: {}", message);
+                    }
+                    Ok(WsCommand::Stop) => {
+                        running = false;
+                        info!("Stopping WebSocket server.");
+                    }
+                    Err(_) => {
+                        info!("Error receiving command.");
+                    }
+                }
+            }
+
+            ws_thread.join().unwrap();
+        });
+    }
+
+    fn send_message(&self, message: String) {
+        self.tx.send(WsCommand::SendMessage(message)).unwrap();
+    }
+
+    fn stop(&self) {
+        self.tx.send(WsCommand::Stop).unwrap();
     }
 }
 
 lazy_static! {
-    static ref SERVER_STATE: Arc<Mutex<ServerState>> = Arc::new(Mutex::new(ServerState::new()));
-    static ref LOCATION_PAYLOAD: LocationPayload = LocationPayload {
-        latitude: 0.0,
-        longitude: 0.0,
-        altitude: 0.0,
-        bearing: 0.0,
-    };
+    static ref WEBSOCKET_SERVER: Arc<Mutex<Option<WsServer>>> = Arc::new(Mutex::new(None));
 }
-
-pub static RUNTIME: Lazy<Runtime> =
-    Lazy::new(|| Runtime::new().expect("Failed to build the Tokio Runtime"));
 
 pub fn start() -> &'static str {
-    let server_state = SERVER_STATE.clone();
+    let (tx, rx): (Sender<WsCommand>, Receiver<WsCommand>) = mpsc::channel();
 
-    thread::spawn(move || {
-        RUNTIME.block_on(async {
-            let mut state = server_state.lock().await;
+    let server = WsServer { tx };
+    server.start(rx);
 
-            if state.handle.is_some() {
-                info!("Server is already running.");
-                return;
-            }
+    let mut server_guard = WEBSOCKET_SERVER.lock().unwrap();
+    *server_guard = Some(server);
 
-            let (stop_tx, stop_rx) = oneshot::channel();
-            state.stop_sender = Some(stop_tx);
+    info!("WebSocket server started.");
 
-            state.handle = Some(tokio::spawn(async move {
-                info!("Starting server...");
-                let listener = TcpListener::bind("192.168.0.43:8080").await.expect("Failed to bind");
-                info!("WebSocket server running on ws://192.168.0.43:8080");
-
-                tokio::select! {
-                    _ = async {
-                        while let Ok((stream, _)) = listener.accept().await {
-                            let ws_stream = accept_async(stream).await.expect("Failed to accept WebSocket connection");
-                            let client = Arc::new(Mutex::new(ws_stream));
-                            SERVER_STATE.lock().await.clients.push(client.clone());
-
-                            tokio::spawn(handle_client(client));
-                        }
-                    } => {}
-                    _ = stop_rx => {
-                        info!("Shutting down WebSocket server.");
-                    }
-                }
-            }));
-        });
-    });
-
-    "Server starting..."
+    "Starting WebSocket Server"
 }
 
-async fn handle_client(client: Arc<Mutex<WebSocket>>) {
-    let mut client = client.lock().await;
-
-    while let Some(Ok(msg)) = client.next().await {
-        if let Message::Text(text) = msg {
-            info!("Received message from client: {}", text);
-        }
+pub fn message(payload: String) -> &'static str {
+    if let Some(ref server) = *WEBSOCKET_SERVER.lock().unwrap() {
+        server.send_message(payload);
+    } else {
+        info!("WebSocket server is not running.");
     }
-}
 
-pub fn send_ping() -> &'static str {
-    thread::spawn(move || {
-        RUNTIME.block_on(async {
-            send_to_all_clients(Message::Text("Ping".into())).await;
-        });
-    });
-
-    "sending ping..."
-}
-
-pub fn send_location() -> &'static str {
-    let current_position = LOCATION_PAYLOAD.clone();
-    thread::spawn(move || {
-        RUNTIME.block_on(async {
-            let location_data = json!(current_position);
-            send_to_all_clients(Message::Text(location_data.to_string())).await;
-        });
-    });
-
-    "sending location..."
-}
-
-async fn send_to_all_clients(message: Message) {
-    info!("Sending message to all clients: {:?}", message);
-    let state = SERVER_STATE.lock().await;
-    for client in &state.clients {
-        let mut client = client.lock().await;
-        if let Err(e) = client.send(message.clone()).await {
-            error!("Failed to send message: {:?}", e);
-        }
-    }
+    "Sending message to all WebSocket clients"
 }
 
 pub fn stop() -> &'static str {
-    let server_state = SERVER_STATE.clone();
+    if let Some(ref server) = *WEBSOCKET_SERVER.lock().unwrap() {
+        server.stop();
+    } else {
+        info!("WebSocket server is not running.");
+    }
 
-    thread::spawn(move || {
-        RUNTIME.block_on(async {
-            let mut state = server_state.lock().await;
-
-            if let Some(stop_tx) = state.stop_sender.take() {
-                let _ = stop_tx.send(());
-            }
-
-            if let Some(handle) = state.handle.take() {
-                let _ = handle.await;
-                state.clients.clear();
-                info!("Server stopped.");
-            }
-        });
-    });
-
-    "Server stopping..."
+    "Stopping WebSocket server"
 }
