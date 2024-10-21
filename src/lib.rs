@@ -30,5 +30,6 @@ pub fn init() -> Extension {
         .command("start", commands::start)
         .command("stop", commands::stop)
         .command("message", commands::message)
+        .command("location", commands::location)
         .finish()
 }

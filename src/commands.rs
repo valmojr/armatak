@@ -5,6 +5,8 @@ use log::info;
 use ws::{listen, Message, Result as WsResult};
 use lazy_static::lazy_static;
 
+use crate::structs::{IntoMessage, LocationPayload};
+
 enum WsCommand {
     SendMessage(String),
     Stop,
@@ -60,7 +62,8 @@ impl WsServer {
         });
     }
 
-    fn send_message(&self, message: String) {
+    fn send_message<T: IntoMessage>(&self, payload: T) {
+        let message = payload.into_message(); // Convert the payload to a String
         self.tx.send(WsCommand::SendMessage(message)).unwrap();
     }
 
@@ -95,6 +98,15 @@ pub fn message(payload: String) -> &'static str {
     }
 
     "Sending message to all WebSocket clients"
+}
+
+pub fn location(payload: LocationPayload) -> &'static str {
+    if let Some(ref server) = *WEBSOCKET_SERVER.lock().unwrap() {
+        server.send_message(payload);
+    } else {
+        info!("WebSocket server is not running.");
+    }
+    "sending location to all WebSocket clients"
 }
 
 pub fn stop() -> &'static str {
