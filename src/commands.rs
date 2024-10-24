@@ -46,7 +46,6 @@ impl WsServer {
                         for client in clients_guard.iter() {
                             client.send(message.clone()).unwrap();
                         }
-                        info!("Broadcasting message: {}", message);
                     }
                     Ok(WsCommand::Stop) => {
                         running = false;
@@ -63,7 +62,7 @@ impl WsServer {
     }
 
     fn send_message<T: IntoMessage>(&self, payload: T) {
-        let message = payload.into_message(); // Convert the payload to a String
+        let message = payload.into_message();
         self.tx.send(WsCommand::SendMessage(message)).unwrap();
     }
 
@@ -92,6 +91,7 @@ pub fn start() -> &'static str {
 
 pub fn message(payload: String) -> &'static str {
     if let Some(ref server) = *WEBSOCKET_SERVER.lock().unwrap() {
+        info!("Broadcasting message: {}", payload);
         server.send_message(payload);
     } else {
         info!("WebSocket server is not running.");
