@@ -25,10 +25,11 @@ pub fn init() -> Extension {
         .unwrap();
 
     log4rs::init_config(config).unwrap();
- 
+
     Extension::build()
         .command("start", commands::start)
         .command("stop", commands::stop)
+        .command("local_ip", commands::local_qrcode)
         .command("message", commands::message)
         .command("location", commands::location)
         .finish()

@@ -1,9 +1,11 @@
-use std::sync::{Arc, Mutex};
-use std::sync::mpsc::{self, Sender, Receiver};
-use std::thread;
-use log::info;
-use ws::{listen, Message, Result as WsResult};
 use lazy_static::lazy_static;
+use log::info;
+use std::net::{IpAddr, UdpSocket};
+use std::sync::mpsc::{self, Receiver, Sender};
+use std::sync::{Arc, Mutex};
+use std::thread;
+use ws::{listen, Message, Result as WsResult};
+use qrcode::{render::unicode::{self}, QrCode};
 
 use crate::structs::{IntoMessage, LocationPayload};
 
@@ -25,18 +27,19 @@ impl WsServer {
             let mut running = true;
 
             let ws_thread = thread::spawn(move || {
-                listen("127.0.0.1:3012", |out| {
+                listen("0.0.0.0:4152", |out| {
                     let clients_inner = Arc::clone(&clients_clone);
                     {
                         let mut clients_guard = clients_inner.lock().unwrap();
                         clients_guard.push(out.clone());
                     }
-                    
+
                     move |msg: Message| -> WsResult<()> {
                         info!("Received: {}", msg);
                         Ok(())
                     }
-                }).unwrap();
+                })
+                .unwrap();
             });
 
             while running {
@@ -51,8 +54,8 @@ impl WsServer {
                         running = false;
                         info!("Stopping WebSocket server.");
                     }
-                    Err(_) => {
-                        info!("Error receiving command.");
+                    Err(error) => {
+                        info!("Error receiving command: {}", error.to_string());
                     }
                 }
             }
@@ -117,4 +120,40 @@ pub fn stop() -> &'static str {
     }
 
     "Stopping WebSocket server"
+}
+
+pub fn local_qrcode() -> Vec<String> {
+    let mut result = Vec::<String>::new();
+
+    fn get_local_ip() -> Result<IpAddr, String> {
+        let socket = UdpSocket::bind("0.0.0.0:0").map_err(|e| e.to_string())?;
+        socket
+            .connect("8.8.8.8:80")
+            .map_err(|e| e.to_string())?;
+        socket
+            .local_addr()
+            .map(|addr| addr.ip())
+            .map_err(|e| e.to_string())
+    }
+
+    fn draw_qrcode(data: String) -> String {
+        let code = QrCode::new(data).expect("Failed to generate QR Code");
+        let ascii_qr = code.render::<unicode::Dense1x2>().quiet_zone(false).build();
+        return ascii_qr.replace("\n", ",")
+    }
+
+    let parsed_data = get_local_ip();
+
+    match parsed_data {
+        Ok(ip) => {
+            result.push(draw_qrcode(ip.to_string()));
+            result.push(ip.to_string())
+        },
+        Err(_) => {
+            result.push("not provided".to_string());
+            result.push("not provided".to_string());
+        },
+    }
+
+    return result;
 }
