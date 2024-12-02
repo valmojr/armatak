@@ -5,7 +5,6 @@ use std::sync::mpsc::{self, Receiver, Sender};
 use std::sync::{Arc, Mutex};
 use std::thread;
 use ws::{listen, Message, Result as WsResult};
-use qrcode::{render::unicode::{self}, QrCode};
 
 use crate::structs::{IntoMessage, LocationPayload};
 
@@ -122,9 +121,7 @@ pub fn stop() -> &'static str {
     "Stopping WebSocket server"
 }
 
-pub fn local_qrcode() -> Vec<String> {
-    let mut result = Vec::<String>::new();
-
+pub fn local_address() -> String {
     fn get_local_ip() -> Result<IpAddr, String> {
         let socket = UdpSocket::bind("0.0.0.0:0").map_err(|e| e.to_string())?;
         socket
@@ -136,24 +133,14 @@ pub fn local_qrcode() -> Vec<String> {
             .map_err(|e| e.to_string())
     }
 
-    fn draw_qrcode(data: String) -> String {
-        let code = QrCode::new(data).expect("Failed to generate QR Code");
-        let ascii_qr = code.render::<unicode::Dense1x2>().quiet_zone(false).build();
-        return ascii_qr.replace("\n", ",")
-    }
-
     let parsed_data = get_local_ip();
 
     match parsed_data {
         Ok(ip) => {
-            result.push(draw_qrcode(ip.to_string()));
-            result.push(ip.to_string())
+            return format!("ws://{}:4152", ip.to_string());
         },
         Err(_) => {
-            result.push("not provided".to_string());
-            result.push("not provided".to_string());
+            return "not provided".to_string();
         },
     }
-
-    return result;
 }

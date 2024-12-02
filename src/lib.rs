@@ -29,7 +29,7 @@ pub fn init() -> Extension {
     Extension::build()
         .command("start", commands::start)
         .command("stop", commands::stop)
-        .command("local_ip", commands::local_qrcode)
+        .command("local_ip", commands::local_address)
         .command("message", commands::message)
         .command("location", commands::location)
         .finish()
