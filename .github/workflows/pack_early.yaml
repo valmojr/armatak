@@ -41,7 +41,9 @@ jobs:
     needs: build_extension
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v4
+        with:
+            lfs: true
       - run: mkdir ./target
       - run: mkdir ./target/release
       - uses: actions/download-artifact@v4
