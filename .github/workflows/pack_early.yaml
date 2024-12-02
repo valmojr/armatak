@@ -4,8 +4,9 @@ on:
   push:
     branches:
       - dev
+      - websocket
   pull_request:
-    branches: [ main, dev ]
+    branches: [ main, dev, websocket ]
 
 jobs:
   build_extension:
