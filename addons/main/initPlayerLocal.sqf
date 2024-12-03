@@ -6,14 +6,6 @@ _local_address = "armatak" callExtension ["local_ip", []] select 0;
 player setVariable ["initializedSocket", _initializedServer];
 player setVariable ["localAddress", _local_address];
 
-waitUntil {alive player};
-
-[{ 
-	if (alive player) then {
-		"armatak" callExtension ["location",[player call armatak_fnc_extract_info]];	
-	};
-}, 1, []] call CBA_fnc_addPerFrameHandler;
-
 player addEventHandler ["Killed", {
 	"armatak" callExtension ["stop", []];
 }];
@@ -37,3 +29,7 @@ player addEventHandler ["Respawn", {
 }];
 
 onPlayerDisconnected "'armatak' callExtension ['stop',[]];";
+
+[{ 
+	"armatak" callExtension ["location",[player call armatak_fnc_extract_info]];	
+}, 1, []] call CBA_fnc_addPerFrameHandler;

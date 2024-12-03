@@ -12,7 +12,7 @@ class CfgPatches {
         "cba_main",
         "ace_main"
       };
-    requiredVersion = 1.6;
+    requiredVersion = 1.68;
   };
 };
 
