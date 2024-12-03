@@ -11,10 +11,15 @@ switch (worldName) do {
 	case "Stratis": {
 		_realLocation = _position call armatak_fnc_convert_to_stratis;
 	};
+	case "Malden": {
+		_realLocation = _position call armatak_fnc_convert_to_malden;
+	};
 	case "VR": {
 		_realLocation = _position call armatak_fnc_convert_to_vr;
 	};
-	default {};
+	default {
+		_realLocation = [0, 0, 0];
+	};
 };
 
 _realLocation

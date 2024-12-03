@@ -18,6 +18,9 @@ class CfgFunctions {
 			class convert_to_stratis {
 				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_stratis.sqf";
 			};
+			class convert_to_malden {
+				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_malden.sqf";
+			};
 			class convert_to_vr {
 				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_vr.sqf";
 			};
