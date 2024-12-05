@@ -71,7 +71,6 @@ impl WsServer {
   }
 }
 
-
 lazy_static! {
   static ref WEBSOCKET_SERVER: Arc<Mutex<Option<WsServer>>> = Arc::new(Mutex::new(None));
 }
@@ -100,7 +99,6 @@ pub fn message(payload: String) -> &'static str {
 
   "Sending message to all WebSocket clients"
 }
-
 
 pub fn location(payload: LocationPayload) -> &'static str {
   if let Some(ref server) = *WEBSOCKET_SERVER.lock().unwrap() {

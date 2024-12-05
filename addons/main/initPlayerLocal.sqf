@@ -1,35 +1,35 @@
 if (!hasInterface) exitWith {};
 
-_initializedServer = "armatak" callExtension ["start",[]] select 0;
+_initializedServer = "armatak" callExtension ["websocket:start",[]] select 0;
 _local_address = "armatak" callExtension ["local_ip", []] select 0;
 
 player setVariable ["initializedSocket", _initializedServer];
 player setVariable ["localAddress", _local_address];
 
 player addEventHandler ["Killed", {
-	"armatak" callExtension ["stop", []];
+	"armatak" callExtension ["websocket:stop", []];
 }];
 
 player addEventHandler ["Deleted", {
-	"armatak" callExtension ["stop", []];
+	"armatak" callExtension ["websocket:stop", []];
 }];
 
 player addEventHandler ["Respawn", {
 	params["_unit", "_corpse"];
 
 	_unit spawn {
-		"armatak" callExtension ["start", []];
+		"armatak" callExtension ["websocket:start", []];
 
 		[{ 
 			if (alive _this) then {
-				"armatak" callExtension ["location",[player call armatak_fnc_extract_info]];	
+				"armatak" callExtension ["websocket:location",[player call armatak_fnc_extract_info]];	
 			};
 		}, 1, []] call CBA_fnc_addPerFrameHandler;
 	};
 }];
 
-onPlayerDisconnected "'armatak' callExtension ['stop',[]];";
+onPlayerDisconnected "'armatak' callExtension ['websocket:stop',[]];";
 
 [{ 
-	"armatak" callExtension ["location",[player call armatak_fnc_extract_info]];	
+	"armatak" callExtension ["websocket:location",[player call armatak_fnc_extract_info]];	
 }, 1, []] call CBA_fnc_addPerFrameHandler;

@@ -30,7 +30,7 @@ pub fn init() -> Extension {
     log4rs::init_config(config).unwrap();
 
     Extension::build()
-        .group("api", Group::new()
+        .group("websocket", Group::new()
             .command("start", websocket::start)
             .command("stop", websocket::stop)
             .command("message", websocket::message)
@@ -38,11 +38,11 @@ pub fn init() -> Extension {
         )
         .command("local_ip", util::get_local_address)
         .command("uuid", util::get_uuid)
-        .command("get_auth_token", api::get_auth_token)
         .group(
-            "markers",
+            "ots_api",
             Group::new()
                 .command("get", api::markers::get)
+                .command("get_auth_token", api::get_auth_token)
                 .command("post", api::markers::post)
                 .command("post_debug", api::markers::post_debug)
                 .command("delete", api::markers::delete),
