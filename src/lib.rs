@@ -1,7 +1,10 @@
-use arma_rs::{arma, Extension};
+use arma_rs::{arma, Extension, Group};
 mod commands;
 mod structs;
 mod tests;
+mod websocket;
+mod api;
+mod util;
 
 #[arma]
 pub fn init() -> Extension {
@@ -27,10 +30,22 @@ pub fn init() -> Extension {
     log4rs::init_config(config).unwrap();
 
     Extension::build()
-        .command("start", commands::start)
-        .command("stop", commands::stop)
-        .command("local_ip", commands::local_address)
-        .command("message", commands::message)
-        .command("location", commands::location)
+        .group("api", Group::new()
+            .command("start", websocket::start)
+            .command("stop", websocket::stop)
+            .command("message", websocket::message)
+            .command("location", websocket::location)    
+        )
+        .command("local_ip", util::get_local_address)
+        .command("uuid", util::get_uuid)
+        .command("get_auth_token", api::get_auth_token)
+        .group(
+            "markers",
+            Group::new()
+                .command("get", api::markers::get)
+                .command("post", api::markers::post)
+                .command("post_debug", api::markers::post_debug)
+                .command("delete", api::markers::delete),
+        )
         .finish()
 }
