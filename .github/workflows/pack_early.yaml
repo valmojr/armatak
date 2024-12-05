@@ -6,7 +6,7 @@ on:
       - dev
       - websocket
   pull_request:
-    branches: [ main, dev, websocket ]
+    branches: [ main, dev ]
 
 jobs:
   build_extension:
