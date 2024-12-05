@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">SIMTAK</string>
+
+    <string name="allowNotificationsPermission" translatable="true">Allow permission for notifications</string>
+    <string name="needNotificationsPermissionMessage" translatable="true">For trust app working, need allow on system settings</string>
+    <string name="goToSettings" translatable="true">Go to system settings</string>
+    <string name="ok">OK</string>
+    <string name="cancel" translatable="true">Cancel</string>
+    <string name="tryAgain" translatable="true">Try Again</string>
+    <string name="serverAddress">Server Address</string>
+    <string name="scanQRCodeStepInfo" translatable="true">Scan the QR code in your briefing tab to get on the TAK Session</string>
+    <string name="welcome" translatable="true">Welcome!, Insert the provided Server Address or Scan the QR code in your briefing tab to get on the TAK Session</string>
+    <string name="header_banner_title">SIMTAK - Simulation for Team Awareness Kit</string>
+    <string name="or">Or</string>
+    <string name="scanQRCode">SCAN QR CODE</string>
+    <string name="content_connect_to_provider_server_address_button" translatable="true">Connect to Provider Server Address Button</string>
+    <string name="footerInfo" translatable="true">SIMTAK are part of the ARMATAK software bundle. \nARMATAK is currently in the development stage and is subject to unexpected bugs. Please use with caution.</string>
+    <string name="footerProject" translatable="true">Give us a Star on Github!</string>
+    <string name="githubProjectUrl" translatable="false">https://github.com/valmojr/armatak</string>
+    <string name="wikiUrl" translatable="false">https://github.com/valmojr/armatak/wiki</string>
+    <string name="discordUrl" translatable="false">https://discord.gg/svK64PCycU</string>
+    <string name="steamUrl" translatable="false">https://steamcommunity.com/sharedfiles/filedetails/?id=3301306282</string>
+    <string name="wiki">Wiki</string>
+    <string name="joinOurGiscordGroup" translatable="true">Join our Discord Group</string>
+    <string name="steam">Steam</string>
+    <string name="startTracking" translatable="true">Start Tracking</string>
+    <string name="stopTracking" translatable="true">Stop Tracking</string>
+    <string name="serverAddressPropertyEmpty" >Server Address:</string>
+    <string name="serverAddressPropertyFormat">Server Address: %s</string>
+    <string name="serverConnectionStatusPropertyEmpty" >Connection Status:</string>
+    <string name="serverConnectionStatusPropertyFormat">Connection Status: %s</string>
+    <string name="contentBtnToBack" translatable="true">Back Button</string>
+    <string name="trackerLog">Tracker Log</string>
+    <string name="serverConnectionProblems" translatable="true">Oops, server has problem!</string>
+    <string name="errorDescriptionFormat" translatable="true">Error Description: \n%s</string>
+    <string name="normal" translatable="true">Normal</string>
+    <string name="networkOperation" translatable="true">Network Operation</string>
+    <string name="warning" translatable="true">Warning</string>
+    <string name="error" translatable="true">Error</string>
+</resources>
