@@ -28,6 +28,10 @@ player addEventHandler ["Respawn", {
 	};
 }];
 
+addMissionEventHandler ["OnUserDisconnected", {
+	"armatak" callExtension ["websocket:stop", []];
+}];
+
 onPlayerDisconnected "'armatak' callExtension ['websocket:stop',[]];";
 
 [{ 
