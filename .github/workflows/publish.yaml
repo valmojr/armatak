@@ -37,8 +37,9 @@ jobs:
     needs: build_extension
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      
+      - uses: actions/checkout@v2
+        with:  
+          lfs: true
       - uses: actions/download-artifact@v4
         with:
           name: x86_64-pc-windows-msvc
