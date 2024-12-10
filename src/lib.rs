@@ -3,7 +3,8 @@ mod commands;
 mod structs;
 mod tests;
 mod websocket;
-mod api;
+mod ots_api;
+mod fts_api;
 mod util;
 
 #[arma]
@@ -41,11 +42,20 @@ pub fn init() -> Extension {
         .group(
             "ots_api",
             Group::new()
-                .command("get", api::markers::get)
-                .command("get_auth_token", api::get_auth_token)
-                .command("post", api::markers::post)
-                .command("post_debug", api::markers::post_debug)
-                .command("delete", api::markers::delete),
+                .command("get", ots_api::markers::get)
+                .command("get_auth_token", ots_api::get_auth_token)
+                .command("post", ots_api::markers::post)
+                .command("post_debug", ots_api::markers::post_debug)
+                .command("delete", ots_api::markers::delete),
+        )
+        .group(
+            "fts_api",
+            Group::new()
+                .command("get", fts_api::markers::get)
+                .command("get_all", fts_api::markers::get_all)
+                .command("post", fts_api::markers::post)
+                .command("patch", fts_api::markers::patch)
+                .command("delete", fts_api::markers::delete)
         )
         .finish()
 }
