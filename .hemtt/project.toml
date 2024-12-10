@@ -6,7 +6,7 @@ prefix = "armatak"
 [version]
 build = 0
 major = 0
-minor = 6 
+minor = 7 
 patch = 0
 
 git_hash = 0
