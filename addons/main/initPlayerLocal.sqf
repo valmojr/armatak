@@ -22,7 +22,7 @@ player addEventHandler ["Respawn", {
 
 		[{ 
 			if (alive _this) then {
-				"armatak" callExtension ["websocket:location",[player call armatak_fnc_extract_info]];	
+				"armatak" callExtension ["websocket:location",[player call armatak_fnc_extract_position]];	
 			};
 		}, 1, []] call CBA_fnc_addPerFrameHandler;
 	};
@@ -35,5 +35,5 @@ addMissionEventHandler ["OnUserDisconnected", {
 onPlayerDisconnected "'armatak' callExtension ['websocket:stop',[]];";
 
 [{ 
-	"armatak" callExtension ["websocket:location",[player call armatak_fnc_extract_info]];	
+	"armatak" callExtension ["websocket:location",[player call armatak_fnc_extract_position]];	
 }, 1, []] call CBA_fnc_addPerFrameHandler;
