@@ -50,8 +50,6 @@ if (isServer && _activated) exitWith {
 			} forEach _syncedUnits;
 
 			_request = "armatak" callExtension ["ots_api:post", [_markers]];
-
-			systemChat format ["Result: %1, Code: %2", _request select 0, _request select 1];
 		}, 1, []] call CBA_fnc_addPerFrameHandler;
 	}, [], 5] call CBA_fnc_waitAndExecute;
 };
