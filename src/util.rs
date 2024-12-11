@@ -62,7 +62,7 @@ pub async fn async_post_markers(data: Vec<Marker>) {
     let parsed_address: String =
         data[0].api_address.clone() + "/api/markers?auth_token=" + &authentication_token;
 
-    let mut status: String = "fetching".to_string();
+    let mut status: String = format!("fetching {} markers", data.len().to_string());
 
     info!("{}", status);
 
