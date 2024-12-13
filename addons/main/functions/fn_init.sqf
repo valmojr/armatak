@@ -22,7 +22,7 @@ if (isServer && _activated) exitWith {
 
 	_atak_server_instance_token = call armatak_fnc_extract_auth_token;
 
-	if (_atak_server_instance_token == "") then {
+	if ((_atak_server_instance_token == "") and !(["ERROR", _atak_server_instance_token, false] call BIS_fnc_inString)) then {
 		private _warning = format ["<t color='#FF0000'>ARMATAK</t><br/> %1", "Connection Failed"];
 		[[_warning, 2]] call CBA_fnc_notify;
 	} else {
@@ -51,7 +51,7 @@ if (isServer && _activated) exitWith {
 
 			_request = "armatak" callExtension ["ots_api:post", [_markers]];
 		}, 1, []] call CBA_fnc_addPerFrameHandler;
-	}, [], 5] call CBA_fnc_waitAndExecute;
+	}, [], 1] call CBA_fnc_waitAndExecute;
 };
 
 true;

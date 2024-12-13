@@ -9,4 +9,5 @@ if (roleDescription _unit != "") then {
 		_callsign = getText(configFile >> "CfgVehicles" >> typeOf _unit >> "displayName");
 	};
 };
+
 _callsign
