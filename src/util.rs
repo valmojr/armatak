@@ -1,7 +1,17 @@
-use log::{error, info};
+use log::{error, info, warn};
 use reqwest::Client;
 use std::net::{IpAddr, UdpSocket};
-use crate::structs::{LoginInfo, LoginPayload, Marker, MarkerPayload};
+use crate::structs::{LogPayload, LoginInfo, LoginPayload, Marker, MarkerPayload};
+
+pub fn log_info(data: LogPayload) -> String {
+    match data.status.as_str() {
+        "info" => info!("{}", data.message),
+        "warn" => warn!("{}", data.message),
+        "error" => error!("{}", data.message),
+        _ => error!("{}","Wrong log call")
+    }
+    "logged".to_string()
+}
 
 pub fn get_uuid() -> String {
     use uuid::Uuid;

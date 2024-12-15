@@ -2,6 +2,28 @@ use arma_rs::{FromArma, FromArmaError};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct LogPayload {
+    pub status: String,
+    pub message: String,
+}
+
+impl IntoMessage for LogPayload {
+    fn into_message(self) -> String {
+        serde_json::to_string(&self).unwrap()
+    }
+}
+
+impl FromArma for LogPayload {
+    fn from_arma(data: String) -> Result<LogPayload, FromArmaError> {
+        let (status, message) = <(String, String)>::from_arma(data)?;
+        Ok(Self {
+            status,
+            message
+        })
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct LocationPayload {
     pub latitude: f64,
     pub longitude: f64,
@@ -21,7 +43,7 @@ impl IntoMessage for String {
 
 impl IntoMessage for LocationPayload {
     fn into_message(self) -> String {
-        serde_json::to_string(&self).unwrap() // Convert struct to JSON
+        serde_json::to_string(&self).unwrap()
     }
 }
 

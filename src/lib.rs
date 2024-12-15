@@ -39,6 +39,7 @@ pub fn init() -> Extension {
         )
         .command("local_ip", util::get_local_address)
         .command("uuid", util::get_uuid)
+        .command("log", util::log_info)
         .group(
             "ots_api",
             Group::new()

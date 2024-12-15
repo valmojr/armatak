@@ -17,6 +17,10 @@ pub struct WsServer {
 
 impl WsServer {
   pub fn start(&self, rx: Receiver<WsCommand>) {
+      if let Some(ref server) = *WEBSOCKET_SERVER.lock().unwrap() {
+        server.stop();
+      }
+
       let clients = Arc::new(Mutex::new(Vec::new()));
       let clients_clone = Arc::clone(&clients);
 
