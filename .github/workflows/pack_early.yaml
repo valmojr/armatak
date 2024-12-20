@@ -5,59 +5,71 @@ on:
     branches:
       - dev
   pull_request:
-    branches: [ main, dev ]
+    branches: [action]
 
 jobs:
   build_extension:
     strategy:
       matrix:
-        arrays: [
-          os: { tag: "windows-latest", target: "i686-pc-windows-msvc" },
-          os: { tag: "windows-latest", target: "x86_64-pc-windows-msvc" },
-        ]
-    runs-on: ${{ matrix.arrays.os.tag }}
+        os_target:
+          - { os: "windows-latest", target: "i686-pc-windows-msvc", artifact: "armatak.dll" }
+          - { os: "windows-latest", target: "x86_64-pc-windows-msvc", artifact: "armatak_x64.dll" }
+          - { os: "ubuntu-latest", target: "x86_64-unknown-linux-gnu", artifact: "armatak.so" }
+    runs-on: ${{ matrix.os_target.os }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
         with:
           lfs: true
-      - name: Install latest
+      - name: Install Rust Toolchain
         uses: actions-rs/toolchain@v1
         with:
-          target: ${{ matrix.arrays.os.target }}
+          target: ${{ matrix.os_target.target }}
           toolchain: stable
           default: true
+      - name: Install Dependencies (Linux only)
+        if: matrix.os_target.os == 'ubuntu-latest'
+        run: sudo apt-get update && sudo apt-get install -y build-essential
       - name: Cargo Build
-        run: cargo build --release
-      - name: Upload
+        run: cargo build --release --target ${{ matrix.os_target.target }}
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.arrays.os.target }}
-          path: target/release/armatak.dll
+          name: ${{ matrix.os_target.target }}
+          path: target/${{ matrix.os_target.target }}/release/${{ matrix.os_target.artifact }}
           if-no-files-found: error
           retention-days: 7
+
   package:
     needs: build_extension
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repo
+        uses: actions/checkout@v4
         with:
-            lfs: true
-      - run: mkdir ./target
-      - run: mkdir ./target/release
-      - uses: actions/download-artifact@v4
+          lfs: true
+      - run: mkdir -p ./target/release
+      - name: Download Windows x64 Artifact
+        uses: actions/download-artifact@v4
         with:
           name: x86_64-pc-windows-msvc
-      - run: mv ./armatak.dll ./target/release/armatak_x64.dll
-      - uses: actions/download-artifact@v4
+      - run: mv ./armatak_x64.dll ./target/release/armatak_x64.dll
+      - name: Download Windows x86 Artifact
+        uses: actions/download-artifact@v4
         with:
           name: i686-pc-windows-msvc
       - run: mv ./armatak.dll ./target/release/armatak.dll
+      - name: Download Linux x64 Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: x86_64-unknown-linux-gnu
+      - run: mv ./armatak.so ./target/release/armatak.so
       - name: Setup HEMTT
         uses: arma-actions/hemtt@v1
       - name: Build
         run: hemtt release
-      - uses: actions/upload-artifact@v4
+      - name: Upload Final Package
+        uses: actions/upload-artifact@v4
         with:
           name: armatak.zip
           path: 'releases/armatak-latest.zip'
