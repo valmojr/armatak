@@ -14,7 +14,7 @@ jobs:
         os_target:
           - { os: "windows-latest", target: "i686-pc-windows-msvc", artifact: "armatak.dll" }
           - { os: "windows-latest", target: "x86_64-pc-windows-msvc", artifact: "armatak_x64.dll" }
-          - { os: "ubuntu-latest", target: "x86_64-unknown-linux-gnu", artifact: "armatak.so" }
+          - { os: "ubuntu-latest", target: "x86_64-unknown-linux-gnu", artifact: "libarmatak.so" }
     runs-on: ${{ matrix.os_target.os }}
     steps:
       - name: Checkout Repo
@@ -65,7 +65,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: x86_64-unknown-linux-gnu
-      - run: mv ./armatak.so ./target/release/armatak.so
+      - run: mv ./armatak.so ./target/release/libarmatak.so
       - name: Setup HEMTT
         uses: arma-actions/hemtt@v1
       - name: Build
