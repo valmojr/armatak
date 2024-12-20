@@ -3,7 +3,7 @@ name: Pack_beta
 on:
   push:
     branches:
-      - dev
+      - action
   pull_request:
     branches: [action]
 
