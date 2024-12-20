@@ -32,6 +32,8 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y build-essential
       - name: Cargo Build
         run: cargo build --release --target ${{ matrix.os_target.target }}
+      - name: Show release directory
+        run: ls target/${{ matrix.os_target.target }}/release
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
