@@ -3,6 +3,7 @@ class CfgFunctions {
 		class functions {
 			class init {
 				file = "\armatak\armatak\armatak_main\functions\fn_init.sqf";
+				postInit = 1;
 			};
 			class extract_callsign {
 				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_extract_callsign.sqf";
