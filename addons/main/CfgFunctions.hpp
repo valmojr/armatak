@@ -3,7 +3,6 @@ class CfgFunctions {
 		class functions {
 			class init {
 				file = "\armatak\armatak\armatak_main\functions\fn_init.sqf";
-				postInit = 1;
 			};
 			class extract_callsign {
 				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_extract_callsign.sqf";
@@ -26,8 +25,8 @@ class CfgFunctions {
 			class extract_uuid {
 				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_extract_uuid.sqf";
 			};
-			class extract_auth_token {
-				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_extract_auth_token.sqf";
+			class extract_ots_auth_token {
+				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_ots_extract_auth_token.sqf";
 			};
 			class convert_location {
 				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_location.sqf";
@@ -44,14 +43,14 @@ class CfgFunctions {
 			class convert_to_vr {
 				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_vr.sqf";
 			};
-			class postMarkers {
-				file = "\armatak\armatak\armatak_main\functions\api\fn_postMarkers.sqf";
+			class ots_postMarkers {
+				file = "\armatak\armatak\armatak_main\functions\api\fn_ots_postMarkers.sqf";
 			};
-			class postMarkersDebug {
-				file = "\armatak\armatak\armatak_main\functions\api\fn_postMarkersDebug.sqf";
+			class ots_postMarkersDebug {
+				file = "\armatak\armatak\armatak_main\functions\api\fn_ots_postMarkersDebug.sqf";
 			};
-			class deleteMarkers {
-				file = "\armatak\armatak\armatak_main\functions\api\fn_deleteMarkers.sqf";
+			class ots_deleteMarkers {
+				file = "\armatak\armatak\armatak_main\functions\api\fn_ots_deleteMarkers.sqf";
 			};
 		};
 	};

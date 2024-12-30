@@ -32,7 +32,7 @@ class CfgVehicles {
 		category = "armatak_module_category";
 		function = "armatak_fnc_init";
 		functionPriority = 1;
-		isGlobal = 2;
+		isGlobal = 0;
 		isTriggerActivated = 0;
 		isDisposable = 1;
 		is3den = 0;
@@ -50,10 +50,10 @@ class CfgVehicles {
 
 		class Attributes: AttributesBase {
 			class Units: Units {
-				property = "armatak_module_property_attached_units";
+				property = "armatak_module_attached_units";
 			};
 			class armatak_module_api_instance: Combo {
-				property = "armatak_module_property_api_instance";
+				property = "armatak_module_api_instance";
 				displayname = "TAK API Instance";
 				tooltip = "Used TAK Server Instance";
 				typeName = "STRING";
@@ -65,7 +65,7 @@ class CfgVehicles {
 				};
 			};
 			class armatak_module_api_instance_protocol: Combo {
-				property = "armatak_module_property_api_instance_protocol";
+				property = "armatak_module_api_instance_protocol";
 				displayname = "OTS Protocol";
 				tooltip = "OpenTAKServer instance protocol";
 				typeName = "STRING";
@@ -77,28 +77,28 @@ class CfgVehicles {
 				};
 			};
 			class armatak_module_api_instance_address: Edit {
-				property = "armatak_module_property_api_instance_address";
+				property = "armatak_module_api_instance_address";
 				displayname = "OTS Address";
 				tooltip = "OpenTAKServer Instance Address";
 				typeName = "STRING";
 				defaultValue = "localhost";
 			};
 			class armatak_module_api_instance_port: Edit {
-				property = "armatak_module_property_api_instance_port";
+				property = "armatak_module_api_instance_port";
 				displayname = "OTS Port";
 				tooltip = "OpenTAKServer Instance Port";
 				typeName = "NUMBER";
 				defaultValue = "8080";
 			};
 			class armatak_module_api_instance_username: Edit {
-				property = "armatak_module_property_api_instance_username";
+				property = "armatak_module_api_instance_username";
 				displayname = "API Username";
 				tooltip = "API Username for authorization";
 				typeName = "STRING";
 				defaultValue = "administrator";
 			};
 			class armatak_module_api_instance_password: Edit {
-				property = "armatak_module_property_api_instance_password";
+				property = "armatak_module_api_instance_password";
 				displayname = "API Password";
 				tooltip = "API Password for authorization";
 				typeName = "STRING";
