@@ -9,6 +9,7 @@ releases/
 *.env
 
 *.sh
+*.ps1
 
 # compiled output
 /dist
