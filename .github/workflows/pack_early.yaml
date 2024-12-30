@@ -1,11 +1,8 @@
 name: Pack_beta
 
 on:
-  push:
-    branches:
-      - action
   pull_request:
-    branches: [action]
+    branches: [main]
 
 jobs:
   build_extension:
