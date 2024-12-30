@@ -3,7 +3,7 @@ name: Pack_beta
 on:
   push:
     branches:
-      - dev
+      - action
   pull_request:
     branches: [action]
 
@@ -12,9 +12,9 @@ jobs:
     strategy:
       matrix:
         os_target:
-          - { os: "windows-latest", target: "i686-pc-windows-msvc", artifact: "armatak.dll" }
-          - { os: "windows-latest", target: "x86_64-pc-windows-msvc", artifact: "armatak_x64.dll" }
-          - { os: "ubuntu-latest", target: "x86_64-unknown-linux-gnu", artifact: "armatak.so" }
+          - { os: "windows-latest", target: "i686-pc-windows-msvc", artifact: "armatak.dll", name: "armatak.dll" }
+          - { os: "windows-latest", target: "x86_64-pc-windows-msvc", artifact: "armatak.dll", name: "armatak_x64.dll" }
+          - { os: "ubuntu-latest", target: "x86_64-unknown-linux-gnu", artifact: "libarmatak.so", name: "armatak.so" }
     runs-on: ${{ matrix.os_target.os }}
     steps:
       - name: Checkout Repo
@@ -32,6 +32,8 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y build-essential
       - name: Cargo Build
         run: cargo build --release --target ${{ matrix.os_target.target }}
+      - name: check stuff
+        run: ls target/release
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -53,17 +55,17 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: x86_64-pc-windows-msvc
-      - run: mv ./armatak_x64.dll ./target/release/armatak_x64.dll
+      - run: ls
+      - run: mv ./armatak.dll ./armatak_x64.dll
       - name: Download Windows x86 Artifact
         uses: actions/download-artifact@v4
         with:
           name: i686-pc-windows-msvc
-      - run: mv ./armatak.dll ./target/release/armatak.dll
       - name: Download Linux x64 Artifact
         uses: actions/download-artifact@v4
         with:
           name: x86_64-unknown-linux-gnu
-      - run: mv ./armatak.so ./target/release/armatak.so
+      - run: mv ./libarmatak.so ./armatak.so
       - name: Setup HEMTT
         uses: arma-actions/hemtt@v1
       - name: Build
