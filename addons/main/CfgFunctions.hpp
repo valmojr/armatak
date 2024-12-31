@@ -43,6 +43,9 @@ class CfgFunctions {
 			class convert_to_vr {
 				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_vr.sqf";
 			};
+			class convert_to_cucui {
+				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_cucui.sqf";
+			};
 			class ots_postMarkers {
 				file = "\armatak\armatak\armatak_main\functions\api\fn_ots_postMarkers.sqf";
 			};

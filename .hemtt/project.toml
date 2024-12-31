@@ -42,7 +42,6 @@ workshop = [
   "623475643", # 3den enhanced
   "1779063631" # Zeus enhanced
 ]
-mission = "atak_test_malden.Malden"
 
 parameters = [
   "-skipIntro",

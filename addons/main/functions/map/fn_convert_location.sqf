@@ -17,6 +17,9 @@ switch (worldName) do {
 	case "VR": {
 		_realLocation = _position call armatak_fnc_convert_to_vr;
 	};
+	case "cucui": {
+		_realLocation = _position call armatak_fnc_convert_to_cucui;
+	};
 	default {
 		_realLocation = [0, 0, 0];
 	};
