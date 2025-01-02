@@ -25,7 +25,8 @@ include = [
   "LICENSE",
   "*.dll",
   "*.so",
-  "*.paa"
+  "*.paa",
+  "simtak.apk"
 ]
 
 [properties]
