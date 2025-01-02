@@ -85,3 +85,5 @@ target/
 .externalNativeBuild
 .cxx
 local.properties
+
+*.apk
