@@ -5,6 +5,32 @@ on:
     branches: [ main ]
 
 jobs:
+  package_application:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+      - name: set up JDK 11
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+          cache: gradle
+    
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build with Gradle
+        run: ./gradlew assembleDebug
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: simtak
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 1
+
   build_extension:
     strategy:
       matrix:
@@ -37,10 +63,10 @@ jobs:
           name: ${{ matrix.os_target.target }}
           path: target/${{ matrix.os_target.target }}/release/${{ matrix.os_target.artifact }}
           if-no-files-found: error
-          retention-days: 7
+          retention-days: 1
 
   package:
-    needs: build_extension
+    needs: [build_extension, package_application]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -52,7 +78,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: x86_64-pc-windows-msvc
-      - run: ls
       - run: mv ./armatak.dll ./armatak_x64.dll
       - name: Download Windows x86 Artifact
         uses: actions/download-artifact@v4
@@ -63,6 +88,11 @@ jobs:
         with:
           name: x86_64-unknown-linux-gnu
       - run: mv ./libarmatak.so ./armatak.so
+      - name: Download Android Application Installer
+        uses: actions/download-artifact@v4
+        with:
+          name: simtak
+      - run: mv ./app-debug.apk ./simtak.apk
       - name: Setup HEMTT
         uses: arma-actions/hemtt@v1
       - name: Build
@@ -71,10 +101,10 @@ jobs:
         run: unzip releases/armatak-latest.zip -d releases
       - uses: arma-actions/workshop-upload@v1
         with:
-            appId: '107410'
-            itemId: ${{ secrets.STEAM_WORKSHOP_ITEM_ID }}
-            contentPath: releases/@armatak
-            changelog: 'Update'
+          appId: '107410'
+          itemId: ${{ secrets.STEAM_WORKSHOP_ITEM_ID }}
+          contentPath: releases/@armatak
+          changelog: 'Update'
         env:
-            STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
-            STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
+          STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
+          STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
