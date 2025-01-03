@@ -112,13 +112,3 @@ pub fn location(payload: LocationPayload) -> &'static str {
   }
   "sending location to all WebSocket clients"
 }
-
-pub fn stop() -> &'static str {
-  if let Some(ref server) = *WEBSOCKET_SERVER.lock().unwrap() {
-      server.stop();
-  } else {
-      info!("WebSocket server is not running.");
-  }
-
-  "Stopping WebSocket server"
-}

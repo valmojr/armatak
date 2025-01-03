@@ -1,5 +1,4 @@
 use arma_rs::{arma, Extension, Group};
-mod commands;
 mod structs;
 mod tests;
 mod websocket;
@@ -30,10 +29,10 @@ pub fn init() -> Extension {
 
     log4rs::init_config(config).unwrap();
 
+    websocket::start();
+
     Extension::build()
         .group("websocket", Group::new()
-            .command("start", websocket::start)
-            .command("stop", websocket::stop)
             .command("message", websocket::message)
             .command("location", websocket::location)    
         )
