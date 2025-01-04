@@ -4,7 +4,7 @@ params [
 	["_activated", true, [true]]
 ];
 
-if (isServer && _activated) exitWith {
+if (isServer) exitWith {
 	_warning = format ["<t color='#FF8021'>ARMATAK</t><br/> %1", "Connecting to API Provider..."];
 	[[_warning, 1.5]] call CBA_fnc_notify;
 
