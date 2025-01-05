@@ -3,6 +3,7 @@
 // function description: Receives a player's unit as param and return the information array for SIMTAK
 
 params["_unit"];
+
 private _location = (getPos _unit) call armatak_fnc_convert_location;
 
 private _atak_latitude = _location select 0;
