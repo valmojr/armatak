@@ -72,18 +72,9 @@ pub async fn async_post_markers(data: Vec<Marker>) {
     let parsed_address: String =
         data[0].api_address.clone() + "/api/markers?auth_token=" + &authentication_token;
 
-    let mut status: String = format!("fetching {} markers", data.len().to_string());
-
-    info!("{}", status);
-
     for marker in data {
         let payload = parse_marker_to_payload(marker);
         let request_body = serde_json::to_string(&payload).unwrap();
-
-        info!(
-            "Parsing: {}, to {} with {}",
-            request_body, parsed_address, authentication_token
-        );
 
         let response = client
             .post(&parsed_address)
@@ -94,17 +85,13 @@ pub async fn async_post_markers(data: Vec<Marker>) {
 
         match response {
             Ok(result) => {
-                status = result.status().to_string();
                 info!("Received: {}", result.text().await.unwrap());
             }
             Err(error) => {
-                status = "fetch failed".to_string();
                 error!("Error: {}", error)
             }
         }
     }
-
-    info!("Final status: {}", status);
 }
 
 pub fn blocking_fetch_auth_token(payload: LoginInfo, api_address: String) -> String {
