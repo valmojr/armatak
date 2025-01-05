@@ -22,7 +22,7 @@ if (isServer) exitWith {
 		missionNamespace setVariable ["_atak_server_instance_username", _atak_api_username];
 		missionNamespace setVariable ["_atak_server_instance_password", _atak_api_password];
 
-		_atak_server_instance_token = call armatak_fnc_extract_auth_token;
+		_atak_server_instance_token = call armatak_fnc_ots_extract_auth_token;
 
 		if ((_atak_server_instance_token == "") and !(["ERROR", _atak_server_instance_token, false] call BIS_fnc_inString)) then {
 			private _warning = format ["<t color='#FF0000'>ARMATAK</t><br/> %1", "Connection Failed"];

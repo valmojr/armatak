@@ -25,7 +25,7 @@ class CfgFunctions {
 			class extract_uuid {
 				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_extract_uuid.sqf";
 			};
-			class extract_ots_auth_token {
+			class ots_extract_auth_token {
 				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_ots_extract_auth_token.sqf";
 			};
 			class convert_location {
