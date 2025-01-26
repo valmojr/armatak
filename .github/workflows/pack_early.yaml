@@ -1,4 +1,4 @@
-name: Publish
+name: Pack on Pull Request
 
 on:
   pull_request:
@@ -35,9 +35,9 @@ jobs:
     strategy:
       matrix:
         os_target:
-          - { os: "windows-latest", target: "i686-pc-windows-msvc", artifact: "armatak.dll", name: "armatak.dll" }
-          - { os: "windows-latest", target: "x86_64-pc-windows-msvc", artifact: "armatak.dll", name: "armatak_x64.dll" }
-          - { os: "ubuntu-latest", target: "x86_64-unknown-linux-gnu", artifact: "libarmatak.so", name: "armatak.so" }
+          - { os: "windows-latest", target: "i686-pc-windows-msvc", artifact: "armatak.dll" }
+          - { os: "windows-latest", target: "x86_64-pc-windows-msvc", artifact: "armatak.dll" }
+          - { os: "ubuntu-latest", target: "x86_64-unknown-linux-gnu", artifact: "libarmatak.so" }
     runs-on: ${{ matrix.os_target.os }}
     steps:
       - name: Checkout Repo
