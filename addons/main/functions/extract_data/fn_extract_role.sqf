@@ -1,4 +1,9 @@
+// function name: armatak_fnc_extract_role
+// function author: Valmo
+// function description: Gets the unit function to be used as TAK role or NATO 2525 marker
+
 params["_unit"];
+
 private _affiliation = "f";
 private _type = "G";
 private _role = "a-f-G-U-C-I";

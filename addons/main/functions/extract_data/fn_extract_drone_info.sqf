@@ -1,3 +1,7 @@
+// function name: armatak_fnc_extract_drone
+// function author: Valmo
+// function description: Gets the drone information for the HTTP request
+
 params["_drone"];
 
 private _location = (getPos _drone) call armatak_fnc_convert_location;

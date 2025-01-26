@@ -1,3 +1,7 @@
+// function name: armatak_fnc_extract_auth_token
+// function author: Valmo
+// function description: Gets the mission params and authenticate on OpenTAKServer API to be able to send HTTP requests
+
 private _atak_server_instance = missionNamespace getVariable "_atak_server_instance";
 private _atak_server_instance_username = missionNamespace getVariable "_atak_server_instance_username";
 private _atak_server_instance_password = missionNamespace getVariable "_atak_server_instance_password";
