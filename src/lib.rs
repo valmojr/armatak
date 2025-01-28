@@ -2,9 +2,9 @@ use arma_rs::{arma, Extension, Group};
 mod structs;
 mod tests;
 mod websocket;
-mod ots_api;
-mod fts_api;
 mod util;
+mod cot_router;
+mod cot_generator;
 
 #[arma]
 pub fn init() -> Extension {
@@ -40,22 +40,11 @@ pub fn init() -> Extension {
         .command("uuid", util::get_uuid)
         .command("log", util::log_info)
         .group(
-            "ots_api",
+            "cot_router",
             Group::new()
-                .command("get", ots_api::markers::get)
-                .command("get_auth_token", ots_api::get_auth_token)
-                .command("post", ots_api::markers::post)
-                .command("post_debug", ots_api::markers::post_debug)
-                .command("delete", ots_api::markers::delete),
-        )
-        .group(
-            "fts_api",
-            Group::new()
-                .command("get", fts_api::markers::get)
-                .command("get_all", fts_api::markers::get_all)
-                .command("post", fts_api::markers::post)
-                .command("patch", fts_api::markers::patch)
-                .command("delete", fts_api::markers::delete)
+                .command("start", cot_router::start)
+                .command("send_cot", cot_router::send_payload)
+                .command("stop", cot_router::stop)
         )
         .finish()
 }
