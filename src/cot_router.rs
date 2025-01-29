@@ -6,6 +6,8 @@ use std::sync::{Arc, Mutex};
 use std::thread;
 use lazy_static::lazy_static;
 
+use crate::cot_generator::{HumanCoTPayload, MarkerCoTPayload};
+
 pub enum TcpCommand {
     SendMessage(String),
     Stop,
@@ -27,7 +29,6 @@ impl TcpClient {
         thread::spawn(move || {
             let mut running = true;
 
-            // TCP connection thread
             let tcp_thread = thread::spawn(move || {
                 match TcpStream::connect(&address) {
                     Ok(stream) => {
@@ -66,11 +67,17 @@ impl TcpClient {
     }
 
     pub fn send_payload(&self, payload: String) {
-        self.tx.send(TcpCommand::SendMessage(payload)).unwrap();
+        let tx = self.tx.clone();
+        thread::spawn(move || {
+            tx.send(TcpCommand::SendMessage(payload)).unwrap();
+        });
     }
 
     pub fn stop(&self) {
-        self.tx.send(TcpCommand::Stop).unwrap();
+        let tx = self.tx.clone();
+        thread::spawn(move || {
+            tx.send(TcpCommand::Stop).unwrap();
+        });
     }
 }
 
@@ -101,6 +108,16 @@ pub fn send_payload(payload: String) -> &'static str {
     }
 
     "Sending payload to TCP server"
+}
+
+pub fn send_human_cot(cursor_over_time: HumanCoTPayload) -> &'static str {
+    let payload = cursor_over_time.to_cot().convert_to_xml();
+    send_payload(payload)
+}
+
+pub fn send_marker_cot(cursor_over_time: MarkerCoTPayload) -> &'static str {
+    let payload = cursor_over_time.to_cot().convert_to_xml();
+    send_payload(payload)
 }
 
 pub fn stop() -> &'static str {

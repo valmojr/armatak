@@ -43,7 +43,9 @@ pub fn init() -> Extension {
             "cot_router",
             Group::new()
                 .command("start", cot_router::start)
-                .command("send_cot", cot_router::send_payload)
+                .command("send_payload", cot_router::send_payload)
+                .command("send_human_cot", cot_router::send_human_cot)
+                .command("send_marker_cot", cot_router::send_marker_cot)
                 .command("stop", cot_router::stop)
         )
         .finish()
