@@ -27,7 +27,7 @@ class CfgVehicles {
 	};
 	class armatak_module_core: Module_F {
 		scope = 2;
-		displayname = "ARMATAK Core";
+		displayname = "ARMATAK CoT Router";
 		icon = "\a3\Modules_F_Curator\Data\iconRadio_ca.paa";
 		category = "armatak_module_category";
 		function = "armatak_fnc_init";
@@ -52,63 +52,25 @@ class CfgVehicles {
 			class Units: Units {
 				property = "armatak_module_attached_units";
 			};
-			class armatak_module_api_instance: Combo {
-				property = "armatak_module_api_instance";
-				displayname = "TAK API Instance";
-				tooltip = "Used TAK Server Instance";
-				typeName = "STRING";
-				defaultValue = "ots";
-
-				class Values {
-					class ots { name = "Open TAK Server"; value = "ots"; default = 1; };
-					class fts { name = "Free TAK Server"; value = "fts"; };
-				};
-			};
-			class armatak_module_api_instance_protocol: Combo {
-				property = "armatak_module_api_instance_protocol";
-				displayname = "OTS Protocol";
-				tooltip = "OpenTAKServer instance protocol";
-				typeName = "STRING";
-				defaultValue = "http";
-			
-				class Values {
-					class http { name = "HTTP"; value = "http"; default = 1; };
-					class https { name = "HTTPS"; value = "https"; };
-				};
-			};
-			class armatak_module_api_instance_address: Edit {
-				property = "armatak_module_api_instance_address";
-				displayname = "OTS Address";
-				tooltip = "OpenTAKServer Instance Address";
+			class armatak_module_tak_server_instance_address: Edit {
+				property = "armatak_module_tak_server_instance_address";
+				displayname = "TAK Server Address";
+				tooltip = "TAK Server Instance Address";
 				typeName = "STRING";
 				defaultValue = "localhost";
 			};
-			class armatak_module_api_instance_port: Edit {
-				property = "armatak_module_api_instance_port";
-				displayname = "OTS Port";
-				tooltip = "OpenTAKServer Instance Port";
+			class armatak_module_tak_server_instance_port: Edit {
+				property = "armatak_module_tak_server_instance_port";
+				displayname = "TAK Server TCP Port";
+				tooltip = "TAK Server instance Port for TCP connection";
 				typeName = "NUMBER";
 				defaultValue = "8080";
-			};
-			class armatak_module_api_instance_username: Edit {
-				property = "armatak_module_api_instance_username";
-				displayname = "API Username";
-				tooltip = "API Username for authorization";
-				typeName = "STRING";
-				defaultValue = "administrator";
-			};
-			class armatak_module_api_instance_password: Edit {
-				property = "armatak_module_api_instance_password";
-				displayname = "API Password";
-				tooltip = "API Password for authorization";
-				typeName = "STRING";
-				defaultValue = "password";
 			};
 			class ModuleDescription: ModuleDescription {};
 		};
 
 		class ModuleDescription: ModuleDescription {
-			description = "Generate the initial ARMATAK configuration, syncronizing all players to the OTS instance";
+			description = "Generate the initial ARMATAK configuration, syncronizing all players to the TAK server instance";
 			sync[] = {"LocationArea_F"};
 
 			class LocationArea_F {
