@@ -24,7 +24,9 @@ switch (side _unit) do {
 		_affiliation = "f";
 	};
 };
+
 _unit_type = _unit call BIS_fnc_objectType select 1;
+
 switch (_unit_type) do {
 	case "AT": {
 		_type = "G-U-C-F-R";
@@ -63,7 +65,8 @@ switch (_unit_type) do {
 		_type = "G-U-C-I";
 	};
 };
-if (!isNull vehicle _unit) then {
+
+if (typeOf (vehicle _unit) != typeOf _unit) then {
 	_vehicle_type = (vehicle _unit) call BIS_fnc_objectType select 1;
 	switch (_vehicle_type) do {
 		case "Car": {
