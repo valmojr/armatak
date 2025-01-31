@@ -22,6 +22,12 @@ class CfgFunctions {
 			class extract_callsign {
 				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_extract_callsign.sqf";
 			};
+			class extract_group_color {
+				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_extract_group_color.sqf";
+			};
+			class extract_group_role {
+				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_extract_group_role.sqf";
+			};
 			class extract_role {
 				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_extract_role.sqf";
 			};

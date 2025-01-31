@@ -31,4 +31,10 @@ if (["officer", typeOf _unit, false] call BIS_fnc_inString) then {
 	_group_role = _group_roles select 2;
 };
 
+_pre_defined_role = _unit getVariable "_atak_group_role";
+
+if (!isNil "_pre_defined_role") then {
+	_callsign = _pre_defined_callsign;
+};
+
 _group_role
