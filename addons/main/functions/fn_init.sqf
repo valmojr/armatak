@@ -18,26 +18,35 @@ if (isServer) exitWith {
 
 	"armatak" callExtension ["cot_router:start", [_tak_server_fulladdress]];
 
-	/*
+	_syncUnits = synchronizedObjects _logic;
+
+	missionNamespace setVariable ["_armatak_marked_units", _syncUnits];
+
+	_syncedUnits = missionNamespace getVariable "_armatak_marked_units";
+
 	[{
-		[{
-			_syncedUnits = missionNamespace getVariable "_armatak_marked_units";
-			_markers = [];
+		_syncedUnits = missionNamespace getVariable "_armatak_marked_units";
 
-			{
-				if (unitIsUAV _x) then {
-					_marker = _x call armatak_fnc_extract_drone_info;
-					_markers append [_marker];
-				} else {
-					_marker = _x call armatak_fnc_extract_info;
-					_markers append [_marker];
-				};
-			} forEach _syncedUnits;
+		{
+			_objectType = _x call BIS_fnc_objectType;
+			if ((_objectType select 0) == "Soldier") then {
+				_callsign = [_x] call armatak_fnc_extract_callsign;
+				_group_name = [group _x] call armatak_fnc_extract_group_color;
+				_group_role = [_x] call armatak_fnc_extract_group_role;
 
-			_request = "armatak" callExtension ["ots_api:post", [_markers]];
-		}, 1, []] call CBA_fnc_addPerFrameHandler;
-	}, [], 1] call CBA_fnc_waitAndExecute;
-	*/
+				[_x, _callsign, _group_name, _group_role] call armatak_fnc_send_human_cot;
+			};
+			if ((_objectType select 0) == "Vehicle") then {
+				_atak_type = [_x] call armatak_fnc_extract_role;
+				_callsign = [_x] call armatak_fnc_extract_callsign;
+
+				[_x, _atak_type, _callsign] call armatak_fnc_send_marker_cot;
+			};
+			if (unitIsUAV _x) then {
+				[_x] call armatak_fnc_send_drone_cot;
+			};
+		} forEach _syncedUnits;
+	}, 2, []] call CBA_fnc_addPerFrameHandler;
 };
 
 true;
