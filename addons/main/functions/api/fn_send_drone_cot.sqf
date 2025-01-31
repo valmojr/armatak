@@ -5,7 +5,7 @@
 params["_drone"];
 
 private _atak_role = "a-f-A";
-private _atak_callsign = getText(configFile >> "CfgVehicles" >> typeOf _drone >> "displayName");
+private _atak_callsign = [_unit] call armatak_fnc_extract_callsign;
 
 switch (side _drone) do {
 	case "WEST": {
@@ -25,6 +25,4 @@ switch (side _drone) do {
 	};
 };
 
-_cot = [_drone, _atak_role, _atak_callsign] call armatak_fnc_extract_marker_cot_info;
-
-"armatak" callExtension ["cot_router:send_marker_cot", [_cot]];
+_cot = [_drone, _atak_role, _atak_callsign] call armatak_fnc_send_marker_cot;
