@@ -26,48 +26,50 @@ switch (side _unit) do {
 	};
 };
 
-_unit_type = _unit call BIS_fnc_objectType select 1;
+_unit_type = _unit call BIS_fnc_objectType;
 
-switch (_unit_type) do {
-	case "AT": {
-		_type = "G-U-C-F-R";
-	};
-	case "Civilian": {
-		_type = "G-E-V-C";
-	};
-	case "Diver": {
-		_type = "U-S";
-	};
-	case "Infantry": {
-		_type = "G-U-C-I";
-	};
-	case "Medic": {
-		_type = "a-f-G-U-C";
-	};
-	case "MG": {
-		_type = "G-U-C-I";
-	};
-	case "Officer": {
-		_type = "G-U-C-I";
-	};
-	case "Pilot": {
-		_type = "G-U-C-V";
-	};
-	case "Sniper": {
-		_type = "G-U-C-R-X";
-	};
-	case "SpecialForces": {
-		_type = "G-U-C-R-X";
-	};
-	case "UAVPilot": {
-		_type = "G-U-C-V-U";
-	};
-	default {
-		_type = "G-U-C-I";
+if ((_unit_type select 0) == "Soldier") then {
+	switch (_unit_type select 1) do {
+		case "AT": {
+			_type = "G-U-C-F-R";
+		};
+		case "Civilian": {
+			_type = "G-E-V-C";
+		};
+		case "Diver": {
+			_type = "U-S";
+		};
+		case "Infantry": {
+			_type = "G-U-C-I";
+		};
+		case "Medic": {
+			_type = "a-f-G-U-C";
+		};
+		case "MG": {
+			_type = "G-U-C-I";
+		};
+		case "Officer": {
+			_type = "G-U-C-I";
+		};
+		case "Pilot": {
+			_type = "G-U-C-V";
+		};
+		case "Sniper": {
+			_type = "G-U-C-R-X";
+		};
+		case "SpecialForces": {
+			_type = "G-U-C-R-X";
+		};
+		case "UAVPilot": {
+			_type = "G-U-C-V-U";
+		};
+		default {
+			_type = "G-U-C-I";
+		};
 	};
 };
 
-if (typeOf (vehicle _unit) != typeOf _unit) then {
+if ((typeOf (vehicle _unit) != typeOf _unit) or ((_unit_type select 0) == "Vehicle")) then {
 	_vehicle_type = (vehicle _unit) call BIS_fnc_objectType select 1;
 	switch (_vehicle_type) do {
 		case "Car": {
@@ -100,7 +102,9 @@ if (typeOf (vehicle _unit) != typeOf _unit) then {
 		case "WheeledAPC": {
 			_type = "G-U-C-I-Z";
 		};
-		default {};
+		default {
+			_type = "G-U-C-I";
+		};
 	};
 };
 
