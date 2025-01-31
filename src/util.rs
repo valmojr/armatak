@@ -1,3 +1,4 @@
+use arma_rs::Context;
 use log::{error, info, warn};
 use std::net::{IpAddr, UdpSocket};
 use crate::structs::LogPayload;
@@ -42,4 +43,10 @@ pub fn get_local_address() -> String {
             return "not provided".to_string();
         },
     }
+}
+
+pub fn test_callback(ctx: Context) -> &'static str {
+    let _ = ctx.callback_data("armatak_test_callback", "123", "321");
+
+    "Testing Callback"
 }

@@ -38,6 +38,7 @@ pub fn init() -> Extension {
         )
         .command("local_ip", util::get_local_address)
         .command("uuid", util::get_uuid)
+        .command("callback", util::test_callback)
         .command("log", util::log_info)
         .group(
             "cot_router",
