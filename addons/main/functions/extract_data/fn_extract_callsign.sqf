@@ -24,9 +24,9 @@ if (unitIsUAV _unit) then {
 	_callsign = getText (configFile >> "CfgVehicles" >> typeOf _unit >> "displayName");
 
 	if (isUAVConnected _unit) then {
-		_callsign = _callsign + "[ON]";
+		_callsign = (_callsign) + "[ON]";
 	} else {
-		_callsign = _callsign + "[OFF]";
+		_callsign = (_callsign) + "[OFF]";
 	}
 };
 
