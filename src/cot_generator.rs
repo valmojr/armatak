@@ -15,6 +15,7 @@ pub struct CursorOverTime {
     pub group_role: Option<String>,
     pub track_course: Option<i32>,
     pub track_speed: Option<f32>,
+    pub link_uid: Option<String>,
 }
 
 impl CursorOverTime {
@@ -63,6 +64,18 @@ impl CursorOverTime {
         xml.push_str("<detail>");
 
         xml.push_str("<takv device=\"Samsung S24\" os=\"Arma 3\" platform=\"ARMATAK\" version=\"0.9.0.0\" />");
+
+        if let Some(linked_uid) = &self.link_uid {
+            xml.push_str("<precisionlocation altsrc=\"DTED0\" />");
+            xml.push_str(
+                format!(
+                    "<link uid=\"{}\" type=\"a-f-G-U-C\" relation=\"p-p\" />",
+                    linked_uid,
+                )
+                .as_str(),
+            );
+            xml.push_str("<hideLabel />");
+        }
 
         xml.push_str(format!("<contact callsign=\"{}\" />", self.contact_callsign).as_str());
 
@@ -150,6 +163,7 @@ impl HumanCoTPayload {
             group_role: Some(self.group_role.clone()),
             track_course: Some(self.track_course),
             track_speed: Some(self.track_speed),
+            link_uid: None,
         }
     }
 }
@@ -205,6 +219,49 @@ impl MarkerCoTPayload {
             group_role: None,
             track_course: Some(self.track_course),
             track_speed: Some(self.track_speed),
+            link_uid: None,
+        }
+    }
+}
+
+pub struct DigitalPointerPayload {
+    pub link_uid: String,
+    pub contact_callsign: String,
+    pub point_lat: f64,
+    pub point_lon: f64,
+    pub point_hae: f32,
+}
+
+impl FromArma for DigitalPointerPayload {
+    fn from_arma(data: String) -> Result<DigitalPointerPayload, FromArmaError> {
+        let (link_uid, contact_callsign, point_lat, point_lon, point_hae) =
+            <(String, String, f64, f64, f32)>::from_arma(data)?;
+        Ok(Self {
+            link_uid,
+            contact_callsign,
+            point_lat,
+            point_lon,
+            point_hae,
+        })
+    }
+}
+
+impl DigitalPointerPayload {
+    pub fn to_cot(&self) -> CursorOverTime {
+        CursorOverTime {
+            uuid: Some(format!("{}{}", self.link_uid.clone(), ".SPI1")),
+            r#type: Some("b-m-p-s-p-i".to_string()),
+            point_lat: self.point_lat,
+            point_lon: self.point_lon,
+            point_hae: self.point_hae,
+            point_ce: None,
+            point_le: None,
+            contact_callsign: self.contact_callsign.clone(),
+            group_name: None,
+            group_role: None,
+            track_course: None,
+            track_speed: None,
+            link_uid: Some(self.link_uid.clone()),
         }
     }
 }
