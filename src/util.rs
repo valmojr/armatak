@@ -1,14 +1,13 @@
-use arma_rs::Context;
+use crate::structs::LogPayload;
 use log::{error, info, warn};
 use std::net::{IpAddr, UdpSocket};
-use crate::structs::LogPayload;
 
 pub fn log_info(data: LogPayload) -> String {
     match data.status.as_str() {
         "info" => info!("{}", data.message),
         "warn" => warn!("{}", data.message),
         "error" => error!("{}", data.message),
-        _ => error!("{}","Wrong log call")
+        _ => error!("{}", "Wrong log call"),
     }
     "logged".to_string()
 }
@@ -18,15 +17,13 @@ pub fn get_uuid() -> String {
 
     let id = Uuid::new_v4().to_string();
 
-    return id
+    return id;
 }
 
 pub fn get_local_address() -> String {
     fn get_local_ip() -> Result<IpAddr, String> {
         let socket = UdpSocket::bind("0.0.0.0:0").map_err(|e| e.to_string())?;
-        socket
-            .connect("8.8.8.8:80")
-            .map_err(|e| e.to_string())?;
+        socket.connect("8.8.8.8:80").map_err(|e| e.to_string())?;
         socket
             .local_addr()
             .map(|addr| addr.ip())
@@ -38,15 +35,9 @@ pub fn get_local_address() -> String {
     match parsed_data {
         Ok(ip) => {
             return format!("ws://{}:4152", ip.to_string());
-        },
+        }
         Err(_) => {
             return "not provided".to_string();
-        },
+        }
     }
-}
-
-pub fn test_callback(ctx: Context) -> &'static str {
-    let _ = ctx.callback_data("armatak_test_callback", "123", "321");
-
-    "Testing Callback"
 }
