@@ -1,11 +1,14 @@
 class CfgFunctions {
-	class Armatak {
+	class armatak {
 		class functions {
 			class init {
 				file = "\armatak\armatak\armatak_main\functions\fn_init.sqf";
 			};
 			class log_message {
 				file = "\armatak\armatak\armatak_main\functions\fn_log_message.sqf";
+			};
+			class send_digital_pointer_cot {
+				file = "\armatak\armatak\armatak_main\functions\api\fn_send_digital_pointer_cot.sqf";
 			};
 			class send_drone_cot {
 				file = "\armatak\armatak\armatak_main\functions\api\fn_send_drone_cot.sqf";
@@ -17,6 +20,9 @@ class CfgFunctions {
 				file = "\armatak\armatak\armatak_main\functions\api\fn_send_human_cot.sqf";
 			};
 			class send_marker_cot {
+				file = "\armatak\armatak\armatak_main\functions\api\fn_send_marker_cot.sqf";
+			};
+			class send_message_cot {
 				file = "\armatak\armatak\armatak_main\functions\api\fn_send_marker_cot.sqf";
 			};
 			class extract_callsign {
