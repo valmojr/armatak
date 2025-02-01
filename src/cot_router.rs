@@ -1,15 +1,16 @@
+use arma_rs::Context;
+use lazy_static::lazy_static;
 use log::info;
 use std::io::Write;
 use std::net::TcpStream;
 use std::sync::mpsc::{self, Receiver, Sender};
 use std::sync::{Arc, Mutex};
 use std::thread;
-use lazy_static::lazy_static;
 
-use crate::cot_generator::{HumanCoTPayload, MarkerCoTPayload};
+use crate::cot_generator::{DigitalPointerPayload, HumanCoTPayload, MarkerCoTPayload};
 
 pub enum TcpCommand {
-    SendMessage(String),
+    SendMessage(String, Context),
     Stop,
 }
 
@@ -18,7 +19,7 @@ pub struct TcpClient {
 }
 
 impl TcpClient {
-    pub fn start(&self, address: String, rx: Receiver<TcpCommand>) {
+    pub fn start(&self, address: String, rx: Receiver<TcpCommand>, ctx: Context) {
         if let Some(ref client) = *TCP_CLIENT.lock().unwrap() {
             client.stop();
         }
@@ -29,27 +30,39 @@ impl TcpClient {
         thread::spawn(move || {
             let mut running = true;
 
-            let tcp_thread = thread::spawn(move || {
-                match TcpStream::connect(&address) {
-                    Ok(stream) => {
-                        info!("Connected to TCP server at {}", address);
-                        *connection_clone.lock().unwrap() = Some(stream);
-                    }
-                    Err(e) => {
-                        info!("Failed to connect to TCP server: {}", e);
-                    }
+            let tcp_thread = thread::spawn(move || match TcpStream::connect(&address) {
+                Ok(stream) => {
+                    info!("Connected to TCP server at {}", address);
+                    *connection_clone.lock().unwrap() = Some(stream);
+                }
+                Err(e) => {
+                    let _ = ctx.callback_data(
+                        "armatak_tcp_socket",
+                        "tak_socket_failed_connection",
+                        format!("Failed to connect to TCP server: {}", e),
+                    );
+                    info!("Failed to connect to TCP server: {}", e);
                 }
             });
 
             while running {
                 match rx.recv() {
-                    Ok(TcpCommand::SendMessage(message)) => {
+                    Ok(TcpCommand::SendMessage(message, context)) => {
                         if let Some(mut stream) = connection.lock().unwrap().as_ref() {
                             if let Err(e) = stream.write_all(message.as_bytes()) {
                                 info!("Failed to send message: {}", e);
+
+                                let _ = context.callback_data(
+                                    "armatak_tcp_socket",
+                                    "tak_socket_disconnected",
+                                    e.to_string(),
+                                );
                             }
                         } else {
-                            info!("No active TCP connection.");
+                            let _ = context.callback_null(
+                                "armatak_tcp_socket",
+                                "tak_socket_not_active",
+                            );
                         }
                     }
                     Ok(TcpCommand::Stop) => {
@@ -66,10 +79,10 @@ impl TcpClient {
         });
     }
 
-    pub fn send_payload(&self, payload: String) {
+    pub fn send_payload(&self, context: Context, payload: String) {
         let tx = self.tx.clone();
         thread::spawn(move || {
-            tx.send(TcpCommand::SendMessage(payload)).unwrap();
+            tx.send(TcpCommand::SendMessage(payload, context)).unwrap();
         });
     }
 
@@ -85,11 +98,11 @@ lazy_static! {
     static ref TCP_CLIENT: Arc<Mutex<Option<TcpClient>>> = Arc::new(Mutex::new(None));
 }
 
-pub fn start(address: String) -> &'static str {
+pub fn start(ctx: Context, address: String) -> &'static str {
     let (tx, rx): (Sender<TcpCommand>, Receiver<TcpCommand>) = mpsc::channel();
 
     let client = TcpClient { tx };
-    client.start(address, rx);
+    client.start(address, rx, ctx);
 
     let mut client_guard = TCP_CLIENT.lock().unwrap();
     *client_guard = Some(client);
@@ -99,10 +112,10 @@ pub fn start(address: String) -> &'static str {
     "Starting TCP Client"
 }
 
-pub fn send_payload(payload: String) -> &'static str {
+pub fn send_payload(ctx: Context, payload: String) -> &'static str {
     if let Some(ref client) = *TCP_CLIENT.lock().unwrap() {
         info!("Sending payload: {}", payload);
-        client.send_payload(payload);
+        client.send_payload(ctx, payload);
     } else {
         info!("TCP client is not running.");
     }
@@ -110,14 +123,25 @@ pub fn send_payload(payload: String) -> &'static str {
     "Sending payload to TCP server"
 }
 
-pub fn send_human_cot(cursor_over_time: HumanCoTPayload) -> &'static str {
+pub fn send_human_cot(ctx: Context, cursor_over_time: HumanCoTPayload) -> &'static str {
     let payload = cursor_over_time.to_cot().convert_to_xml();
-    send_payload(payload)
+    send_payload(ctx, payload);
+
+    "Sending Human Cursor Over Time to TCP server"
 }
 
-pub fn send_marker_cot(cursor_over_time: MarkerCoTPayload) -> &'static str {
+pub fn send_marker_cot(ctx: Context, cursor_over_time: MarkerCoTPayload) -> &'static str {
     let payload = cursor_over_time.to_cot().convert_to_xml();
-    send_payload(payload)
+    send_payload(ctx, payload);
+
+    "Sending Marker Cursor Over Time to TCP server"
+}
+
+pub fn send_digital_pointer_cot(ctx: Context, cursor_over_time: DigitalPointerPayload) -> &'static str {
+    let payload = cursor_over_time.to_cot().convert_to_xml();
+    send_payload(ctx, payload);
+
+    "Sending Digital Pointer Cursor Over Time to TCP server"
 }
 
 pub fn stop() -> &'static str {
