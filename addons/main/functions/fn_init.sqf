@@ -12,7 +12,7 @@ if (isServer) exitWith {
 		params ["_name", "_function", "_data"];
 
 		if (_name == "armatak_tcp_socket") then {
-			_warning = format ["<t color='#FF8021'>ARMATAK</t><br/> %1", "Connecting to TAK Server TCP Socket..."];
+			_warning = format ["<t color='#FF8021'>ARMATAK</t><br/> %1", _function];
 			[[_warning, 1.5]] call CBA_fnc_notify;
 		};
 	}];
