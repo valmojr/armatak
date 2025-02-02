@@ -17,7 +17,11 @@ if (roleDescription _unit != "") then {
 };
 
 if ((([_unit] call BIS_fnc_objectType) select 0) == "Vehicle") then {
-	_callsign = getText (configFile >> "CfgVehicles" >> typeOf _unit >> "displayName") + " | " + name _unit;
+	_callsign = getText (configFile >> "CfgVehicles" >> typeOf _unit >> "displayName");
+
+	if (!isNull driver _unit) then {
+		_callsign = getText (configFile >> "CfgVehicles" >> typeOf _unit >> "displayName") + " | " + name (driver _unit);
+	};
 };
 
 if (unitIsUAV _unit) then {
