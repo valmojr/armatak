@@ -61,6 +61,9 @@ class CfgFunctions {
 			class convert_to_cucui {
 				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_cucui.sqf";
 			};
+			class convert_to_takistan_montains {
+				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_takistan_montains.sqf";
+			};
 		};
 	};
 };
