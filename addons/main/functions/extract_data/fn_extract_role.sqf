@@ -15,7 +15,7 @@ switch (side _unit) do {
 	case "EAST": {
 		_affiliation = "h";
 	};
-	case "INDEPENDENT": {
+	case "GUER": {
 		_affiliation = "n";
 	};
 	case "CIVILIAN": {
