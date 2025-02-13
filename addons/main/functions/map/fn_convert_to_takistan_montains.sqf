@@ -8,11 +8,11 @@ _playerLongitude = _playerPosition select 1;
 _playerMaxLongitude = 6340;
 _playerMaxLatitude = 6340;
 
-_MapMaxLatitude = 35.042822;
-_MapMinLatitude = 34.914006;
+_MapMaxLongitude = 35.042822;
+_MapMinLongitude = 34.914006;
 
-_MapMaxLongitude = 36.268269;
-_MapMinLongitude = 36.111253;
+_MapMaxLatitude = 36.268269;
+_MapMinLatitude = 36.111253;
 
 _LongitudeDifference = _MapMaxLongitude - _MapMinLongitude;
 _LatitudeDifference = _MapMaxLatitude - _MapMinLatitude;
