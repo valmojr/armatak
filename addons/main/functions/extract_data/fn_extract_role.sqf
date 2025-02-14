@@ -8,7 +8,7 @@ private _affiliation = "f";
 private _type = "G";
 private _role = "a-f-G-U-C-I";
  
-switch (side _unit) do {
+switch (str side _unit) do {
 	case "WEST": {
 		_affiliation = "f";
 	};
