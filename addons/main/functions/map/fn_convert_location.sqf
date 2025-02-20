@@ -4,26 +4,29 @@ _position = [_latitude, _longitude, _altitude];
 
 _realLocation = null;
 
-switch (worldName) do {
-	case "Altis": {
+switch (toLower worldName) do {
+	case "altis": {
 		_realLocation = _position call armatak_fnc_convert_to_altis;
 	};
-	case "Stratis": {
+	case "stratis": {
 		_realLocation = _position call armatak_fnc_convert_to_stratis;
 	};
-	case "Malden": {
+	case "malden": {
 		_realLocation = _position call armatak_fnc_convert_to_malden;
 	};
-	case "VR": {
+	case "vr": {
 		_realLocation = _position call armatak_fnc_convert_to_vr;
 	};
 	case "cucui": {
 		_realLocation = _position call armatak_fnc_convert_to_cucui;
 	};
-	case "Mountains_ACR": {
+	case "mountains_acr": {
 		_realLocation = _position call armatak_fnc_convert_to_takistan_montains;
 	};
 	default {
+		_warning = format ["<t color='#FF8021'>ARMATAK</t><br/> %1", "Unsupported Map"];
+		[[_warning, 1.5]] call CBA_fnc_notify;
+
 		_realLocation = [0, 0, 0];
 	};
 };
