@@ -20,6 +20,9 @@ switch (toLower worldName) do {
 	case "cucui": {
 		_realLocation = _position call armatak_fnc_convert_to_cucui;
 	};
+	case "chernarus": {
+		_realLocation = _position call armatak_fnc_convert_to_chernarus;
+	};
 	case "mountains_acr": {
 		_realLocation = _position call armatak_fnc_convert_to_takistan_montains;
 	};

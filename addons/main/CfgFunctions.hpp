@@ -64,6 +64,9 @@ class CfgFunctions {
 			class convert_to_takistan_montains {
 				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_takistan_montains.sqf";
 			};
+			class convert_to_chernarus {
+				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_chernarus.sqf";
+			};
 		};
 	};
 };
