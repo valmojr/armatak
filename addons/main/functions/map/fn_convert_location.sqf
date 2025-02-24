@@ -32,8 +32,17 @@ switch (toLower worldName) do {
 	case "bootcamp_acr": {
 		_realLocation = _position call armatak_fnc_convert_to_bukovina;
 	};
+	case "woodland_acr": {
+		_realLocation = _position call armatak_fnc_convert_to_bystrika;
+	};
 	case "mountains_acr": {
 		_realLocation = _position call armatak_fnc_convert_to_takistan_montains;
+	};
+	case "sara_dbe1": {
+		_realLocation = _position call armatak_fnc_convert_to_united_sahrani;
+	};
+	case "saralite": {
+		_realLocation = _position call armatak_fnc_convert_to_united_sahrani;
 	};
 	default {
 		_warning = format ["<t color='#FF8021'>ARMATAK</t><br/> %1", "Unsupported Map"];
