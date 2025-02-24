@@ -41,7 +41,10 @@ workshop = [
   "450814997", # CBA
   "463939057", # ACE
   "623475643", # 3den enhanced
-  "1779063631" # Zeus enhanced
+  "1779063631", # Zeus enhanced
+  "1673595418", # User Input Menus
+  "1678581937", # Extended Function Viewer
+  "1231625987" #Debug Console
 ]
 
 parameters = [
