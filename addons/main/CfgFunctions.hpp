@@ -49,23 +49,26 @@ class CfgFunctions {
 			class convert_to_altis {
 				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_altis.sqf";
 			};
-			class convert_to_stratis {
-				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_stratis.sqf";
-			};
-			class convert_to_malden {
-				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_malden.sqf";
-			};
-			class convert_to_vr {
-				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_vr.sqf";
+			class convert_to_chernarus {
+				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_chernarus.sqf";
 			};
 			class convert_to_cucui {
 				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_cucui.sqf";
 			};
+			class convert_to_malden {
+				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_malden.sqf";
+			};
+			class convert_to_stratis {
+				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_stratis.sqf";
+			};
 			class convert_to_takistan_montains {
 				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_takistan_montains.sqf";
 			};
-			class convert_to_chernarus {
-				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_chernarus.sqf";
+			class convert_to_tanoa {
+				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_tanoa.sqf";
+			};
+			class convert_to_vr {
+				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_vr.sqf";
 			};
 		};
 	};
