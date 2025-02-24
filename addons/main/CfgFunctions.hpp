@@ -64,6 +64,9 @@ class CfgFunctions {
 			class convert_to_malden {
 				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_malden.sqf";
 			};
+			class convert_to_southen_sahrani {
+				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_southen_sahrani.sqf";
+			};
 			class convert_to_stratis {
 				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_stratis.sqf";
 			};
@@ -72,6 +75,9 @@ class CfgFunctions {
 			};
 			class convert_to_tanoa {
 				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_tanoa.sqf";
+			};
+			class convert_to_united_sahrani {
+				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_united_sahrani.sqf";
 			};
 			class convert_to_vr {
 				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_vr.sqf";
