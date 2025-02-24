@@ -23,7 +23,13 @@ switch (toLower worldName) do {
 	case "chernarus": {
 		_realLocation = _position call armatak_fnc_convert_to_chernarus;
 	};
-	case "bukovina": {
+	case "chernarus_summer": {
+		_realLocation = _position call armatak_fnc_convert_to_chernarus;
+	};
+	case "chernarus_winter": {
+		_realLocation = _position call armatak_fnc_convert_to_chernarus;
+	};
+	case "bootcamp_acr": {
 		_realLocation = _position call armatak_fnc_convert_to_bukovina;
 	};
 	case "mountains_acr": {
