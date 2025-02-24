@@ -49,6 +49,9 @@ class CfgFunctions {
 			class convert_to_altis {
 				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_altis.sqf";
 			};
+			class convert_to_bukovina {
+				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_bukovina.sqf";
+			};
 			class convert_to_chernarus {
 				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_to_chernarus.sqf";
 			};
