@@ -100,29 +100,13 @@ jobs:
         uses: arma-actions/hemtt@v1
       - name: Build
         run: hemtt release
-      - name: Upload Final Package
-        uses: actions/upload-artifact@v4
-        with:
-          name: armatak.zip
-          path: 'releases/armatak-latest.zip'
-
-  get_commits:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v4
       - name: Get previous tag
         id: prev_tag
-        run: echo "::set-output name=tag::$(git describe --tags --abbrev=0 HEAD^)"
+        run: echo "PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD^)" >> $GITHUB_ENV
       - name: Get commit messages
         id: commits
         run: |
-          echo "::set-output name=messages::$(git log ${{ steps.prev_tag.outputs.tag }}..HEAD --pretty=format:'%h - %s' | tr '\n' ',' | sed 's/,$//')"
-
-  create_release:
-    needs: [package, get_commits]
-    runs-on: ubuntu-latest
-    steps:
+          echo "COMMIT_MESSAGES=$(git log ${{ env.PREVIOUS_TAG }}..HEAD --pretty=format:'%h - %s' | tr '\n' ',' | sed 's/,$//')" >> $GITHUB_ENV
       - name: Checkout Repo
         uses: actions/checkout@v4
         with:
@@ -130,21 +114,21 @@ jobs:
       - name: Create Release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          release_name: ${{ github.ref }}
           body: |
             Changes in this release:
-            ${{ steps.commits.outputs.messages }}
+            ${{ env.COMMIT_MESSAGES }}
           draft: false
           prerelease: false
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: releases/armatak-latest.zip
-          asset_name: armatak-latest.zip
+          asset_name: armatak.zip
           asset_content_type: application/zip
