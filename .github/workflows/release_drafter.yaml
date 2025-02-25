@@ -102,16 +102,17 @@ jobs:
         run: hemtt release
       - name: Get previous tag
         id: prev_tag
-        run: echo "PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD^)" >> $GITHUB_ENV
+        run: |
+          tag=$(git describe --tags --abbrev=0 HEAD^ || echo "")
+          echo "tag=${tag}" >> $GITHUB_ENV
+        continue-on-error: true
       - name: Get commit messages
         id: commits
         run: |
           echo "COMMIT_MESSAGES=$(git log ${{ env.PREVIOUS_TAG }}..HEAD --pretty=format:'%h - %s' | tr '\n' ',' | sed 's/,$//')" >> $GITHUB_ENV
-      - name: Checkout Repo
-        uses: actions/checkout@v4
-        with:
-          lfs: true
+
       - name: Create Release
+        id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
