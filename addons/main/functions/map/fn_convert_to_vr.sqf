@@ -1,23 +1,30 @@
-params["_latitude", "_longitude", "_altitude"];
+params ["_longitudeInGame", "_latitudeInGame", "_altitude"];
 
-_playerPosition = [_latitude, _longitude, _altitude];
+private _mapWidth = 8192;
+private _mapHeight = 8192;
 
-_playerLatitude = _playerPosition select 0;
-_playerLongitude = _playerPosition select 1;
+//    SW corner (used as origin)
+private _SW_lat = 37.272582;
+private _SW_lon =-115.805174;
 
-_playerMaxLongitude = 8192;
-_playerMaxLatitude = 8192;
+//    SE corner
+private _SE_lat = 37.272582;
+private _SE_lon =-115.786913;
 
-_MapMaxLatitude = 37.266306;
-_MapMinLatitude = 37.189233;
+//    NW corner
+private _NW_lat = 37.287123;
+private _NW_lon =-115.805174;
 
-_MapMaxLongitude = -115.771889;
-_MapMinLongitude = -115.863786;
+private _edgeSE_lat = _SE_lat - _SW_lat;
+private _edgeSE_lon = _SE_lon - _SW_lon;
 
-_LongitudeDifference = _MapMaxLongitude - _MapMinLongitude;
-_LatitudeDifference = _MapMaxLatitude - _MapMinLatitude;
+private _edgeNW_lat = _NW_lat - _SW_lat;
+private _edgeNW_lon = _NW_lon - _SW_lon;
 
-_RealLongitude = (_playerLongitude / _playerMaxLongitude) * _LongitudeDifference + _MapMinLongitude;
-_RealLatitude = (_playerLatitude / _playerMaxLatitude) * _LatitudeDifference + _MapMinLatitude;
+private _fx = _longitudeInGame / _mapWidth;
+private _fy = _latitudeInGame / _mapHeight;
 
-[_RealLongitude, _RealLatitude, _playerPosition select 2]
+private _realLat = _SW_lat + (_fx * _edgeSE_lat) + (_fy * _edgeNW_lat);
+private _realLon = _SW_lon + (_fx * _edgeSE_lon) + (_fy * _edgeNW_lon);
+
+[_realLat, _realLon, _altitude]
