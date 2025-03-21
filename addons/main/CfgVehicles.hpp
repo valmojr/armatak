@@ -64,7 +64,7 @@ class CfgVehicles {
 				displayname = "TAK Server TCP Port";
 				tooltip = "TAK Server instance Port for TCP connection";
 				typeName = "NUMBER";
-				defaultValue = "8080";
+				defaultValue = "8088";
 			};
 			class ModuleDescription: ModuleDescription {};
 		};
