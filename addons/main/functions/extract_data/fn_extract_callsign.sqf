@@ -7,7 +7,7 @@ params["_unit"];
 private _callsign = "";
 
 if (roleDescription _unit != "") then {
-	_callsign = name _unit + " | " + roleDescription _unit;
+	_callsign = ([name _unit] call armatak_fnc_shorten_name) + " | " + roleDescription _unit;
 } else {
 	_callsign = name _unit;
 
@@ -20,7 +20,7 @@ if ((([_unit] call BIS_fnc_objectType) select 0) == "Vehicle") then {
 	_callsign = getText (configFile >> "CfgVehicles" >> typeOf _unit >> "displayName");
 
 	if (!isNull driver _unit) then {
-		_callsign = getText (configFile >> "CfgVehicles" >> typeOf _unit >> "displayName") + " | " + name (driver _unit);
+		_callsign = getText (configFile >> "CfgVehicles" >> typeOf _unit >> "displayName") + " | " + ([name (driver _unit)] call armatak_fnc_shorten_name);
 	};
 };
 
@@ -34,10 +34,10 @@ if (unitIsUAV _unit) then {
 	}
 };
 
-_pre_defined_callsign = _unit getVariable "_atak_callsign";
+_atak_pre_defined_callsign = _unit getVariable "_atak_callsign";
 
-if (!isNil "_pre_defined_callsign") then {
-	_callsign = _pre_defined_callsign;
+if (!isNil "_atak_pre_defined_callsign") then {
+	_callsign = _atak_pre_defined_callsign;
 };
 
 _callsign
