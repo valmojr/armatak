@@ -5,8 +5,8 @@ prefix = "armatak"
 
 [version]
 build = 0
-major = 0
-minor = 9 
+major = 1
+minor = 0 
 patch = 0
 
 git_hash = 0
@@ -44,7 +44,9 @@ workshop = [
   "1779063631", # Zeus enhanced
   "1673595418", # User Input Menus
   "1678581937", # Extended Function Viewer
-  "1231625987" #Debug Console
+  "1231625987", #Debug Console
+  "843577117", # RHSUSAF
+  "843425103", # RHSAFRF
 ]
 
 parameters = [
