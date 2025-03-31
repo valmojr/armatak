@@ -42,7 +42,7 @@ switch (toLower worldName) do {
 		_realLocation = _position call armatak_fnc_convert_to_united_sahrani;
 	};
 	case "saralite": {
-		_realLocation = _position call armatak_fnc_convert_to_united_sahrani;
+		_realLocation = _position call armatak_fnc_convert_to_southen_sahrani;
 	};
 	case "enoch": {
 		_realLocation = _position call armatak_fnc_convert_to_livonia;
