@@ -38,7 +38,7 @@ impl TcpClient {
                 Err(e) => {
                     let _ = ctx.callback_data(
                         "armatak_tcp_socket",
-                        "tak_socket_failed_connection",
+                        "TAK Socket connection failed",
                         format!("Failed to connect to TCP server: {}", e),
                     );
                     info!("Failed to connect to TCP server: {}", e);
@@ -54,14 +54,14 @@ impl TcpClient {
 
                                 let _ = context.callback_data(
                                     "armatak_tcp_socket",
-                                    "tak_socket_disconnected",
+                                    "TAK Socket disconnected",
                                     e.to_string(),
                                 );
                             }
                         } else {
                             let _ = context.callback_null(
                                 "armatak_tcp_socket",
-                                "tak_socket_not_active",
+                                "TAK Socket is not active",
                             );
                         }
                     }
