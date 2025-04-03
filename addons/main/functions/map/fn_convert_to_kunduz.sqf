@@ -1,7 +1,7 @@
 params ["_longitudeInGame", "_latitudeInGame", "_altitude"];
 
-private _mapWidth = 30720;
-private _mapHeight = 30720;
+private _mapWidth = 5120;
+private _mapHeight = 5120;
 
 //    SW corner (used as origin)
 private _SW_lat = 36.588437;
