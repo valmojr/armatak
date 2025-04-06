@@ -5,6 +5,7 @@ mod websocket;
 mod util;
 mod cot_router;
 mod cot_generator;
+mod video_stream;
 
 #[arma]
 pub fn init() -> Extension {
@@ -48,6 +49,12 @@ pub fn init() -> Extension {
                 .command("send_marker_cot", cot_router::send_marker_cot)
                 .command("send_digital_pointer_cot", cot_router::send_digital_pointer_cot)
                 .command("stop", cot_router::stop)
+        )
+        .group(
+            "video_stream",
+            Group::new()
+                .command("start", video_stream::start_stream)
+                .command("stop", video_stream::stop_stream)
         )
         .finish()
 }
