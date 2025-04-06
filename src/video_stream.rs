@@ -1,5 +1,6 @@
 use arma_rs::Context;
 use lazy_static::lazy_static;
+use std::os::windows::process::CommandExt;
 use std::process::Command;
 use std::sync::mpsc::{self, Receiver, Sender};
 use std::sync::Mutex;
@@ -8,6 +9,8 @@ use std::thread;
 lazy_static! {
     static ref STREAM_CTRL: Mutex<Option<Sender<()>>> = Mutex::new(None);
 }
+
+const CREATE_NO_WINDOW: u32 = 0x08000000;
 
 pub fn start_stream(
     ctx: Context,
@@ -37,6 +40,7 @@ pub fn start_stream(
                 "tcp",
                 &rtsp_url_clone,
             ])
+            .creation_flags(CREATE_NO_WINDOW)
             .spawn()
         {
             Ok(child) => child,
