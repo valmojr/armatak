@@ -69,6 +69,7 @@ pub fn start_stream(
             return ctx.callback_null("armatak_video_error", "Error receiving stop signal");
         }
 
+        #[cfg(target_os = "windows")]
         Ok(if let Err(e) = child.kill() {
             return ctx.callback_data(
                 "armatak_video_error",
