@@ -4,6 +4,9 @@ class CfgFunctions {
 			class init {
 				file = "\armatak\armatak\armatak_main\functions\fn_init.sqf";
 			};
+			class video_init {
+				file = "\armatak\armatak\armatak_main\functions\fn_video_init.sqf";
+			};
 			class log_message {
 				file = "\armatak\armatak\armatak_main\functions\fn_log_message.sqf";
 			};
