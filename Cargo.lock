@@ -83,7 +83,7 @@ dependencies = [
 
 [[package]]
 name = "armatak"
-version = "0.9.0"
+version = "0.9.9"
 dependencies = [
  "arma-rs",
  "chrono",
