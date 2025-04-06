@@ -57,6 +57,8 @@ impl TcpClient {
                                     "TAK Socket disconnected",
                                     e.to_string(),
                                 );
+
+                                running = false;
                             }
                         } else {
                             let _ = context.callback_null(
