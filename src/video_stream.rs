@@ -57,26 +57,27 @@ pub fn start_stream(
         let mut child = match cmd.creation_flags(CREATE_NO_WINDOW).spawn() {
             Ok(child) => child,
             Err(e) => {
-                return ctx.callback_data(
+                let _ = ctx.callback_data(
                     "armatak_video_error",
                     "Failed to Start FFmpeg",
                     e.to_string(),
                 );
+                return;
             }
         };
 
         if rx.recv().is_err() {
-            return ctx.callback_null("armatak_video_error", "Error receiving stop signal");
+            let _ = ctx.callback_null("armatak_video_error", "Error receiving stop signal");
         }
 
         #[cfg(target_os = "windows")]
-        Ok(if let Err(e) = child.kill() {
-            return ctx.callback_data(
+        if let Err(e) = child.kill() {
+            let _ = ctx.callback_data(
                 "armatak_video_error",
                 "Failed to Stop FFmpeg",
                 e.to_string(),
             );
-        })
+        }
     });
 
     match STREAM_CTRL.lock() {
