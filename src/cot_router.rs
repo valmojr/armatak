@@ -32,7 +32,7 @@ impl TcpClient {
 
             let tcp_thread = thread::spawn(move || match TcpStream::connect(&address) {
                 Ok(stream) => {
-                    info!("Connected to TCP server at {}", address);
+                    let _ = ctx.callback_data("armatak_tcp_socket", "Connected to TCP Server", address);
                     *connection_clone.lock().unwrap() = Some(stream);
                 }
                 Err(e) => {
@@ -107,16 +107,14 @@ pub fn start(ctx: Context, address: String) -> &'static str {
     let mut client_guard = TCP_CLIENT.lock().unwrap();
     *client_guard = Some(client);
 
-    info!("TCP client started.");
-
     "Starting TCP Client"
 }
 
 pub fn send_payload(ctx: Context, payload: String) -> &'static str {
     if let Some(ref client) = *TCP_CLIENT.lock().unwrap() {
-        info!("Sending payload: {}", payload);
         client.send_payload(ctx, payload);
     } else {
+        let _ = ctx.callback_null("armatak_tcp_socket_error", "TCP Client is not running");
         info!("TCP client is not running.");
     }
 
@@ -144,12 +142,12 @@ pub fn send_digital_pointer_cot(ctx: Context, cursor_over_time: DigitalPointerPa
     "Sending Digital Pointer Cursor Over Time to TCP server"
 }
 
-pub fn stop() -> &'static str {
+pub fn stop(ctx: Context) -> &'static str {
     if let Some(ref client) = *TCP_CLIENT.lock().unwrap() {
         client.stop();
-        info!("TCP client stopped.");
+        let _ = ctx.callback_null("armatak_tcp_socket", "TCP client stopped");
     } else {
-        info!("TCP client is not running.");
+        let _ = ctx.callback_null("armatak_tcp_socket_error", "TCP client is not running");
     }
 
     "Stopping TCP Client"
