@@ -22,6 +22,16 @@ if (isServer) exitWith {
 		{
 			_uuid = (_this select 0) call armatak_fnc_extract_uuid;
 
+			_uuid = (_this select 0) call armatak_fnc_extract_uuid; 
+			_uuid_short = _uuid select [0, 8]; 
+			_role = roleDescription (_this select 0); 
+			_name = name (_this select 0); 
+
+			_role = [_role] call BIS_fnc_filterString;
+			_name = [_name] call BIS_fnc_filterString; 
+			
+			_stream_path = _name + "_" + _role + "_" + _uuid_short; 
+
 			armatak_mediamtx_video_stream_instance_address = missionNamespace getVariable "armatak_mediamtx_video_stream_instance_address";
 			armatak_mediamtx_video_stream_instance_port = missionNamespace getVariable "armatak_mediamtx_video_stream_instance_port";
 			armatak_mediamtx_video_stream_instance_auth_user = missionNamespace getVariable "armatak_mediamtx_video_stream_instance_auth_user";
