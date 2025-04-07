@@ -25,65 +25,56 @@ pub fn start_stream(
 ) -> &'static str {
     #[cfg(target_os = "linux")]
     {
-        return ctx.callback_null(
+        ctx.callback_null(
             "armatak_video_error",
             "Screen capture is only supported on Windows",
         );
     }
 
-    let (tx, rx): (Sender<()>, Receiver<()>) = mpsc::channel();
-    let rtsp_url = format!(
-        "rtsp://{}:{}@{}:{}/{}",
-        username, password, address, port, stream_path
-    );
-    let rtsp_url_clone = rtsp_url.clone();
+    #[cfg(target_os = "windows")]
+    {
+        let (tx, rx): (Sender<()>, Receiver<()>) = mpsc::channel();
+        let rtsp_url = format!(
+            "rtsp://{}:{}@{}:{}/{}",
+            username, password, address, port, stream_path
+        );
+        let rtsp_url_clone = rtsp_url.clone();
 
-    thread::spawn(move || {
-        let mut cmd = Command::new("ffmpeg");
+        thread::spawn(move || {
+            let mut cmd = Command::new("ffmpeg");
 
-        cmd.args(&[
-            "-f",
-            "gdigrab",
-            "-i",
-            "desktop",
-            "-f",
-            "rtsp",
-            "-rtsp_transport",
-            "tcp",
-            &rtsp_url_clone,
-        ]);
+            cmd.args(&[
+                "-f",
+                "gdigrab",
+                "-i",
+                "desktop",
+                "-f",
+                "rtsp",
+                "-rtsp_transport",
+                "tcp",
+                &rtsp_url_clone,
+            ]);
 
-        #[cfg(target_os = "windows")]
-        let mut child = match cmd.creation_flags(CREATE_NO_WINDOW).spawn() {
-            Ok(child) => child,
-            Err(e) => {
+            let mut child = cmd.creation_flags(CREATE_NO_WINDOW).spawn().unwrap();
+
+            if rx.recv().is_err() {
+                let _ = ctx.callback_null("armatak_video_error", "Error receiving stop signal");
+            }
+
+            if let Err(e) = child.kill() {
                 let _ = ctx.callback_data(
                     "armatak_video_error",
-                    "Failed to Start FFmpeg",
+                    "Failed to Stop FFmpeg",
                     e.to_string(),
                 );
-                return;
             }
-        };
+        });
 
-        if rx.recv().is_err() {
-            let _ = ctx.callback_null("armatak_video_error", "Error receiving stop signal");
-        }
-
-        #[cfg(target_os = "windows")]
-        if let Err(e) = child.kill() {
-            let _ = ctx.callback_data(
-                "armatak_video_error",
-                "Failed to Stop FFmpeg",
-                e.to_string(),
-            );
-        }
-    });
-
-    match STREAM_CTRL.lock() {
-        Ok(mut lock) => *lock = Some(tx),
-        Err(e) => {
-            eprintln!("Failed to acquire lock: {}", e);
+        match STREAM_CTRL.lock() {
+            Ok(mut lock) => *lock = Some(tx),
+            Err(e) => {
+                eprintln!("Failed to acquire lock: {}", e);
+            }
         }
     }
 
