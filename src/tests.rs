@@ -13,7 +13,7 @@ mod tests {
 
             assert!(validation.is_ok())
         }
-        
+
         #[test]
         fn uuid_output_throws_if_passed_args() {
             let extension = init().testing();
