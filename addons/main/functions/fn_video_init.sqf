@@ -20,8 +20,6 @@ if (isServer) exitWith {
 		"Start Video Feed",
 		"",
 		{
-			_uuid = (_this select 0) call armatak_fnc_extract_uuid;
-
 			_uuid = (_this select 0) call armatak_fnc_extract_uuid; 
 			_uuid_short = _uuid select [0, 8]; 
 			_role = roleDescription (_this select 0); 
@@ -37,7 +35,7 @@ if (isServer) exitWith {
 			armatak_mediamtx_video_stream_instance_auth_user = missionNamespace getVariable "armatak_mediamtx_video_stream_instance_auth_user";
 			armatak_mediamtx_video_stream_instance_auth_pass = missionNamespace getVariable "armatak_mediamtx_video_stream_instance_auth_pass";
 
-			"armatak" callExtension ["video_stream:start", [armatak_mediamtx_video_stream_instance_address, armatak_mediamtx_video_stream_instance_port, _uuid, armatak_mediamtx_video_stream_instance_auth_user, armatak_mediamtx_video_stream_instance_auth_pass]];
+			"armatak" callExtension ["video_stream:start", [armatak_mediamtx_video_stream_instance_address, armatak_mediamtx_video_stream_instance_port, _stream_path, armatak_mediamtx_video_stream_instance_auth_user, armatak_mediamtx_video_stream_instance_auth_pass]];
 			(_this select 0) setVariable ["armatak_video_feed_is_streaming", true];
 		},
 		{
