@@ -34,10 +34,15 @@ pub fn start_stream(
     #[cfg(target_os = "windows")]
     {
         let (tx, rx): (Sender<()>, Receiver<()>) = mpsc::channel();
-        let rtsp_url = format!(
-            "rtsp://{}:{}@{}:{}/{}",
-            username, password, address, port, stream_path
-        );
+        let rtsp_url = if username.is_empty() || password.is_empty() {
+            format!("rtsp://{}:{}/{}", address, port, stream_path)
+        } else {
+            format!(
+                "rtsp://{}:{}@{}:{}/{}",
+                username, password, address, port, stream_path
+            )
+        };
+
         let rtsp_url_clone = rtsp_url.clone();
 
         thread::spawn(move || {
