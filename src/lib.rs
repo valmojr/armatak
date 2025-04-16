@@ -2,10 +2,10 @@ use arma_rs::{arma, Extension, Group};
 mod structs;
 mod tests;
 mod websocket;
-mod util;
 mod cot_router;
 mod cot_generator;
 mod video_stream;
+mod utils;
 
 #[arma]
 pub fn init() -> Extension {
@@ -37,9 +37,9 @@ pub fn init() -> Extension {
             .command("message", websocket::message)
             .command("location", websocket::location)    
         )
-        .command("local_ip", util::get_local_address)
-        .command("uuid", util::get_uuid)
-        .command("log", util::log_info)
+        .command("local_ip", utils::address::get_local_address)
+        .command("uuid", utils::uuid::get_uuid)
+        .command("log", utils::log::log_info)
         .group(
             "cot_router",
             Group::new()
