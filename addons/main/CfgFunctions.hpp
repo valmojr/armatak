@@ -19,8 +19,8 @@ class CfgFunctions {
 			class send_group_cots {
 				file = "\armatak\armatak\armatak_main\functions\api\fn_send_group_cots.sqf";
 			};
-			class send_human_cot {
-				file = "\armatak\armatak\armatak_main\functions\api\fn_send_human_cot.sqf";
+			class send_eud_cot {
+				file = "\armatak\armatak\armatak_main\functions\api\fn_send_eud_cot.sqf";
 			};
 			class send_marker_cot {
 				file = "\armatak\armatak\armatak_main\functions\api\fn_send_marker_cot.sqf";
