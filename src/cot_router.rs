@@ -7,7 +7,7 @@ use std::sync::mpsc::{self, Receiver, Sender};
 use std::sync::{Arc, Mutex};
 use std::thread;
 
-use crate::cot_generator::{DigitalPointerPayload, HumanCoTPayload, MarkerCoTPayload};
+use crate::cot;
 
 pub enum TcpCommand {
     SendMessage(String, Context),
@@ -123,21 +123,21 @@ pub fn send_payload(ctx: Context, payload: String) -> &'static str {
     "Sending payload to TCP server"
 }
 
-pub fn send_human_cot(ctx: Context, cursor_over_time: HumanCoTPayload) -> &'static str {
+pub fn send_eud_cot(ctx: Context, cursor_over_time: cot::eud::EudCoTPayload) -> &'static str {
     let payload = cursor_over_time.to_cot().convert_to_xml();
     send_payload(ctx, payload);
 
-    "Sending Human Cursor Over Time to TCP server"
+    "Sending End User Device Cursor Over Time to TCP server"
 }
 
-pub fn send_marker_cot(ctx: Context, cursor_over_time: MarkerCoTPayload) -> &'static str {
+pub fn send_marker_cot(ctx: Context, cursor_over_time: cot::nato::MarkerCoTPayload) -> &'static str {
     let payload = cursor_over_time.to_cot().convert_to_xml();
     send_payload(ctx, payload);
 
     "Sending Marker Cursor Over Time to TCP server"
 }
 
-pub fn send_digital_pointer_cot(ctx: Context, cursor_over_time: DigitalPointerPayload) -> &'static str {
+pub fn send_digital_pointer_cot(ctx: Context, cursor_over_time: cot::digital_pointer::DigitalPointerPayload) -> &'static str {
     let payload = cursor_over_time.to_cot().convert_to_xml();
     send_payload(ctx, payload);
 

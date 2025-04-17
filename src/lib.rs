@@ -3,8 +3,9 @@ mod structs;
 mod tests;
 mod websocket;
 mod cot_router;
-mod cot_generator;
 mod video_stream;
+
+mod cot;
 mod utils;
 
 #[arma]
@@ -45,7 +46,7 @@ pub fn init() -> Extension {
             Group::new()
                 .command("start", cot_router::start)
                 .command("send_payload", cot_router::send_payload)
-                .command("send_human_cot", cot_router::send_human_cot)
+                .command("send_eud_cot", cot_router::send_eud_cot)
                 .command("send_marker_cot", cot_router::send_marker_cot)
                 .command("send_digital_pointer_cot", cot_router::send_digital_pointer_cot)
                 .command("stop", cot_router::stop)
