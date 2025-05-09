@@ -37,10 +37,12 @@ if (isServer) exitWith {
 
 	_tak_server_fulladdress = _tak_server_instance_address + ":" + (str _tak_server_instance_port);
 
+	missionNamespace setVariable ["_armatak_server_instance", _tak_server_fulladdress];
+	missionNamespace setVariable ["_armatak_tcp_socket_is_running", true];
 	missionNamespace setVariable ["_atak_server_instance", _tak_server_fulladdress];
 	missionNamespace setVariable ["_group_colors", ["White", "Yellow", "Orange", "Magenta", "Red", "Maroon", "Purple", "DarkBlue", "Blue", "Cyan", "Teal", "Green", "DarkGreen", "Brown"]];
 
-	"armatak" callExtension ["cot_router:start", [_tak_server_fulladdress]];
+	"armatak" callExtension ["tcp_socket:start", [_tak_server_fulladdress]];
 
 	_syncUnits = synchronizedObjects _logic;
 

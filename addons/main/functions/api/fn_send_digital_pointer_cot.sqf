@@ -10,5 +10,5 @@ if (!isNull _digitalPointer) then {
 
 	_dpCot = [_link_uid, _contact_callsign, _digitalPointerPosition select 0, _digitalPointerPosition select 1, _digitalPointerPosition select 2];
 
-	"armatak" callExtension ["cot_router:send_digital_pointer_cot", [_dpCot]];
+	"armatak" callExtension ["tcp_socket:send_digital_pointer_cot", [_dpCot]];
 };

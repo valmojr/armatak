@@ -25,8 +25,8 @@ class CfgFunctions {
 			class send_marker_cot {
 				file = "\armatak\armatak\armatak_main\functions\api\fn_send_marker_cot.sqf";
 			};
-			class send_message_cot {
-				file = "\armatak\armatak\armatak_main\functions\api\fn_send_marker_cot.sqf";
+			class stop_tcp_socket {
+				file = "\armatak\armatak\armatak_main\functions\api\fn_stop_tcp_socket.sqf";
 			};
 			class extract_callsign {
 				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_extract_callsign.sqf";
