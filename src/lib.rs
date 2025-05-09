@@ -42,7 +42,7 @@ pub fn init() -> Extension {
         .command("uuid", utils::uuid::get_uuid)
         .command("log", utils::log::log_info)
         .group(
-            "cot_router",
+            "tcp_socket",
             Group::new()
                 .command("start", cot_router::start)
                 .command("send_payload", cot_router::send_payload)
