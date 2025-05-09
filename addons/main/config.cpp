@@ -7,8 +7,7 @@ class CfgPatches {
     weapons[] = {""};
     author = "Valmo";
     url = "https://github.com/valmojr/armatak";
-    requiredAddons[] =
-      {
+    requiredAddons[] = {
         "cba_main",
         "ace_main"
       };
@@ -24,3 +23,4 @@ class Extended_PostInit_EventHandlers {
 
 #include "CfgFunctions.hpp"
 #include "CfgVehicles.hpp"
+#include "Cfg3den.hpp"
