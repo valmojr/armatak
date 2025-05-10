@@ -4,14 +4,14 @@ class Cfg3den {
       class armatak_3den_attributes {
         displayName = "ARMA Team Awareness Kit";
         class Attributes {
-          class armatak_attribute_callsign {
+          class armatak_attribute_unit_callsign {
             displayName = "Unit Callsign";
             tooltip = "Unit callsign on TAK";
-            property = "armatak_attribute_callsign";
+            property = "armatak_attribute_unit_callsign";
             control = "Edit";
-            expression = "_this setVariable ['armatak_attribute_callsign',_value]";
+            expression = "_this setVariable ['armatak_attribute_unit_callsign',_value]";
             defaultValue = "''";
-            condition = "object";
+            condition = "objectBrain";
             typeName = "STRING";
           };
           class armatak_attribute_unit_role {
@@ -57,6 +57,16 @@ class Cfg3den {
             expression = "_this setVariable ['%s',_value];";
             unique = 0;
             condition = "objectBrain";
+          };
+          class armatak_attribute_marker_callsign {
+            displayName = "Marker Callsign";
+            tooltip = "Marker Callsign on TAK";
+            property = "armatak_attribute_marker_callsign";
+            control = "Edit";
+            expression = "_this setVariable ['armatak_attribute_marker_callsign',_value]";
+            defaultValue = "''";
+            condition = "objectVehicle";
+            typeName = "STRING";
           };
           class armatak_attribute_marker_type {
             displayName = "Marker Type";

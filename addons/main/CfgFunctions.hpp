@@ -28,20 +28,23 @@ class CfgFunctions {
 			class stop_tcp_socket {
 				file = "\armatak\armatak\armatak_main\functions\api\fn_stop_tcp_socket.sqf";
 			};
-			class extract_callsign {
-				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_extract_callsign.sqf";
-			};
 			class extract_group_color {
 				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_extract_group_color.sqf";
 			};
 			class extract_group_role {
 				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_extract_group_role.sqf";
 			};
-			class extract_role {
-				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_extract_role.sqf";
+			class extract_marker_callsign {
+				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_extract_marker_callsign.sqf";
 			};
 			class extract_position {
 				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_extract_position.sqf";
+			};
+			class extract_role {
+				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_extract_role.sqf";
+			};
+			class extract_unit_callsign {
+				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_extract_unit_callsign.sqf";
 			};
 			class extract_uuid {
 				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_extract_uuid.sqf";
