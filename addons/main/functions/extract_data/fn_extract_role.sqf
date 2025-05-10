@@ -110,4 +110,11 @@ if ((typeOf (vehicle _unit) != typeOf _unit) or ((_unit_type select 0) == "Vehic
 
 _role = "a-" + _affiliation + "-" + _type;
 
+
+armatak_attribute_marker_type = _unit getVariable "armatak_attribute_marker_type";
+
+if (!isNil "armatak_attribute_marker_type" or armatak_attribute_marker_type != '') then {
+	_role = armatak_attribute_marker_type;
+};
+
 _role
