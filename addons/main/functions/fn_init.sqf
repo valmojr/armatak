@@ -56,7 +56,7 @@ if (isServer) exitWith {
 		{
 			_objectType = _x call BIS_fnc_objectType;
 			if ((_objectType select 0) == "Soldier") then {
-				_callsign = [_x] call armatak_fnc_extract_callsign;
+				_callsign = [_x] call armatak_fnc_extract_unit_callsign;
 				_group_name = [group _x] call armatak_fnc_extract_group_color;
 				_group_role = [_x] call armatak_fnc_extract_group_role;
 
@@ -65,7 +65,7 @@ if (isServer) exitWith {
 			};
 			if ((_objectType select 0) == "Vehicle") then {
 				_atak_type = [_x] call armatak_fnc_extract_role;
-				_callsign = [_x] call armatak_fnc_extract_callsign;
+				_callsign = [_x] call armatak_fnc_extract_marker_callsign;
 
 				[_x, _atak_type, _callsign] call armatak_fnc_send_marker_cot;
 			};
