@@ -56,6 +56,13 @@ class CfgFunctions {
 				file = "\armatak\armatak\armatak_main\functions\extract_data\fn_shorten_name.sqf";
 			};
 
+			class ZeusCoreModule_show {
+				file = "\armatak\armatak\armatak_main\functions\gui\fn_ZeusCoreModule_show.sqf";
+			};
+			class ZeusCoreModule_configure {
+				file = "\armatak\armatak\armatak_main\functions\gui\fn_ZeusCoreModule_configure.sqf";
+			};
+
 			class convert_location {
 				file = "\armatak\armatak\armatak_main\functions\map\fn_convert_location.sqf";
 			};
