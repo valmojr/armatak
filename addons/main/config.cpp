@@ -24,3 +24,4 @@ class Extended_PostInit_EventHandlers {
 #include "CfgFunctions.hpp"
 #include "CfgVehicles.hpp"
 #include "Cfg3den.hpp"
+#include "dialog.hpp"
