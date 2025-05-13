@@ -1,6 +1,9 @@
 class CfgFunctions {
 	class armatak {
 		class functions {
+			class handleCallbacks {
+				file = "\armatak\armatak\armatak_main\functions\fn_handleCallbacks.sqf";
+			};
 			class init {
 				file = "\armatak\armatak\armatak_main\functions\fn_init.sqf";
 			};
