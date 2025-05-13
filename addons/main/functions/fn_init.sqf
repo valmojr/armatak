@@ -8,50 +8,27 @@ if (isServer) exitWith {
 	_warning = format ["<t color='#FF8021'>ARMATAK</t><br/> %1", "Connecting to TAK Server TCP Socket..."];
 	[[_warning, 1.5]] call CBA_fnc_notify;
 
-	addMissionEventHandler ["ExtensionCallback", {
-		params ["_name", "_function", "_data"];
-
-		if (_name == "armatak_tcp_socket") then {
-			_warning = format ["<t color='#00FF21'>ARMATAK</t><br/> %1", _function];
-			[[_warning, 1.5]] call CBA_fnc_notify;
-		};
-
-		if (_name == "armatak_tcp_socket_error") then {
-			_warning = format ["<t color='#FF0021'>ARMATAK</t><br/> %1", _function];
-			[[_warning, 1.5]] call CBA_fnc_notify;
-		};
-
-		if (_name == "armatak_video") then {
-			_warning = format ["<t color='#00FF21'>ARMATAK Video</t><br/> %1", _function];
-			[[_warning, 1.5]] call CBA_fnc_notify;
-		};
-
-		if (_name == "armatak_video_error") then {
-			_warning = format ["<t color='#FF0021'>ARMATAK Video</t><br/> %1", _function];
-			[[_warning, 1.5]] call CBA_fnc_notify;
-		};
-	}];
-
 	_tak_server_instance_address = _logic getVariable "armatak_module_tak_server_instance_address";
 	_tak_server_instance_port = _logic getVariable "armatak_module_tak_server_instance_port";
 
 	_tak_server_fulladdress = _tak_server_instance_address + ":" + (str _tak_server_instance_port);
 
-	missionNamespace setVariable ["_armatak_server_instance", _tak_server_fulladdress];
-	missionNamespace setVariable ["_armatak_tcp_socket_is_running", true];
-	missionNamespace setVariable ["_atak_server_instance", _tak_server_fulladdress];
-	missionNamespace setVariable ["_group_colors", ["White", "Yellow", "Orange", "Magenta", "Red", "Maroon", "Purple", "DarkBlue", "Blue", "Cyan", "Teal", "Green", "DarkGreen", "Brown"]];
+	missionNamespace setVariable ["armatak_server_instance", _tak_server_fulladdress];
+	missionNamespace setVariable ["armatak_tcp_socket_is_running", true];
+	missionNamespace setVariable ["armatak_group_colors", ["White", "Yellow", "Orange", "Magenta", "Red", "Maroon", "Purple", "DarkBlue", "Blue", "Cyan", "Teal", "Green", "DarkGreen", "Brown"]];
+
+	call armatak_fnc_handleCallbacks;
 
 	"armatak" callExtension ["tcp_socket:start", [_tak_server_fulladdress]];
 
 	_syncUnits = synchronizedObjects _logic;
 
-	missionNamespace setVariable ["_armatak_marked_units", _syncUnits];
+	missionNamespace setVariable ["armatak_marked_units", _syncUnits];
 
-	_syncedUnits = missionNamespace getVariable "_armatak_marked_units";
+	_syncedUnits = missionNamespace getVariable "armatak_marked_units";
 
 	[{
-		_syncedUnits = missionNamespace getVariable "_armatak_marked_units";
+		_syncedUnits = missionNamespace getVariable "armatak_marked_units";
 
 		{
 			_objectType = _x call BIS_fnc_objectType;
