@@ -47,20 +47,20 @@ workshop = [
   "1231625987", #Debug Console
   "751965892", # ACRE2
   "843577117", # RHSUSAF
-  "843425103", # RHSAFRF
-  "843593391", # RHSGREF
-  "735566597", # Project OPFOR
   "3030830594", # Western Dusk
-  "3147473073", # TOTT Core
-  "3147480843", # TOTT CAG
-  "3147476552", # TOTT Optics
-  "2975268929", # GPNVG
+  "2268351256", # Tier One Weapons
   "583496184", # CUP Terrains
-  "421620913", # Kunduz
-  "2397360831", # USAF Core
-  "2397376046", # USAF Utility
-  "2226368165", # USAF AC130
+  "583544987", # CUP Maps
+  "3015795970", # No zoom
+  "2941986336", # Hatchet Framework
+  "1745501605", # Hatchet H-60 Pack
+  "333310405", # Enhanced Moviments
+  "2034363662", # Enhanced Moviments Rework
+  "2257686620", # Blastcore Murr
+  "3407948300", # JSRS Sound Mod
 ]
+
+mission = "armatak_jtac.Mountains_ACR"
 
 parameters = [
   "-skipIntro",
