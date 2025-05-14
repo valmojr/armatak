@@ -47,7 +47,7 @@ class armatak_zeus_core_module_dialog {
       y = "0.346 * safezoneH + safezoneY";
       w = "0.237187 * safezoneW";
       h = "0.275 * safezoneH";
-      colorBackground[] = {1,1,1,0.5};
+      colorBackground[] = {0,0,0,1};
     };
     class armatak_gui_module_zeus_core_dialog_address_text: RscText
     {
@@ -58,9 +58,18 @@ class armatak_zeus_core_module_dialog {
       w = "0.216563 * safezoneW";
       h = "0.044 * safezoneH";
     };
+    class armatak_gui_module_zeus_core_dialog_address_port_text: RscText
+    {
+      idc = 1001;
+      text = "TAK Server Port";
+      x = "0.402031 * safezoneW + safezoneX";
+      y = "0.445 * safezoneH + safezoneY";
+      w = "0.216563 * safezoneW";
+      h = "0.044 * safezoneH";
+    };
     class armatak_gui_module_zeus_core_dialog_address_edit: RscEdit
     {
-      idc = 1400;
+      idc = 14000;
       text = "localhost";
       x = "0.396875 * safezoneW + safezoneX";
       y = "0.401 * safezoneH + safezoneY";
@@ -68,18 +77,9 @@ class armatak_zeus_core_module_dialog {
       h = "0.044 * safezoneH";
       tooltip = "Address without protocol prefix of the TAK Server (localhost, 192.168.1.1, etcetera...)";
     };
-    class armatak_gui_module_zeus_core_dialog_address_port_text: RscText
-    {
-      idc = 1001;
-      text = "TAK Server Port";
-      x = "0.391719 * safezoneW + safezoneX";
-      y = "0.445 * safezoneH + safezoneY";
-      w = "0.221719 * safezoneW";
-      h = "0.044 * safezoneH";
-    };
     class armatak_gui_module_zeus_core_dialog_address_port_edit: RscEdit
     {
-      idc = 1401;
+      idc = 14001;
       text = "8088";
       x = "0.396875 * safezoneW + safezoneX";
       y = "0.489 * safezoneH + safezoneY";
@@ -90,6 +90,7 @@ class armatak_zeus_core_module_dialog {
     {
       idc = 1600;
       text = "OK";
+      action = "call armatak_fnc_ZeusCoreModule_configure;";
       x = "0.5 * safezoneW + safezoneX";
       y = "0.555 * safezoneH + safezoneY";
       w = "0.0515625 * safezoneW";
@@ -99,6 +100,7 @@ class armatak_zeus_core_module_dialog {
     {
       idc = 1601;
       text = "Cancel";
+      action = "closeDialog 2;";
       x = "0.561875 * safezoneW + safezoneX";
       y = "0.555 * safezoneH + safezoneY";
       w = "0.0515625 * safezoneW";
