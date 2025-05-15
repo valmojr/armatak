@@ -13,7 +13,7 @@ class CfgPatches {
         "ace_main"
       };
     requiredVersion = REQUIRED_VERSION;
-    author = QUOTE(Valmo);
+    author = PROJECT_AUTHOR;
     url = "https://github.com/valmojr/armatak";
   };
 };
