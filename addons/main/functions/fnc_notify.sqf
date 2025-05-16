@@ -15,5 +15,7 @@ switch (_type) do {
 		_warning = format ["<t color='#FF0021'>%1</t><br/> %2", _title, _message];
 		[[_warning, 1.5]] call CBA_fnc_notify;
 	};
-	default { };
+	default {
+		systemChat format ["%1 - %2", _title, _message];
+	};
 };
