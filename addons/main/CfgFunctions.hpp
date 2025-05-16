@@ -1,9 +1,6 @@
 class CfgFunctions {
 	class armatak {
 		class functions {
-			class handleCallbacks {
-				file = "\armatak\armatak\addons\main\functions\fn_handleCallbacks.sqf";
-			};
 			class init {
 				file = "\armatak\armatak\addons\main\functions\fn_init.sqf";
 			};
@@ -12,9 +9,6 @@ class CfgFunctions {
 			};
 			class video_init {
 				file = "\armatak\armatak\addons\main\functions\fn_video_init.sqf";
-			};
-			class notify {
-				file = "\armatak\armatak\addons\main\functions\fnc_notify.sqf";
 			};
 			class send_digital_pointer_cot {
 				file = "\armatak\armatak\addons\main\functions\api\fn_send_digital_pointer_cot.sqf";

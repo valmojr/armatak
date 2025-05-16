@@ -28,5 +28,5 @@
 
 #define EXTENSION_NAME QUOTE(armatak)
 
-#define CALLEXT(var) EXTENSION_NAME callExtension [var]
+#define CALLEXT(var) EXTENSION_NAME callExtension [QUOTE(var),[]]
 #define CALLEXTP(var1, var2) EXTENSION_NAME callExtension [QUOTE(var1), var2] select 0

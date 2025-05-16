@@ -17,8 +17,6 @@ if (isServer) exitWith {
 	missionNamespace setVariable ["armatak_tcp_socket_is_running", true];
 	missionNamespace setVariable ["armatak_group_colors", ["White", "Yellow", "Orange", "Magenta", "Red", "Maroon", "Purple", "DarkBlue", "Blue", "Cyan", "Teal", "Green", "DarkGreen", "Brown"]];
 
-	call armatak_fnc_handleCallbacks;
-
 	"armatak" callExtension ["tcp_socket:start", [_tak_server_fulladdress]];
 
 	_syncUnits = synchronizedObjects _logic;
