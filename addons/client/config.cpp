@@ -21,3 +21,5 @@ class Extended_PostInit_EventHandlers {
         init = "call compileScript ['\armatak\armatak\armatak_client\initPlayerLocal.sqf']";
     };
 };
+
+#include "CfgEventHandlers.hpp"
