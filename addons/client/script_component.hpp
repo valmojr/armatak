@@ -1,6 +1,6 @@
 #define COMPONENT client
 #define COMPONENT_BEAUTIFIED WebSocket Client
-#include "\armatak\armatak\armatak_main\script_mod.hpp"
+#include "\armatak\armatak\addons\main\script_mod.hpp"
 
 // #define DEBUG_MODE_FULL
 // #define DISABLE_COMPILE_CACHE
