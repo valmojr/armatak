@@ -16,10 +16,4 @@ class CfgPatches {
   };
 };
 
-class Extended_PostInit_EventHandlers {
-    class armatak_main {
-        init = "call compileScript ['\armatak\armatak\armatak_client\initPlayerLocal.sqf']";
-    };
-};
-
 #include "CfgEventHandlers.hpp"
