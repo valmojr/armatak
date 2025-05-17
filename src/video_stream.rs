@@ -26,7 +26,7 @@ pub fn start_stream(
     #[cfg(target_os = "linux")]
     {
         ctx.callback_null(
-            "armatak_video_error",
+            "VIDEO ERROR",
             "Screen capture is only supported on Windows",
         );
     }
@@ -63,12 +63,12 @@ pub fn start_stream(
             let mut child = cmd.creation_flags(CREATE_NO_WINDOW).spawn().unwrap();
 
             if rx.recv().is_err() {
-                let _ = ctx.callback_null("armatak_video_error", "Error receiving stop signal");
+                let _ = ctx.callback_null("VIDEO ERROR", "Error receiving stop signal");
             }
 
             if let Err(e) = child.kill() {
                 let _ = ctx.callback_data(
-                    "armatak_video_error",
+                    "VIDEO ERROR",
                     "Failed to Stop FFmpeg",
                     e.to_string(),
                 );
@@ -92,19 +92,19 @@ pub fn stop_stream(ctx: Context) -> &'static str {
             if let Some(tx) = lock.take() {
                 if let Err(e) = tx.send(()) {
                     let _ = ctx.callback_data(
-                        "armatak_video_error",
+                        "VIDEO ERROR",
                         "Failed to send stop signal",
                         e.to_string(),
                     );
                 }
             } else {
                 let _ =
-                    ctx.callback_null("armatak_video_error", "Tried to stop a nonexistent stream");
+                    ctx.callback_null("VIDEO ERROR", "Tried to stop a nonexistent stream");
             }
         }
         Err(e) => {
             let _ = ctx.callback_data(
-                "armatak_video_error",
+                "VIDEO ERROR",
                 "Failed to acquire lock",
                 e.to_string(),
             );
