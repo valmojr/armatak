@@ -101,12 +101,10 @@ impl WsServer {
                 // Handle event callbacks with valid Context
                 match event_rx.try_recv() {
                     Ok(WsEvent::FirstClientConnected) => {
-                        info!("Triggering callback: client_connected");
-                        let _ = ctx.callback_null("armatak_websocket", "client_connected");
+                        let _ = ctx.callback_null("WEBSOCKET", "Client connected");
                     }
                     Ok(WsEvent::LastClientDisconnected) => {
-                        info!("Triggering callback: client_disconnected");
-                        let _ = ctx.callback_null("armatak_websocket", "client_disconnected");
+                        let _ = ctx.callback_null("WEBSOCKET WARNING", "Client disconnected");
                     }
                     Err(_) => {}
                 }
@@ -139,36 +137,36 @@ pub fn start(ctx: Context) -> &'static str {
     let mut server_guard = WEBSOCKET_SERVER.lock().unwrap();
     *server_guard = Some(server);
 
-    info!("WebSocket server started.");
     "Starting WebSocket Server"
 }
 
-pub fn message(payload: String) -> &'static str {
+pub fn message(ctx: Context, payload: String) -> &'static str {
     if let Some(ref server) = *WEBSOCKET_SERVER.lock().unwrap() {
-        info!("Broadcasting message: {}", payload);
+        info!("Broadcasting message: {}", payload); // why the fuck i did this?
         server.send_message(payload);
     } else {
-        info!("WebSocket server is not running.");
+        let _ = ctx.callback_null("WEBSOCKET ERROR", "Websocket is not running");
     }
 
     "Sending message to all WebSocket clients"
 }
 
-pub fn location(payload: LocationPayload) -> &'static str {
+pub fn location(ctx: Context, payload: LocationPayload) -> &'static str {
     if let Some(ref server) = *WEBSOCKET_SERVER.lock().unwrap() {
         server.send_message(payload);
     } else {
-        info!("WebSocket server is not running.");
+        let _ = ctx.callback_null("WEBSOCKET ERROR", "Websocket is not running");
     }
 
     "Sending location to all WebSocket clients"
 }
 
-pub fn stop() -> &'static str {
+pub fn stop(ctx: Context) -> &'static str {
     if let Some(ref server) = *WEBSOCKET_SERVER.lock().unwrap() {
         server.stop();
+        let _ = ctx.callback_null("WEBSOCKET WARNING", "Websocket stopped");
     } else {
-        info!("WebSocket server is not running.");
+        let _ = ctx.callback_null("WEBSOCKET ERROR", "Websocket is not running");
     }
 
     "Stopping WebSocket Server"
