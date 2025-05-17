@@ -17,19 +17,19 @@ addMissionEventHandler ["ExtensionCallback", {
 		[_function, "error", _name] call armatak_main_fnc_notify;
 	};
 
-	if (_name == "armatak_tcp_socket") then {
+	if (_name == "TCP SOCKET") then {
 		[_function, "success", _name] call armatak_main_fnc_notify;
 	};
 
-	if (_name == "armatak_tcp_socket_error") then {
+	if (_name == "TCP SOCKET ERROR") then {
 		[_function, "error", _name] call armatak_main_fnc_notify;
 	};
 
-	if (_name == "armatak_video") then {
+	if (_name == "VIDEO") then {
 		[_function, "success", _name] call armatak_main_fnc_notify;
 	};
 
-	if (_name == "armatak_video_error") then {
+	if (_name == "VIDEO ERROR") then {
 		[_function, "error", _name] call armatak_main_fnc_notify;
 	};
 }];
