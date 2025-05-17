@@ -11,7 +11,7 @@ class Extended_PreInit_EventHandlers {
 };
 
 class Extended_PostInit_EventHandlers {
-    class armatak_main {
+    class ADDON {
         init = QUOTE(call COMPILE_SCRIPT(XEH_postInit));
     };
 };
