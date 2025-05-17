@@ -101,10 +101,10 @@ impl WsServer {
                 // Handle event callbacks with valid Context
                 match event_rx.try_recv() {
                     Ok(WsEvent::FirstClientConnected) => {
-                        let _ = ctx.callback_null("WEBSOCKET", "Client connected");
+                        let _ = ctx.callback_null("WEBSOCKET", "EUD connected");
                     }
                     Ok(WsEvent::LastClientDisconnected) => {
-                        let _ = ctx.callback_null("WEBSOCKET WARNING", "Client disconnected");
+                        let _ = ctx.callback_null("WEBSOCKET WARNING", "EUD disconnected");
                     }
                     Err(_) => {}
                 }
