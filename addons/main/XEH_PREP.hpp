@@ -1,1 +1,3 @@
-PREP(notify)
+PREP(initCOTRouter);
+PREP(logMessage);
+PREP(notify);

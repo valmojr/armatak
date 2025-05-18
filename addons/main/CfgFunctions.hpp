@@ -1,9 +1,6 @@
 class CfgFunctions {
 	class armatak {
 		class functions {
-			class init {
-				file = "\armatak\armatak\addons\main\functions\fn_init.sqf";
-			};
 			class log_message {
 				file = "\armatak\armatak\addons\main\functions\fn_log_message.sqf";
 			};
@@ -45,13 +42,6 @@ class CfgFunctions {
 			};
 			class shorten_name {
 				file = "\armatak\armatak\addons\main\functions\extract_data\fn_shorten_name.sqf";
-			};
-
-			class ZeusCoreModule_show {
-				file = "\armatak\armatak\addons\main\functions\gui\fn_ZeusCoreModule_show.sqf";
-			};
-			class ZeusCoreModule_configure {
-				file = "\armatak\armatak\addons\main\functions\gui\fn_ZeusCoreModule_configure.sqf";
 			};
 
 			class convert_to_altis {

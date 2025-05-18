@@ -11,7 +11,8 @@ class CfgPatches {
     requiredAddons[] = {
         "cba_main",
         "ace_main",
-        "armatak_main"
+        "armatak_main",
+        "armatak_server"
       };
     requiredVersion = REQUIRED_VERSION;
     author = PROJECT_AUTHOR;
@@ -39,3 +40,4 @@ class CfgMods {
 };
 
 #include "CfgEventHandlers.hpp"
+#include "CfgVehicles.hpp"

@@ -1,3 +1,5 @@
+#include "..\script_component.hpp"
+
 disableSerialization;
 
 _warning = format ["<t color='#FF8021'>ARMATAK</t><br/> %1", "Connecting to TAK Server TCP Socket..."];
