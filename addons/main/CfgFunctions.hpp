@@ -7,9 +7,6 @@ class CfgFunctions {
 			class log_message {
 				file = "\armatak\armatak\addons\main\functions\fn_log_message.sqf";
 			};
-			class video_init {
-				file = "\armatak\armatak\addons\main\functions\fn_video_init.sqf";
-			};
 			class send_digital_pointer_cot {
 				file = "\armatak\armatak\addons\main\functions\api\fn_send_digital_pointer_cot.sqf";
 			};
