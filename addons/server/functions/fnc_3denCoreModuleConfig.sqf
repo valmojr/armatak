@@ -33,7 +33,7 @@ if (isServer) exitWith {
 		{
 			_objectType = _x call BIS_fnc_objectType;
 			if ((_objectType select 0) == "Soldier") then {
-				if (!GETVAR(_x,EVAR(client,eudConnected))) then {
+				if (!GETVAR(_x,EGVAR(client,eudConnected),false)) then {
 					_callsign = [_x] call armatak_fnc_extract_unit_callsign;
 					_group_name = [group _x] call armatak_fnc_extract_group_color;
 					_group_role = [_x] call armatak_fnc_extract_group_role;
