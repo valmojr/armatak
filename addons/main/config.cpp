@@ -3,10 +3,7 @@
 class CfgPatches {
   class ADDON {
     name = COMPONENT_NAME;
-    units[] = {
-      "armatak_module_core",
-      "armatak_module_callsign"
-    };
+    units[] = {};
     weapons[] = {};
     requiredAddons[] = {
         "cba_main",
