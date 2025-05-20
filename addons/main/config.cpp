@@ -44,4 +44,3 @@ class CfgFactionClasses {
 #include "CfgEventHandlers.hpp"
 #include "CfgFunctions.hpp"
 #include "Cfg3den.hpp"
-#include "dialog.hpp"

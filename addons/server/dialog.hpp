@@ -90,7 +90,7 @@ class armatak_zeus_core_module_dialog {
     {
       idc = 1600;
       text = "OK";
-      action = "call armatak_fnc_ZeusCoreModule_configure;";
+      action = QUOTE(call FUNC(zeusCoreModuleConfig));
       x = "0.5 * safezoneW + safezoneX";
       y = "0.555 * safezoneH + safezoneY";
       w = "0.0515625 * safezoneW";
