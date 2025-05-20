@@ -26,10 +26,10 @@ _syncUnits = [];
 
 missionNamespace setVariable ["armatak_marked_units", _syncUnits];
 
-_syncedUnits = missionNamespace getVariable "armatak_marked_units";
-/*
+GVAR(syncedUnits) = missionNamespace getVariable "armatak_marked_units";
+
 [{
-	_syncedUnits = missionNamespace getVariable "armatak_marked_units";
+	GVAR(syncedUnits) = missionNamespace getVariable "armatak_marked_units";
 
 	{
 		_objectType = _x call BIS_fnc_objectType;
@@ -51,8 +51,7 @@ _syncedUnits = missionNamespace getVariable "armatak_marked_units";
 			[_x] call armatak_fnc_send_drone_cot;
 			[_x] call armatak_fnc_send_digital_pointer_cot;
 		};
-	} forEach _syncedUnits;
+	} forEach GVAR(syncedUnits);
 }, 2, []] call CBA_fnc_addPerFrameHandler;
- */
 
 closeDialog 1;
