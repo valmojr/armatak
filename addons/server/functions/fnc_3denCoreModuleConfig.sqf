@@ -7,8 +7,7 @@ params [
 ];
 
 if (isServer) exitWith {
-	_warning = format ["<t color='#FF8021'>ARMATAK</t><br/> %1", "Connecting to TAK Server TCP Socket..."];
-	[[_warning, 1.5]] call CBA_fnc_notify;
+	["Connecting to TCP Socket", "success", "TCP Socket"] call EFUNC(main,notify);
 
 	_tak_server_instance_address = _logic getVariable "armatak_module_tak_server_instance_address";
 	_tak_server_instance_port = _logic getVariable "armatak_module_tak_server_instance_port";
