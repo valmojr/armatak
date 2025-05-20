@@ -9,8 +9,8 @@ params [
 if (isServer) exitWith {
 	["Connecting to TCP Socket", "success", "TCP Socket"] call EFUNC(main,notify);
 
-	_tak_server_instance_address = _logic getVariable "armatak_module_tak_server_instance_address";
-	_tak_server_instance_port = _logic getVariable "armatak_module_tak_server_instance_port";
+	_tak_server_instance_address = _logic getVariable QGVAR(moduleInstanceAddress);
+	_tak_server_instance_port = _logic getVariable QGVAR(moduleInstancePort);
 
 	_tak_server_fulladdress = _tak_server_instance_address + ":" + (str _tak_server_instance_port);
 

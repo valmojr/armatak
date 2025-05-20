@@ -1,16 +1,20 @@
 #include "..\script_component.hpp"
 
+_socket_is_running = missionNamespace getVariable ["armatak_tcp_socket_is_running", false];
+
+if (_socket_is_running) exitWith {
+	["Socket was called twice","error", "TCP Socket"] call EFUNC(main,notify);
+	closeDialog 1;
+};
+
 disableSerialization;
 
-_warning = format ["<t color='#FF8021'>ARMATAK</t><br/> %1", "Connecting to TAK Server TCP Socket..."];
-[[_warning, 1.5]] call CBA_fnc_notify;
-
-call armatak_fnc_handleCallbacks;
+["Connecting to TCP Socket", "success", "TCP Socket"] call EFUNC(main,notify);
 
 _tak_server_instance_address = ctrlText 14000;
 _tak_server_instance_port = ctrlText 14001;
 
-_tak_server_fulladdress = ((_tak_server_instance_address) + ":" + (str _tak_server_instance_port));
+_tak_server_fulladdress = ((_tak_server_instance_address) + ":" + (_tak_server_instance_port));
 
 missionNamespace setVariable ["armatak_server_instance", _tak_server_fulladdress];
 missionNamespace setVariable ["armatak_tcp_socket_is_running", true];
@@ -23,7 +27,7 @@ _syncUnits = [];
 missionNamespace setVariable ["armatak_marked_units", _syncUnits];
 
 _syncedUnits = missionNamespace getVariable "armatak_marked_units";
-
+/*
 [{
 	_syncedUnits = missionNamespace getVariable "armatak_marked_units";
 
@@ -49,5 +53,6 @@ _syncedUnits = missionNamespace getVariable "armatak_marked_units";
 		};
 	} forEach _syncedUnits;
 }, 2, []] call CBA_fnc_addPerFrameHandler;
+ */
 
 closeDialog 1;
