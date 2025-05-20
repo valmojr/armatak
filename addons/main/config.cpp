@@ -37,8 +37,14 @@ class CfgMods {
     };
 };
 
+class CfgFactionClasses {
+	class NO_CATEGORY;
+	class GVAR(moduleCategory): NO_CATEGORY {
+		displayName = "Team Awareness Kit";
+	};
+};
+
 #include "CfgEventHandlers.hpp"
 #include "CfgFunctions.hpp"
-#include "CfgVehicles.hpp"
 #include "Cfg3den.hpp"
 #include "dialog.hpp"
