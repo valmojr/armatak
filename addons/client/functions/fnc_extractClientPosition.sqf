@@ -18,7 +18,7 @@
 
 params["_unit"];
 
-private _location = (getPos _unit) call armatak_client_fnc_convertClientLocation;
+private _location = (getPos _unit) call FUNC(convertClientLocation);
 
 private _atak_latitude = _location select 0;
 private _atak_longitude = _location select 1;
