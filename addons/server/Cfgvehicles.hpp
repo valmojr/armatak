@@ -19,7 +19,18 @@ class CfgVehicles {
 		};
 	};
 
-	class GVAR(coreModule): Module_F {
+	class GVAR(moduleBase): Module_F {
+    author = PROJECT_AUTHOR;
+    category = QEGVAR(main,moduleCategory);
+    function = QUOTE({});
+    functionPriority = 1;
+    isGlobal = 1;
+    isTriggerActivated = 0;
+    scope = 1;
+    scopeCurator = 2;
+  };
+
+	class GVAR(coreModule): GVAR(moduleBase) {
 		scope = 2;
 		scopeCurator = 0;
 		displayname = "CoT Router";
@@ -33,15 +44,9 @@ class CfgVehicles {
 		is3den = 0;
 		curatorCanAttach = 0;
 		curatorInfoType = "RscDisplayAttributeModuleNuke";
-
 		canSetArea = 0;
 		canSetAreaShape = 0;
 		canSetAreaHeight = 0;
-
-		class AttributesValues {
-			size3[] = { 1, 1, -1 };
-			isRectangle = 0;
-		};
 
 		class Attributes: AttributesBase {
 			class GVAR(moduleInstanceAddress): Edit {
@@ -64,25 +69,6 @@ class CfgVehicles {
 		class ModuleDescription: ModuleDescription {
 			description = "Generate the initial ARMATAK configuration, syncronizing all players to the TAK server instance";
 			sync[] = {"LocationArea_F"};
-
-			class LocationArea_F {
-				description[] = {
-					"This module will synchronize all",
-					"players to the TAK server instance"
-				};
-				position = 1;
-				direction = 1;
-				optional = 1;
-				duplicate = 1;
-				synced[] = { "BluforUnit", "AnyBrain" };
-			};
-			class BluforUnit
-			{
-				description = "Short description";
-				displayName = "Any BLUFOR unit";
-				icon = "iconMan";
-				side = 1;
-			};
 		};
 	};
 
@@ -92,89 +78,13 @@ class CfgVehicles {
 		function = "";
 		displayName = "CoT Router (Zeus)";
 		curatorInfoType = "armatak_zeus_core_module_dialog";
-
-		class AttributesValues {
-			size3[] = { 1, 1, -1 };
-			isRectangle = 0;
-		};
-
-		class Attributes: AttributesBase {
-			class ModuleDescription: ModuleDescription {};
-		};
-
-		class ModuleDescription: ModuleDescription {
-			description = "Generate the initial ARMATAK configuration, syncronizing all players to the TAK server instance";
-			sync[] = {"LocationArea_F"};
-
-			class LocationArea_F {
-				description[] = {
-					"This module will synchronize all",
-					"players to the TAK server instance"
-				};
-				position = 1;
-				direction = 1;
-				optional = 1;
-				duplicate = 1;
-				synced[] = { "BluforUnit", "AnyBrain" };
-			};
-			class BluforUnit
-			{
-				description = "Short description";
-				displayName = "Any BLUFOR unit";
-				icon = "iconMan";
-				side = 1;
-			};
-		};
 	};
 
-	class GVAR(markEntity): GVAR(coreModuleCurator) {
-		scope = 1;
-		scopeCurator = 2;
-		displayname = "Mark Entity";
-		isDisposable = 1;
-		curatorInfoType = "RscDisplayAttributeModuleNuke";
-		curatorCanAttach = 1;
-
-		author = "Valmo Trindade";
+	class GVAR(markEntity): GVAR(moduleBase) {
+    curatorCanAttach = 1;
     category = QEGVAR(main,moduleCategory);
+		displayname = "Mark Entity";
     function = QFUNC(routerEntityAdd);
-    functionPriority = 1;
-    isGlobal = 1;
-    isTriggerActivated = 0;
-
     icon = "\a3\Modules_F_Curator\Data\iconRadio_ca.paa";
-
-		class AttributesValues {
-			size3[] = { 1, 1, -1 };
-			isRectangle = 0;
-		};
-
-		class Attributes: AttributesBase {
-			class ModuleDescription: ModuleDescription {};
-		};
-
-		class ModuleDescription: ModuleDescription {
-			description = "Select a unit to be marked to the TAK Server";
-			sync[] = {"LocationArea_F"};
-
-			class LocationArea_F {
-				description[] = {
-					"This module will add a marker",
-					"to the TAK server"
-				};
-				position = 1;
-				direction = 1;
-				optional = 1;
-				duplicate = 1;
-				synced[] = { "BluforUnit", "AnyBrain" };
-			};
-			class BluforUnit
-			{
-				description = "Short description";
-				displayName = "Any BLUFOR unit";
-				icon = "iconMan";
-				side = 1;
-			};
-		};
-	};
+  };
 };
