@@ -90,6 +90,7 @@ class CfgVehicles {
 		scope = 1;
 		scopeCurator = 2;
 		function = "";
+		displayName = "CoT Router (Zeus)";
 		curatorInfoType = "armatak_zeus_core_module_dialog";
 
 		class AttributesValues {
@@ -109,6 +110,57 @@ class CfgVehicles {
 				description[] = {
 					"This module will synchronize all",
 					"players to the TAK server instance"
+				};
+				position = 1;
+				direction = 1;
+				optional = 1;
+				duplicate = 1;
+				synced[] = { "BluforUnit", "AnyBrain" };
+			};
+			class BluforUnit
+			{
+				description = "Short description";
+				displayName = "Any BLUFOR unit";
+				icon = "iconMan";
+				side = 1;
+			};
+		};
+	};
+
+	class GVAR(markEntity): GVAR(coreModuleCurator) {
+		scope = 1;
+		scopeCurator = 2;
+		displayname = "Mark Entity";
+		isDisposable = 1;
+		curatorInfoType = "RscDisplayAttributeModuleNuke";
+		curatorCanAttach = 1;
+
+		author = "Valmo Trindade";
+    category = QEGVAR(main,moduleCategory);
+    function = QFUNC(routerEntityAdd);
+    functionPriority = 1;
+    isGlobal = 1;
+    isTriggerActivated = 0;
+
+    icon = "\a3\Modules_F_Curator\Data\iconRadio_ca.paa";
+
+		class AttributesValues {
+			size3[] = { 1, 1, -1 };
+			isRectangle = 0;
+		};
+
+		class Attributes: AttributesBase {
+			class ModuleDescription: ModuleDescription {};
+		};
+
+		class ModuleDescription: ModuleDescription {
+			description = "Select a unit to be marked to the TAK Server";
+			sync[] = {"LocationArea_F"};
+
+			class LocationArea_F {
+				description[] = {
+					"This module will add a marker",
+					"to the TAK server"
 				};
 				position = 1;
 				direction = 1;

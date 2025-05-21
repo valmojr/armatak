@@ -5,7 +5,8 @@ class CfgPatches {
     name = COMPONENT_NAME;
     units[] = {
 			QGVAR(coreModule),
-			QGVAR(coreModuleCurator)
+			QGVAR(coreModuleCurator),
+      QGVAR(markEntity)
 		};
     weapons[] = {};
     requiredAddons[] = {
