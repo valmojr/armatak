@@ -4,6 +4,7 @@ use std::process::Command;
 use std::sync::mpsc::{self, Receiver, Sender};
 use std::sync::Mutex;
 use std::thread;
+use std::time::Duration;
 
 #[cfg(target_os = "windows")]
 use std::os::windows::process::CommandExt;
@@ -29,11 +30,14 @@ pub fn start_stream(
             "VIDEO ERROR",
             "Screen capture is only supported on Windows",
         );
+        return "screen capture unsupported";
     }
 
     #[cfg(target_os = "windows")]
     {
-        let (tx, rx): (Sender<()>, Receiver<()>) = mpsc::channel();
+        let (stop_tx, stop_rx): (Sender<()>, Receiver<()>) = mpsc::channel();
+        let (status_tx, status_rx): (Sender<Result<(), String>>, Receiver<Result<(), String>>) = mpsc::channel();
+
         let rtsp_url = if username.is_empty() || password.is_empty() {
             format!("rtsp://{}:{}/{}", address, port, stream_path)
         } else {
@@ -47,7 +51,6 @@ pub fn start_stream(
 
         thread::spawn(move || {
             let mut cmd = Command::new("ffmpeg");
-
             cmd.args(&[
                 "-f",
                 "gdigrab",
@@ -60,30 +63,57 @@ pub fn start_stream(
                 &rtsp_url_clone,
             ]);
 
-            let mut child = cmd.creation_flags(CREATE_NO_WINDOW).spawn().unwrap();
+            // Try to spawn ffmpeg process
+            let child_result = cmd.creation_flags(CREATE_NO_WINDOW).spawn();
 
-            if rx.recv().is_err() {
-                let _ = ctx.callback_null("VIDEO ERROR", "Error receiving stop signal");
-            }
-
-            if let Err(e) = child.kill() {
-                let _ = ctx.callback_data(
-                    "VIDEO ERROR",
-                    "Failed to Stop FFmpeg",
-                    e.to_string(),
-                );
+            match child_result {
+                Ok(mut child) => {
+                    let _ = status_tx.send(Ok(()));
+                    if stop_rx.recv().is_err() {}
+                    let _ = child.kill();
+                }
+                Err(e) => {
+                    let _ = status_tx.send(Err(format!("Failed to start FFmpeg: {}", e)));
+                    // Return early, nothing else to do
+                }
             }
         });
 
+        // Save the stop channel so we can stop later
         match STREAM_CTRL.lock() {
-            Ok(mut lock) => *lock = Some(tx),
+            Ok(mut lock) => *lock = Some(stop_tx),
             Err(e) => {
-                eprintln!("Failed to acquire lock: {}", e);
+                let _ = ctx.callback_data(
+                    "VIDEO ERROR",
+                    "Failed to acquire lock for stream control",
+                    e.to_string(),
+                );
+                return "stream control lock error";
+            }
+        }
+
+        // Wait up to 2 seconds to see if ffmpeg started correctly
+        match status_rx.recv_timeout(Duration::from_secs(2)) {
+            Ok(Ok(())) => {
+                let _ = ctx.callback_null("VIDEO", "FFmpeg started successfully");
+                "starting video stream"
+            }
+            Ok(Err(e)) => {
+                let _ = ctx.callback_data("VIDEO ERROR", "FFmpeg failed to start", e);
+                "ffmpeg failed to start"
+            }
+            Err(_) => {
+                let _ = ctx.callback_null("VIDEO ERROR", "FFmpeg did not respond in time");
+                "ffmpeg did not respond"
             }
         }
     }
 
-    "starting video stream"
+    #[cfg(not(any(target_os = "windows", target_os = "linux")))]
+    {
+        ctx.callback_null("VIDEO ERROR", "Screen capture is only supported on Windows");
+        "unsupported platform"
+    }
 }
 
 pub fn stop_stream(ctx: Context) -> &'static str {
@@ -96,20 +126,23 @@ pub fn stop_stream(ctx: Context) -> &'static str {
                         "Failed to send stop signal",
                         e.to_string(),
                     );
+                    "error sending stop"
+                } else {
+                    let _ = ctx.callback_null("VIDEO", "Sent stop signal to FFmpeg");
+                    "stopping video stream"
                 }
             } else {
-                let _ =
-                    ctx.callback_null("VIDEO ERROR", "Tried to stop a nonexistent stream");
+                let _ = ctx.callback_null("VIDEO ERROR", "Tried to stop a nonexistent stream");
+                "no stream to stop"
             }
         }
         Err(e) => {
             let _ = ctx.callback_data(
                 "VIDEO ERROR",
-                "Failed to acquire lock",
+                "Failed to acquire lock for stop",
                 e.to_string(),
             );
+            "lock error"
         }
     }
-
-    "stopping video stream"
 }

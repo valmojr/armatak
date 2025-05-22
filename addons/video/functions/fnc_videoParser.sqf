@@ -7,15 +7,15 @@ params [
 ];
 
 if (isServer) exitWith {
-	private _instance_address = GETVAR(_logic,instance_address,false);
-	private _instance_port = GETVAR(_logic,instance_port,false);
-	private _instance_auth_user = GETVAR(_logic,instance_auth_user,false);
-	private _instance_auth_pass = GETVAR(_logic,instance_auth_pass,false);
+	private _instance_address = GETVAR(_logic,GVAR(instanceAddress),false);
+	private _instance_port = GETVAR(_logic,GVAR(instancePort),false);
+	private _instance_auth_user = GETVAR(_logic,GVAR(instanceAuthUser),false);
+	private _instance_auth_pass = GETVAR(_logic,GVAR(instanceAuthPassword),false);
 
-	SETMVAR(GVAR(instance_address),_instance_address);
-	SETMVAR(GVAR(instance_port),_instance_port);
-	SETMVAR(GVAR(instance_auth_user),_instance_auth_user);
-	SETMVAR(GVAR(instance_auth_pass),_instance_auth_pass);
+	SETMVAR(GVAR(instanceAddress),_instance_address);
+	SETMVAR(GVAR(instancePort),_instance_port);
+	SETMVAR(GVAR(instanceAuthUser),_instance_auth_user);
+	SETMVAR(GVAR(instanceAuthPassword),_instance_auth_pass);
 
 	_startAction = [
 		QGVAR(startStream),
