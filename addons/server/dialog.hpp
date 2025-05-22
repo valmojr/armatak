@@ -38,73 +38,66 @@ class RscCheckBox;
 class armatak_zeus_core_module_dialog {
   idd = 999991;
   movingEnable = 0;
-  class controls {
-    class armatak_gui_module_zeus_core_dialog_main_frame: RscPicture
-    {
-      idc = 1200;
-      text = "#(argb,8,8,3)color(1,1,1,1)";
+  class ControlsBackground {
+    class armatak_gui_module_zeus_core_dialog_main_frame: RscFrame {
+      idc = 1800;
       x = "0.386562 * safezoneW + safezoneX";
-      y = "0.346 * safezoneH + safezoneY";
-      w = "0.237187 * safezoneW";
-      h = "0.275 * safezoneH";
-      colorBackground[] = {0,0,0,1};
-    };
-    class armatak_gui_module_zeus_core_dialog_address_text: RscText
-    {
-      idc = 1000;
-      text = "TAK Server Address";
-      x = "0.402031 * safezoneW + safezoneX";
-      y = "0.368 * safezoneH + safezoneY";
-      w = "0.216563 * safezoneW";
-      h = "0.044 * safezoneH";
-    };
-    class armatak_gui_module_zeus_core_dialog_address_port_text: RscText
-    {
-      idc = 1001;
-      text = "TAK Server Port";
-      x = "0.402031 * safezoneW + safezoneX";
-      y = "0.445 * safezoneH + safezoneY";
-      w = "0.216563 * safezoneW";
-      h = "0.044 * safezoneH";
-    };
-    class armatak_gui_module_zeus_core_dialog_address_edit: RscEdit
-    {
-      idc = 14000;
-      text = "localhost";
-      x = "0.396875 * safezoneW + safezoneX";
       y = "0.401 * safezoneH + safezoneY";
       w = "0.216563 * safezoneW";
-      h = "0.044 * safezoneH";
-      tooltip = "Address without protocol prefix of the TAK Server (localhost, 192.168.1.1, etcetera...)";
+      h = "0.242 * safezoneH";
+      colorBackground[]={0,0,0,0.5};
     };
-    class armatak_gui_module_zeus_core_dialog_address_port_edit: RscEdit
-    {
+  };
+  class Controls {
+    class armatak_gui_module_zeus_core_dialog_address_edit: RscEdit {
+      idc = 14000;
+      text = "localhost";
+      x = "0.391719 * safezoneW + safezoneX";
+      y = "0.445 * safezoneH + safezoneY";
+      w = "0.20625 * safezoneW";
+      h = "0.044 * safezoneH";
+    };
+    class armatak_gui_module_zeus_core_dialog_address_port_edit: RscEdit {
       idc = 14001;
       text = "8088";
-      x = "0.396875 * safezoneW + safezoneX";
+      x = "0.391719 * safezoneW + safezoneX";
+      y = "0.522 * safezoneH + safezoneY";
+      w = "0.20625 * safezoneW";
+      h = "0.044 * safezoneH";
+    };
+    class armatak_gui_module_zeus_core_dialog_address_text: RscText {
+      idc = 1000;
+      text = "TAK Server Address";
+      x = "0.391719 * safezoneW + safezoneX";
+      y = "0.412 * safezoneH + safezoneY";
+      w = "0.20625 * safezoneW";
+      h = "0.033 * safezoneH";
+    };
+    class armatak_gui_module_zeus_core_dialog_address_port_text: RscText {
+      idc = 1001;
+      text = "TAK Server Port";
+      x = "0.391719 * safezoneW + safezoneX";
       y = "0.489 * safezoneH + safezoneY";
-      w = "0.216563 * safezoneW";
-      h = "0.044 * safezoneH";
+      w = "0.20625 * safezoneW";
+      h = "0.033 * safezoneH";
     };
-    class armatak_gui_module_zeus_core_dialog_address_button_ok: RscButton
-    {
-      idc = 1600;
-      text = "OK";
-      action = QUOTE(call FUNC(zeusCoreModuleConfig));
-      x = "0.5 * safezoneW + safezoneX";
-      y = "0.555 * safezoneH + safezoneY";
-      w = "0.0515625 * safezoneW";
-      h = "0.044 * safezoneH";
-    };
-    class armatak_gui_module_zeus_core_dialog_address_button_cancel: RscButton
-    {
+    class armatak_gui_module_zeus_core_dialog_address_button_cancel: RscButton {
       idc = 1601;
       text = "Cancel";
       action = "closeDialog 2;";
-      x = "0.561875 * safezoneW + safezoneX";
-      y = "0.555 * safezoneH + safezoneY";
-      w = "0.0515625 * safezoneW";
-      h = "0.044 * safezoneH";
+      x = "0.551563 * safezoneW + safezoneX";
+      y = "0.577 * safezoneH + safezoneY";
+      w = "0.0464063 * safezoneW";
+      h = "0.055 * safezoneH";
+    };
+    class armatak_gui_module_zeus_core_dialog_address_button_ok: RscButton {
+      idc = 1600;
+      text = "Ok";
+      action = QUOTE(call FUNC(zeusCoreModuleConfig));
+      x = "0.5 * safezoneW + safezoneX";
+      y = "0.577 * safezoneH + safezoneY";
+      w = "0.0464063 * safezoneW";
+      h = "0.055 * safezoneH";
     };
   };
 };
