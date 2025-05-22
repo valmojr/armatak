@@ -1,5 +1,7 @@
 #include "..\script_component.hpp"
 
+params ["_logic"];
+
 _socket_is_running = missionNamespace getVariable ["armatak_tcp_socket_is_running", false];
 
 if (_socket_is_running) exitWith {
@@ -54,4 +56,5 @@ GVAR(syncedUnits) = missionNamespace getVariable "armatak_marked_units";
 	} forEach GVAR(syncedUnits);
 }, 2, []] call CBA_fnc_addPerFrameHandler;
 
+deleteVehicle _logic;
 closeDialog 1;
