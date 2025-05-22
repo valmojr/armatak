@@ -27,6 +27,17 @@ switch (false) do {
 		deleteVehicle _logic;
 		["Nothing selected", "error", "TCP Socket"] call EFUNC(main,notify);
 	};
+	case (!isNull (units _unit)): {
+		GVAR(syncedUnits) = missionNamespace getVariable "armatak_marked_units";
+
+		{
+			GVAR(syncedUnits) pushBack _unit;
+		} forEach (units _unit);
+
+		missionNamespace setVariable ["armatak_marked_units", GVAR(syncedUnits)];
+
+		deleteVehicle _logic;
+	};
 	default {
 		GVAR(syncedUnits) = missionNamespace getVariable "armatak_marked_units";
 
