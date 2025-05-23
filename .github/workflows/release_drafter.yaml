@@ -122,7 +122,7 @@ jobs:
           body: |
             Changes in this release:
             ${{ env.COMMIT_MESSAGES }}
-          draft: false
+          draft: true
           prerelease: false
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
