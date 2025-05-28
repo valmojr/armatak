@@ -5,7 +5,7 @@ params ["_logic"];
 _socket_is_running = missionNamespace getVariable ["armatak_tcp_socket_is_running", false];
 
 if (_socket_is_running) exitWith {
-	["Socket was called twice","error", "TCP Socket"] call EFUNC(main,notify);
+	["Socket was called twice", "error", "TCP Socket"] call EFUNC(main,notify);
 	closeDialog 1;
 };
 
@@ -35,19 +35,21 @@ GVAR(syncedUnits) = missionNamespace getVariable "armatak_marked_units";
 
 	{
 		_objectType = _x call BIS_fnc_objectType;
-		if ((_objectType select 0) == "Soldier") then {
-			_callsign = [_x] call armatak_fnc_extract_unit_callsign;
-			_group_name = [group _x] call armatak_fnc_extract_group_color;
-			_group_role = [_x] call armatak_fnc_extract_group_role;
+		switch (true) do {
+			case ((_objectType select 0) == "Soldier"): {
+				_callsign = [_x] call armatak_fnc_extract_unit_callsign;
+				_group_name = [group _x] call armatak_fnc_extract_group_color;
+				_group_role = [_x] call armatak_fnc_extract_group_role;
 
-			[_x, _callsign, _group_name, _group_role] call armatak_fnc_send_eud_cot;
-			[_x] call armatak_fnc_send_digital_pointer_cot;
-		};
-		if ((_objectType select 0) == "Vehicle") then {
-			_atak_type = [_x] call armatak_fnc_extract_role;
-			_callsign = [_x] call armatak_fnc_extract_marker_callsign;
+				[_x, _callsign, _group_name, _group_role] call armatak_fnc_send_eud_cot;
+				[_x] call armatak_fnc_send_digital_pointer_cot;
+			};
+			case ((_objectType select 0) == "Vehicle"): {
+				_atak_type = [_x] call armatak_fnc_extract_role;
+				_callsign = [_x] call armatak_fnc_extract_marker_callsign;
 
-			[_x, _atak_type, _callsign] call armatak_fnc_send_marker_cot;
+				[_x, _atak_type, _callsign] call armatak_fnc_send_marker_cot;
+			};
 		};
 		if (unitIsUAV _x) then {
 			[_x] call armatak_fnc_send_drone_cot;
@@ -55,6 +57,5 @@ GVAR(syncedUnits) = missionNamespace getVariable "armatak_marked_units";
 		};
 	} forEach GVAR(syncedUnits);
 }, 2, []] call CBA_fnc_addPerFrameHandler;
-
 deleteVehicle _logic;
 closeDialog 1;
