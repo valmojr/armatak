@@ -3,7 +3,7 @@ params ["_unit"];
 _digitalPointer = laserTarget _unit;
 
 if (!isNull _digitalPointer) then {
-	_digitalPointerPosition = _digitalPointer call armatak_fnc_extract_position;
+	_digitalPointerPosition = _digitalPointer call armatak_client_fnc_extractClientPosition;
 
 	_link_uid = [_unit] call armatak_fnc_extract_uuid;
 	_contact_callsign = ([player] call armatak_fnc_extract_callsign) + ".DP1";
