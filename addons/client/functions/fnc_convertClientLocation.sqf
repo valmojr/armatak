@@ -71,6 +71,9 @@ switch (toLower worldName) do {
 	case "kunduz": {
 		_realLocation = _position call armatak_fnc_convert_to_kunduz;
 	};
+	case "kunduz_valley": {
+		_realLocation = _position call armatak_fnc_convert_to_kunduz_valley;
+	};
 	default {
 		_warning = format ["<t color='#FF8021'>ARMATAK</t><br/> %1", "Unsupported Map"];
 		[[_warning, 1.5]] call CBA_fnc_notify;

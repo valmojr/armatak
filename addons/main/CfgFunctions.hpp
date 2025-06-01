@@ -59,6 +59,9 @@ class CfgFunctions {
 			class convert_to_kunduz {
 				file = "\armatak\armatak\addons\main\functions\map\fn_convert_to_kunduz.sqf";
 			};
+			class convert_to_kunduz_valley {
+				file = "\armatak\armatak\addons\main\functions\map\fn_convert_to_kunduz_valley.sqf";
+			};
 			class convert_to_livonia {
 				file = "\armatak\armatak\addons\main\functions\map\fn_convert_to_livonia.sqf";
 			};
