@@ -5,7 +5,7 @@
 params["_group"];
 
 {
-	_callsign = [_x] call armatak_fnc_extract_callsign;
+	_callsign = [_x] call armatak_fnc_extract_unit_callsign;
 	_group_name = [_group] call armatak_fnc_extract_group_color;
 	_group_role = [_x] call armatak_fnc_extract_group_role;
 
