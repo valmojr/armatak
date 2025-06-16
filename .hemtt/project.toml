@@ -60,8 +60,6 @@ workshop = [
   "3407948300", # JSRS Sound Mod
 ]
 
-mission = "armatak_jtac.Mountains_ACR"
-
 parameters = [
   "-skipIntro",
   "-noSplash",
@@ -69,6 +67,8 @@ parameters = [
   "-debug",
   "-filePatching",
 ]
+
+executable = "/mnt/storage/Steam/steamapps/common/Proton 8.0/proton run '/mnt/storage/Steam/steamapps/common/Arma 3/arma3_x64.exe'"
 
 [binarize]
 exclude = [
