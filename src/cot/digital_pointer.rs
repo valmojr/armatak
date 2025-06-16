@@ -1,7 +1,5 @@
 use arma_rs::{FromArma, FromArmaError};
-
 use super::cot::CursorOverTime;
-
 
 pub struct DigitalPointerPayload {
   pub link_uid: String,
