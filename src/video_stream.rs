@@ -26,7 +26,7 @@ pub fn start_stream(
 ) -> &'static str {
     #[cfg(target_os = "linux")]
     {
-        ctx.callback_null(
+        _ = ctx.callback_null(
             "VIDEO ERROR",
             "Screen capture is only supported on Windows",
         );
@@ -74,12 +74,11 @@ pub fn start_stream(
                 }
                 Err(e) => {
                     let _ = status_tx.send(Err(format!("Failed to start FFmpeg: {}", e)));
-                    // Return early, nothing else to do
                 }
             }
         });
 
-        // Save the stop channel so we can stop later
+        // Save the stop channel
         match STREAM_CTRL.lock() {
             Ok(mut lock) => *lock = Some(stop_tx),
             Err(e) => {
