@@ -1,8 +1,8 @@
 use arma_rs::{arma, Extension, Group};
 mod structs;
 mod tests;
-mod websocket;
-mod cot_router;
+mod udp_socket;
+mod tcp_socket;
 mod video_stream;
 
 mod cot;
@@ -32,24 +32,25 @@ pub fn init() -> Extension {
     log4rs::init_config(config).unwrap();
 
     Extension::build()
-        .group("websocket", Group::new()
-            .command("start", websocket::start)
-            .command("stop", websocket::stop)
-            .command("message", websocket::message)
-            .command("location", websocket::location)    
-        )
         .command("local_ip", utils::address::get_local_address)
         .command("uuid", utils::uuid::get_uuid)
         .command("log", utils::log::log_info)
+        .group("udp_socket",
+            Group::new()
+                .command("start", udp_socket::start)
+                .command("send_payload", udp_socket::send_payload)
+                .command("send_gps_cot", udp_socket::send_gps_cot)
+                .command("stop", udp_socket::stop)
+        )
         .group(
             "tcp_socket",
             Group::new()
-                .command("start", cot_router::start)
-                .command("send_payload", cot_router::send_payload)
-                .command("send_eud_cot", cot_router::send_eud_cot)
-                .command("send_marker_cot", cot_router::send_marker_cot)
-                .command("send_digital_pointer_cot", cot_router::send_digital_pointer_cot)
-                .command("stop", cot_router::stop)
+                .command("start", tcp_socket::start)
+                .command("send_payload", tcp_socket::send_payload)
+                .command("send_eud_cot", tcp_socket::send_eud_cot)
+                .command("send_marker_cot", tcp_socket::send_marker_cot)
+                .command("send_digital_pointer_cot", tcp_socket::send_digital_pointer_cot)
+                .command("stop", tcp_socket::stop)
         )
         .group(
             "video_stream",
