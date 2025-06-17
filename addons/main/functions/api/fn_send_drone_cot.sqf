@@ -5,7 +5,7 @@
 params["_drone"];
 
 private _atak_role = "a-f-A";
-private _atak_callsign = [_unit] call armatak_fnc_extract_callsign;
+private _atak_callsign = [_unit] call armatak_fnc_extract_unit_callsign;
 
 switch (side _drone) do {
 	case "WEST": {
