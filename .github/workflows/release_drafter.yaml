@@ -66,11 +66,6 @@ jobs:
         with:
           name: x86_64-unknown-linux-gnu
       - run: mv ./libarmatak.so ./armatak_x64.so
-      - name: Download Android Application Installer
-        uses: actions/download-artifact@v4
-        with:
-          name: simtak
-      - run: mv ./app-debug.apk ./simtak.apk
       - name: Setup HEMTT
         uses: arma-actions/hemtt@v1
       - name: Build
