@@ -23,9 +23,7 @@ private _pos = (getPos _unit) call FUNC(convertClientLocation);
 private _callsign = _unit call armatak_fnc_extract_unit_callsign;
 private _bearing = parseNumber ((getDir _unit) toFixed 0);
 private _speed = speed _unit / 3.6;
-private _group_color = [_unit] call armatak_fnc_extract_group_color;
-private _group_role = [_unit] call armatak_fnc_extract_group_role;
 
-_payload = [_uuid, _pos select 0, _pos select 1, _pos select 2, _callsign, _bearing, _speed, _group_color, _group_role, _callsign];
+_payload = [_uuid, _pos select 0, _pos select 1, _pos select 2, _callsign, _bearing, _speed, _callsign];
 
 _payload
