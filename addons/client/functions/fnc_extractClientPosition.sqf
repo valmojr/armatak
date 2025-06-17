@@ -18,13 +18,14 @@
 
 params["_unit"];
 
-private _location = (getPos _unit) call FUNC(convertClientLocation);
+private _uuid = _unit call armatak_fnc_extract_uuid;
+private _pos = (getPos _unit) call FUNC(convertClientLocation);
+private _callsign = _unit call armatak_fnc_extract_unit_callsign;
+private _bearing = parseNumber ((getDir _unit) toFixed 0);
+private _speed = speed _unit / 3.6;
+private _group_color = [_unit] call armatak_fnc_extract_group_color;
+private _group_role = [_unit] call armatak_fnc_extract_group_role;
 
-private _atak_latitude = _location select 0;
-private _atak_longitude = _location select 1;
-private _atak_altitude = _location select 2;
-private _atak_bearing = parseNumber ((getDir _unit) toFixed 0);
+_payload = [_uuid, _pos select 0, _pos select 1, _pos select 2, _callsign, _bearing, _speed, _group_color, _group_role, _callsign];
 
-_unit_info = [_atak_latitude,_atak_longitude,_atak_altitude,_atak_bearing];
-
-_unit_info
+_payload
