@@ -20,7 +20,6 @@ _tak_server_fulladdress = ((_tak_server_instance_address) + ":" + (_tak_server_i
 
 missionNamespace setVariable ["armatak_server_instance", _tak_server_fulladdress];
 missionNamespace setVariable ["armatak_tcp_socket_is_running", true];
-missionNamespace setVariable ["armatak_group_colors", ["White", "Yellow", "Orange", "Magenta", "Red", "Maroon", "Purple", "DarkBlue", "Blue", "Cyan", "Teal", "Green", "DarkGreen", "Brown"]];
 
 "armatak" callExtension ["tcp_socket:start", [_tak_server_fulladdress]];
 

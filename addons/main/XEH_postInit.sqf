@@ -46,3 +46,7 @@ addMissionEventHandler ["ExtensionCallback", {
 		};
 	};
 }];
+
+GVAR(group_colors) = ["White", "Yellow", "Orange", "Magenta", "Red", "Maroon", "Purple", "DarkBlue", "Blue", "Cyan", "Teal", "Green", "DarkGreen", "Brown"];
+
+missionNamespace setVariable [QGVAR(group_colors), GVAR(group_colors)];
