@@ -1,40 +1,8 @@
-class RscObject;
 class RscText;
-class RscFrame;
-class RscLine;
-class RscProgress;
-class RscPicture;
 class RscBackground;
-class RscPictureKeepAspect;
-class RscVideo;
-class RscHTML;
 class RscButton;
-class RscShortcutButton;
 class RscEdit;
-class RscCombo;
-class RscListBox;
-class RscListNBox;
-class RscXListBox;
-class RscTree;
-class RscSlider;
-class RscXSliderH;
-class RscActiveText;
-class RscActivePicture;
-class RscActivePictureKeepAspect;
-class RscStructuredText;
-class RscToolbox;
-class RscControlsGroup;
-class RscControlsGroupNoScrollbars;
-class RscControlsGroupNoHScrollbars;
-class RscControlsGroupNoVScrollbars;
-class RscButtonTextOnly;
 class RscButtonMenu;
-class RscButtonMenuOK;
-class RscButtonMenuCancel;
-class RscButtonMenuSteam;
-class RscMapControl;
-class RscMapControlEmpty;
-class RscCheckBox;
 
 class armatak_zeus_core_module_dialog {
   idd = 999991;
@@ -110,7 +78,7 @@ class armatak_zeus_custom_marker_dialog {
   movingEnable = 0;
 
   class Controls {
-    class RscFrame_1800: RscFrame
+    class RscFrame_1800: RscBackground
     {
       idc = 1800;
       x = "0.37625 * safezoneW + safezoneX";
