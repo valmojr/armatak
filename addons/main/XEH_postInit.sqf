@@ -4,7 +4,7 @@ addMissionEventHandler ["ExtensionCallback", {
 	params ["_name", "_function", "_data"];
 
 	switch (_name) do {
-		case "WEBSOCKET": {
+		case "UDP SOCKET": {
 			[_function, "success", _name] call FUNC(notify);
 
 			switch (_function) do {
@@ -17,13 +17,13 @@ addMissionEventHandler ["ExtensionCallback", {
 				default {};
 			};
 		};
-		case "WEBSOCKET WARNING": {
-			[_function, "warning", "WEBSOCKET"] call FUNC(notify);
+		case "UDP SOCKET WARNING": {
+			[_function, "warning", "UDP Socket"] call FUNC(notify);
 		};
-		case "WEBSOCKET ERROR": {
+		case "UDP SOCKET ERROR": {
 			[_function, "error", _name] call FUNC(notify);
 
-			if (_function == "Websocket is not running") then {
+			if (_function == "UDP Socket is not running") then {
 				SETVAR(player,EGVAR(client,eudConnected),false);
 			};
 		};
