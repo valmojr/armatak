@@ -15,6 +15,7 @@ pub struct CursorOverTime {
     pub track_course: Option<i32>,
     pub track_speed: Option<f32>,
     pub link_uid: Option<String>,
+    pub remarker: Option<String>,
 }
 
 impl CursorOverTime {
@@ -100,6 +101,10 @@ impl CursorOverTime {
                 )
                 .as_str(),
             );
+        }
+
+        if let Some(remark) = &self.remarker {
+            xml.push_str(format!("<remarks>ARMATAK | {}</remarks>", remark).as_str());
         }
 
         xml.push_str("</detail></event>");

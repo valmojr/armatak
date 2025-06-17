@@ -54,6 +54,7 @@ impl MarkerCoTPayload {
             track_course: Some(self.track_course),
             track_speed: Some(self.track_speed),
             link_uid: None,
+            remarker: None,
         }
     }
 }

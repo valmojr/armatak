@@ -39,6 +39,7 @@ impl DigitalPointerPayload {
           track_course: None,
           track_speed: None,
           link_uid: Some(self.link_uid.clone()),
+          remarker: None,
       }
   }
 }
