@@ -39,7 +39,7 @@ impl UdpClient {
         }
       };
 
-      let _ = ctx.callback_data("UDP SOCKET", "UDP Socket ready", address.clone());
+      let _ = ctx.callback_data("UDP SOCKET", "EUD Connected", address.clone());
 
       let mut running = true;
       while running {
@@ -101,8 +101,7 @@ pub fn send_payload(ctx: Context, payload: String) -> &'static str {
   if let Some(ref client) = *UDP_CLIENT.lock().unwrap() {
     client.send_payload(ctx, payload);
   } else {
-    let _ = ctx.callback_null("UDP SOCKET ERROR", "UDP Client is not running");
-    info!("UDP client is not running.");
+    let _ = ctx.callback_null("UDP SOCKET ERROR", "UDP Socket is not running");
   }
 
   "Sending payload to UDP server"
@@ -118,9 +117,9 @@ pub fn send_gps_cot(ctx: Context, cursor_over_time: cot::gps::ExternalPositionPa
 pub fn stop(ctx: Context) -> &'static str {
   if let Some(ref client) = *UDP_CLIENT.lock().unwrap() {
     client.stop();
-    let _ = ctx.callback_null("UDP SOCKET", "UDP client stopped");
+    let _ = ctx.callback_null("UDP SOCKET", "EUD Disconnected");
   } else {
-    let _ = ctx.callback_null("UDP SOCKET ERROR", "UDP client is not running");
+    let _ = ctx.callback_null("UDP SOCKET ERROR", "UDP Socket is not running");
   }
 
   "Stopping UDP Client"

@@ -8,10 +8,10 @@ addMissionEventHandler ["ExtensionCallback", {
 			[_function, "success", _name] call FUNC(notify);
 
 			switch (_function) do {
-				case "EUD connected": {
+				case "EUD Connected": {
 					SETVAR(player,EGVAR(client,eudConnected),true);
 				};
-				case "EUD disconnected": {
+				case "EUD Disconnected": {
 					SETVAR(player,EGVAR(client,eudConnected),false);
 				};
 				default {};
