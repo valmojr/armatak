@@ -91,7 +91,7 @@ jobs:
           release_name: ${{ github.ref }}
           body: |
             Changes in this release:
-            ${{ env.COMMIT_MESSAGES }}
+            ${{ github.event.head_commit.message }}
           draft: true
           prerelease: false
       - name: Upload Release Asset
