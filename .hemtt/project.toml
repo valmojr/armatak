@@ -38,24 +38,29 @@ preset = "Hemtt"
 
 [hemtt.launch.default]
 workshop = [
-  "450814997", # CBA
+  "450814997", # CBA_A3
   "463939057", # ACE
-  "623475643", # 3den enhanced
-  "1779063631", # Zeus enhanced
-  "1673595418", # User Input Menus
-  "1678581937", # Extended Function Viewer
-  "1231625987", #Debug Console
   "751965892", # ACRE2
+  "2522638637", # ACE Extended Arsenal
+  "333310405", # Enhanced Movement
+  "2034363662", # Enhanced Movement Rework
+  "2941986336", # Hatchet Interaction Framework - Stable Version
+  "1745501605", # Hatchet H-60 pack - Stable Version
   "843577117", # RHSUSAF
+  "843425103", # RHSAFRF
+  "843632231", # RHSSAF
+  "843593391", # RHSGREF
+  "1673456286", # 3CB Factions
+  "623475643", # 3den Enhanced
+  "2257686620", # Blastcore Murr Edition
+  "583496184", # CUP Terrains - Core
+  "3078351739", # Kunduz River
+  "1858075458", # LAMBS_Danger.fsm
+  "1808238502", # LAMBS_Suppression
+  "3425368881", # M4A1_URGI
   "2268351256", # Tier One Weapons
-  "583496184", # CUP Terrains
-  "3015795970", # No zoom
-  "2941986336", # Hatchet Framework
-  "1745501605", # Hatchet H-60 Pack
-  "333310405", # Enhanced Moviments
-  "2034363662", # Enhanced Moviments Rework
-  "2257686620", # Blastcore Murr
-  "3407948300", # JSRS Sound Mod
+  "2560276469", # Restrict Markers
+  "3493557838" # Ballad of the Green Berets
 ]
 
 parameters = [
