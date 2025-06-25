@@ -22,8 +22,12 @@ addMissionEventHandler ["ExtensionCallback", {
 		};
 		case "UDP SOCKET ERROR": {
 			[_function, "error", _name] call FUNC(notify);
-
+			
 			if (_function == "UDP Socket is not running") then {
+				SETVAR(player,EGVAR(client,eudConnected),false);
+			};
+
+			if (_function == "failed to bind UDP socket") then {
 				SETVAR(player,EGVAR(client,eudConnected),false);
 			};
 		};
