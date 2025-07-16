@@ -2,7 +2,6 @@ class RscText;
 class RscBackground;
 class RscButton;
 class RscEdit;
-class RscButtonMenu;
 
 class armatak_zeus_core_module_dialog {
   idd = 999991;

@@ -1,7 +1,6 @@
 class RscText;
 class RscBackground;
 class RscButton;
-class RscShortcutButton;
 class RscEdit;
 
 class armatak_udp_socket_start_dialog {
