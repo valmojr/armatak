@@ -17,7 +17,7 @@
  * [player] call armatak_client_fnc_convertClientLocation;
  *
  * Public: Yes
- */
+*/
 
 params["_latitude", "_longitude", "_altitude"];
 

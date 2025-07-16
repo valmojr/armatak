@@ -37,7 +37,7 @@ class CfgVehicles {
 		canSetArea = 0;
 		canSetAreaShape = 0;
 		canSetAreaHeight = 0;
-
+		/*
 		class Attributes: AttributesBase {
 			class GVAR(instanceAddress): Edit {
 				property = QGVAR(instanceAddress);
@@ -47,26 +47,27 @@ class CfgVehicles {
 				defaultValue = "localhost";
 			};
 			class GVAR(instancePort): Edit {
-				property = "armatak_module_mediamtx_video_stream_instance_port";
-				displayname = "MediaMTX Provider Port";
-				tooltip = "MediaMTX Provider Port for handling video streams";
+				property = QGVAR(instancePort);
+				displayname = QUOTE(MediaMTX Provider Port);
+				tooltip = QUOTE(MediaMTX Provider Port for handling video streams);
 				typeName = "STRING";
 				defaultValue = "8554";
 			};
 			class GVAR(instanceAuthUser): Edit {
 				property = QGVAR(instanceAuthUser);
-				displayname = "MediaMTX Provider Username";
-				tooltip = "MediaMTX Provider Instance Username";
+				displayname = QUOTE(MediaMTX Provider Username);
+				tooltip = QUOTE(MediaMTX Provider Instance Username);
 				typeName = "STRING";
 				defaultValue = "administrator";
 			};
 			class GVAR(instanceAuthPassword): Edit {
 				property = QGVAR(instanceAuthPassword);
-				displayname = "MediaMTX Provider Password";
-				tooltip = "MediaMTX Provider Instance Password";
+				displayname = QUOTE(MediaMTX Provider Password);
+				tooltip = QUOTE(MediaMTX Provider Instance Password);
 				typeName = "STRING";
 				defaultValue = "password";
 			};
 		};
+		*/
 	};
 };
