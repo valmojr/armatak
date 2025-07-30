@@ -71,7 +71,7 @@ parameters = [
   "-filePatching",
 ]
 
-executable = "/mnt/storage/Steam/steamapps/common/Proton 8.0/proton run '/mnt/storage/Steam/steamapps/common/Arma 3/arma3_x64.exe'"
+executable = "/home/valmo/.steam/steam/steamapps/common/Proton 8.0/proton run '/home/valmo/.steam/steam/steamapps/common/Arma 3/arma3_x64.exe'"
 
 [binarize]
 exclude = [
