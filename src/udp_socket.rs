@@ -23,10 +23,8 @@ impl UdpClient {
       client.stop();
     }
 
-    let udp_address = address.clone();
-
     thread::spawn(move || {
-      let socket = match UdpSocket::bind(udp_address) {
+      let socket = match UdpSocket::bind("0.0.0.0:0") {
         Ok(s) => s,
         Err(e) => {
           let _ = ctx.callback_data(
