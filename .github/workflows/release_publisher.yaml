@@ -1,0 +1,79 @@
+name: Publish Production
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build_extension:
+    strategy:
+      matrix:
+        os_target:
+          - { os: "windows-latest", target: "i686-pc-windows-msvc", artifact: "armatak.dll", name: "armatak.dll" }
+          - { os: "windows-latest", target: "x86_64-pc-windows-msvc", artifact: "armatak.dll", name: "armatak_x64.dll" }
+          - { os: "ubuntu-latest", target: "x86_64-unknown-linux-gnu", artifact: "libarmatak.so", name: "armatak.so" }
+    runs-on: ${{ matrix.os_target.os }}
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+      - name: Install Rust Toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          target: ${{ matrix.os_target.target }}
+          toolchain: stable
+          default: true
+      - name: Install Dependencies (Linux only)
+        if: matrix.os_target.os == 'ubuntu-latest'
+        run: sudo apt-get update && sudo apt-get install -y build-essential
+      - name: Cargo Build
+        run: cargo build --release --target ${{ matrix.os_target.target }}
+      - name: check stuff
+        run: ls target/release
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.os_target.target }}
+          path: target/${{ matrix.os_target.target }}/release/${{ matrix.os_target.artifact }}
+          if-no-files-found: error
+          retention-days: 1
+
+  package:
+    needs: [build_extension]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+      - run: mkdir -p ./target/release
+      - name: Download Windows x64 Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: x86_64-pc-windows-msvc
+      - run: mv ./armatak.dll ./armatak_x64.dll
+      - name: Download Windows x86 Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: i686-pc-windows-msvc
+      - name: Download Linux x64 Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: x86_64-unknown-linux-gnu
+      - run: mv ./libarmatak.so ./armatak_x64.so
+      - name: Setup HEMTT
+        uses: arma-actions/hemtt@v1
+      - name: Build
+        run: hemtt release
+      - name: Extract Zipped Mod
+        run: unzip releases/armatak-latest.zip -d releases
+      - uses: arma-actions/workshop-upload@v1
+        with:
+          appId: '107410'
+          itemId: ${{ secrets.STEAM_WORKSHOP_PROD_ID }}
+          contentPath: releases/@armatak
+          changelog: 'Update'
+        env:
+          STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
+          STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
