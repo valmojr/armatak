@@ -25,8 +25,7 @@ include = [
   "LICENSE",
   "*.dll",
   "*.so",
-  "*.paa",
-  "simtak.apk"
+  "*.paa"
 ]
 
 [properties]
@@ -71,7 +70,7 @@ parameters = [
   "-filePatching",
 ]
 
-executable = "/home/valmo/.steam/steam/steamapps/common/Proton 8.0/proton run '/home/valmo/.steam/steam/steamapps/common/Arma 3/arma3_x64.exe'"
+executable = "/home/valmo/games/SteamLibrary/steamapps/common/Proton 8.0/proton run '/home/valmo/games/SteamLibrary/steamapps/common/Arma 3/arma3_x64.exe'"
 
 [binarize]
 exclude = [
