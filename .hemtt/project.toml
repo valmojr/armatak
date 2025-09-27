@@ -49,6 +49,8 @@ workshop = [
   "843632231", # RHSSAF
   "843593391", # RHSGREF
   "1673456286", # 3CB Factions
+  "2585568796", # Taliban Forces 2021
+  "3030830594", # Western Dusk
   "623475643", # 3den Enhanced
   "2257686620", # Blastcore Murr Edition
   "583496184", # CUP Terrains - Core
@@ -57,6 +59,7 @@ workshop = [
   "1808238502", # LAMBS_Suppression
   "3425368881", # M4A1_URGI
   "2268351256", # Tier One Weapons
+  "3073216844", # Tier One Weapons - All NVG Compatible
   "2560276469", # Restrict Markers
 ]
 
