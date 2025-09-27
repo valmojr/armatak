@@ -36,6 +36,7 @@ url = "https://github.com/valmojr/armatak"
 preset = "Hemtt"
 
 [hemtt.launch.default]
+mission = "hearts_and_minds.kunduz_valley"
 workshop = [
   "450814997", # CBA_A3
   "463939057", # ACE
@@ -43,8 +44,6 @@ workshop = [
   "2522638637", # ACE Extended Arsenal
   "333310405", # Enhanced Movement
   "2034363662", # Enhanced Movement Rework
-  "2941986336", # Hatchet Interaction Framework - Stable Version
-  "1745501605", # Hatchet H-60 pack - Stable Version
   "843577117", # RHSUSAF
   "843425103", # RHSAFRF
   "843632231", # RHSSAF
@@ -59,7 +58,6 @@ workshop = [
   "3425368881", # M4A1_URGI
   "2268351256", # Tier One Weapons
   "2560276469", # Restrict Markers
-  "3493557838" # Ballad of the Green Berets
 ]
 
 parameters = [
