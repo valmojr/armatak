@@ -61,6 +61,9 @@ workshop = [
   "2268351256", # Tier One Weapons
   "3073216844", # Tier One Weapons - All NVG Compatible
   "2560276469", # Restrict Markers
+  "3015795970", # Weapon Sight No Zoom Overhaul
+  "2397360831", # USAF Mod - Main
+  "2397376046" # USAF Mod - Utility
 ]
 
 parameters = [

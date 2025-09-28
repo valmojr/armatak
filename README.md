@@ -6,7 +6,7 @@ ARMATAK is a server side Arma 3 addons for streaming unit positions to TAK Clien
 
 ## Operation Wings of Liberty
 
-By default, this repo contains a forked H&M (6~12 men) themed as Ranger Recon Detachment to showcase the mod, it was developed and heavily tested on a OG TAK Server running in CloudRF TAK Server container, other TAK Server may be functional.
+By default, this repo contains a forked Hearts and Minds mission (6-12 COOP) themed as Ranger Recon Detachment to showcase the mod, it was developed and heavily tested on a OG TAK Server running in CloudRF TAK Server container, other TAK Server may be functional, but not tested.
 
 ## Get in Touch
 
