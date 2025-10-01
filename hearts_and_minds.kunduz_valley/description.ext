@@ -1,5 +1,5 @@
 
-loadScreen = "core\img\btc.paa";
+loadScreen = "core\img\ranger_on_patrol_in_af.jpg";
 author = "Giallustio";
 onLoadName = $STR_BTC_HAM_DESCR_NAME;
 onLoadMission = $STR_BTC_HAM_DESCR_MISSION;
