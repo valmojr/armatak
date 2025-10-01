@@ -19,7 +19,7 @@ if (((backpack _unit) isKindOf "TFAR_Bag_Base") or (["radio", typeOf _unit, fals
 	_group_role = _group_roles select 6;
 };
 
-if ((["sniper", typeOf _unit, false] call BIS_fnc_inString) or (["marksman", (configFile >> "CfgVehicles" >> typeOf _unit >> "role") call BIS_fnc_getCfgData, false] call BIS_fnc_inString) or (["sharpshooter", typeOf _unit, false] call BIS_fnc_inString)) then {
+if ((["sniper", typeOf _unit, false] call BIS_fnc_inString) or (["marksman", (configOf _unit >> "role") call BIS_fnc_getCfgData, false] call BIS_fnc_inString) or (["sharpshooter", typeOf _unit, false] call BIS_fnc_inString)) then {
 	_group_role = _group_roles select 3;
 };
 
