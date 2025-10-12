@@ -3,7 +3,7 @@ params["_unit"];
 _group_roles = ["Team Member", "Team Lead", "HQ", "Sniper", "Medic", "Forward Observer", "RTO", "K9"];
 _group_role = "Team Member";
 
-if (["SpecialOperative", (configFile >> "CfgVehicles" >> typeOf _unit >> "role") call BIS_fnc_getCfgData, false] call BIS_fnc_inString) then {
+if (["SpecialOperative", (configOf _unit >> "role") call BIS_fnc_getCfgData, false] call BIS_fnc_inString) then {
 	_group_role = _group_roles select 5;
 };
 
