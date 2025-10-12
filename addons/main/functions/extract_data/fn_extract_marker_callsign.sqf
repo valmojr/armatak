@@ -7,15 +7,15 @@ params["_unit"];
 private _callsign = "";
 
 if ((([_unit] call BIS_fnc_objectType) select 0) == "Vehicle") then {
-	_callsign = getText (configFile >> "CfgVehicles" >> typeOf _unit >> "displayName");
+	_callsign = getText (configOf _unit >> "displayName");
 
 	if (!isNull driver _unit) then {
-		_callsign = getText (configFile >> "CfgVehicles" >> typeOf _unit >> "displayName") + " | " + ([name (driver _unit)] call armatak_fnc_shorten_name);
+		_callsign = getText (configOf _unit >> "displayName") + " | " + ([name (driver _unit)] call armatak_fnc_shorten_name);
 	};
 };
 
 if (unitIsUAV _unit) then {
-	_callsign = getText (configFile >> "CfgVehicles" >> typeOf _unit >> "displayName");
+	_callsign = getText (configOf _unit >> "displayName");
 
 	if (isUAVConnected _unit) then {
 		_callsign = (_callsign) + "[ON]";

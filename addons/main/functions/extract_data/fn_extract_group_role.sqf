@@ -1,9 +1,10 @@
 params["_unit"];
 
+_group = group _unit;
 _group_roles = ["Team Member", "Team Lead", "HQ", "Sniper", "Medic", "Forward Observer", "RTO", "K9"];
 _group_role = "Team Member";
 
-if (["SpecialOperative", (configFile >> "CfgVehicles" >> typeOf _unit >> "role") call BIS_fnc_getCfgData, false] call BIS_fnc_inString) then {
+if (["SpecialOperative", (configOf _unit >> "role") call BIS_fnc_getCfgData, false] call BIS_fnc_inString) then {
 	_group_role = _group_roles select 5;
 };
 
@@ -19,7 +20,7 @@ if (((backpack _unit) isKindOf "TFAR_Bag_Base") or (["radio", typeOf _unit, fals
 	_group_role = _group_roles select 6;
 };
 
-if ((["sniper", typeOf _unit, false] call BIS_fnc_inString) or (["marksman", (configFile >> "CfgVehicles" >> typeOf _unit >> "role") call BIS_fnc_getCfgData, false] call BIS_fnc_inString) or (["sharpshooter", typeOf _unit, false] call BIS_fnc_inString)) then {
+if ((["sniper", typeOf _unit, false] call BIS_fnc_inString) or (["marksman", (configOf _unit >> "role") call BIS_fnc_getCfgData, false] call BIS_fnc_inString) or (["sharpshooter", typeOf _unit, false] call BIS_fnc_inString)) then {
 	_group_role = _group_roles select 3;
 };
 
@@ -34,7 +35,7 @@ if (["officer", typeOf _unit, false] call BIS_fnc_inString) then {
 _pre_defined_role = _unit getVariable "_atak_group_role";
 
 if (!isNil "_pre_defined_role") then {
-	_callsign = _pre_defined_callsign;
+	_callsign = _pre_defined_role;
 };
 
 _group_role
