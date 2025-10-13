@@ -1,5 +1,6 @@
 params["_unit"];
 
+_group = group _unit;
 _group_roles = ["Team Member", "Team Lead", "HQ", "Sniper", "Medic", "Forward Observer", "RTO", "K9"];
 _group_role = "Team Member";
 
@@ -34,7 +35,7 @@ if (["officer", typeOf _unit, false] call BIS_fnc_inString) then {
 _pre_defined_role = _unit getVariable "_atak_group_role";
 
 if (!isNil "_pre_defined_role") then {
-	_callsign = _pre_defined_callsign;
+	_callsign = _pre_defined_role;
 };
 
 _group_role
