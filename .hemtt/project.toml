@@ -70,8 +70,6 @@ parameters = [
   "-filePatching",
 ]
 
-executable = "/home/valmo/games/SteamLibrary/steamapps/common/Proton 8.0/proton run '/home/valmo/games/SteamLibrary/steamapps/common/Arma 3/arma3_x64.exe'"
-
 [binarize]
 exclude = [
   "*.jpg"
