@@ -25,7 +25,7 @@ player setVariable [QGVAR(eudConnected), true];
 	if (player getVariable [QGVAR(eudConnected), false]) then {
 		"armatak" callExtension ["udp_socket:send_gps_cot", [player call FUNC(extractClientPosition)]];
 	};
-}, 0.02, []] call CBA_fnc_addPerFrameHandler;
+}, 0.1, []] call CBA_fnc_addPerFrameHandler;
 
 deleteVehicle _logic;
 closeDialog 1;
