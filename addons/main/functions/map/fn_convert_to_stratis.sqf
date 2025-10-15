@@ -1,19 +1,19 @@
 params ["_longitudeInGame", "_latitudeInGame", "_altitude"];
 
-private _mapWidth = 30720;
-private _mapHeight = 30720;
+private _mapWidth = 8192;
+private _mapHeight = 8192;
 
 //    SW corner (used as origin)
-private _SW_lat = 39.456910;
-private _SW_lon = 24.940792;
+private _SW_lat = 39.458019;
+private _SW_lon = 24.939314;
 
 //    SE corner
-private _SE_lat = 39.459151;
-private _SE_lon = 25.083440;
+private _SE_lat = 39.458019;
+private _SE_lon = 25.081992;
 
 //    NW corner
-private _NW_lat = 39.567714;
-private _NW_lon = 24.937866;
+private _NW_lat = 39.458019;
+private _NW_lon = 24.939314;
 
 private _edgeSE_lat = _SE_lat - _SW_lat;
 private _edgeSE_lon = _SE_lon - _SW_lon;
