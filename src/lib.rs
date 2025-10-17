@@ -1,7 +1,7 @@
 use arma_rs::{arma, Extension, Group};
 mod structs;
 mod tests;
-mod udp_socket;
+mod udp_client;
 mod tcp_socket;
 mod video_stream;
 
@@ -35,12 +35,12 @@ pub fn init() -> Extension {
         .command("local_ip", utils::address::get_local_address)
         .command("uuid", utils::uuid::get_uuid)
         .command("log", utils::log::log_info)
-        .group("udp_socket",
+        .group("udp_client",
             Group::new()
-                .command("start", udp_socket::start)
-                .command("send_payload", udp_socket::send_payload)
-                .command("send_gps_cot", udp_socket::send_gps_cot)
-                .command("stop", udp_socket::stop)
+                .command("start", udp_client::start)
+                .command("send_payload", udp_client::send_payload)
+                .command("send_gps_cot", udp_client::send_gps_cot)
+                .command("stop", udp_client::stop)
         )
         .group(
             "tcp_socket",
