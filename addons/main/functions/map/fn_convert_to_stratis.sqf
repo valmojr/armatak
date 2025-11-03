@@ -12,7 +12,7 @@ private _SE_lat = 39.458019;
 private _SE_lon = 25.081992;
 
 //    NW corner
-private _NW_lat = 39.458019;
+private _NW_lat = 39.568847;
 private _NW_lon = 24.939314;
 
 private _edgeSE_lat = _SE_lat - _SW_lat;
