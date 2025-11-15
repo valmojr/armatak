@@ -54,7 +54,7 @@ if (isServer) exitWith {
 				};
 			};
 		} forEach GVAR(syncedUnits);
-	}, 0.5, []] call CBA_fnc_addPerFrameHandler;
+	}, 1, []] call CBA_fnc_addPerFrameHandler;
 };
 
 true;
