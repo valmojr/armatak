@@ -20,14 +20,14 @@ class EditorData
 	};
 	class LayerIndexProvider
 	{
-		nextID=65;
+		nextID=73;
 	};
 	class Camera
 	{
-		pos[]={1593.6781,58.831642,8623.5967};
-		dir[]={-0.64798218,-0.53195918,0.5451113};
-		up[]={-0.40707514,0.84676778,0.34244972};
-		aside[]={0.64375275,-2.4912879e-08,0.76523846};
+		pos[]={1516.0549,53.656116,8549.5332};
+		dir[]={-0.49783278,-0.68573368,0.5309726};
+		up[]={-0.46902454,0.72785252,0.50024664};
+		aside[]={0.72950572,0,0.68397474};
 	};
 };
 binarizationWanted=0;
@@ -67,14 +67,13 @@ addons[]=
 	"ace_compat_rhs_usf3_nightvision",
 	"A3_Characters_F_Common",
 	"UK3CB_Factions_ANA",
-	"USAF_Missilebox_C",
-	"armatak_server"
+	"USAF_Missilebox_C"
 };
 class AddonsMetaData
 {
 	class List
 	{
-		items=31;
+		items=30;
 		class Item0
 		{
 			className="A3_Ui_F";
@@ -280,13 +279,6 @@ class AddonsMetaData
 			className="USAF_Missilebox_C";
 			name="USAF_Missilebox_C";
 			author="USAF Mod Team";
-		};
-		class Item30
-		{
-			className="armatak_server";
-			name="ARMATAK - TCP Socket Client";
-			author="Valmo Trindade";
-			url="https://github.com/valmojr/armatak";
 		};
 	};
 };
@@ -595,7 +587,7 @@ class Mission
 	};
 	class Entities
 	{
-		items=27;
+		items=26;
 		class Item0
 		{
 			dataType="Marker";
@@ -1255,7 +1247,7 @@ class Mission
 					class PositionInfo
 					{
 						position[]={1407.0162,37.665756,8483.873};
-						angles[]={-0,2.103467,0};
+						angles[]={0,2.103467,0};
 					};
 					side="Empty";
 					flags=4;
@@ -2896,13 +2888,13 @@ class Mission
 						angles[]={0,2.3531749,0};
 					};
 					side="West";
-					flags=4;
 					class Attributes
 					{
 						name="droneG";
 					};
 					id=302;
 					type="B_UAV_AI";
+					atlOffset=1.7847023;
 				};
 			};
 			class Attributes
@@ -2991,227 +2983,6 @@ class Mission
 			};
 			id=352;
 			type="USAF_missileCart_W_AGM114";
-		};
-		class Item26
-		{
-			dataType="Logic";
-			class PositionInfo
-			{
-				position[]={1509.8149,34.950001,8571.6172};
-			};
-			id=353;
-			type="armatak_server_coreModule";
-			class CustomAttributes
-			{
-				class Attribute0
-				{
-					property="armatak_server_moduleInstanceAddress";
-					expression="_this setVariable ['armatak_server_moduleInstanceAddress',_value,true];";
-					class Value
-					{
-						class data
-						{
-							singleType="STRING";
-							value="192.168.15.100";
-						};
-					};
-				};
-				class Attribute1
-				{
-					property="armatak_server_moduleInstancePort";
-					expression="_this setVariable ['armatak_server_moduleInstancePort',_value,true];";
-					class Value
-					{
-						class data
-						{
-							singleType="SCALAR";
-							value=8088;
-						};
-					};
-				};
-				nAttributes=2;
-			};
-		};
-	};
-	class Connections
-	{
-		class LinkIDProvider
-		{
-			nextID=17;
-		};
-		class Links
-		{
-			items=17;
-			class Item0
-			{
-				linkID=0;
-				item0=276;
-				item1=353;
-				class CustomData
-				{
-					type="Sync";
-				};
-			};
-			class Item1
-			{
-				linkID=1;
-				item0=280;
-				item1=353;
-				class CustomData
-				{
-					type="Sync";
-				};
-			};
-			class Item2
-			{
-				linkID=2;
-				item0=281;
-				item1=353;
-				class CustomData
-				{
-					type="Sync";
-				};
-			};
-			class Item3
-			{
-				linkID=3;
-				item0=282;
-				item1=353;
-				class CustomData
-				{
-					type="Sync";
-				};
-			};
-			class Item4
-			{
-				linkID=4;
-				item0=285;
-				item1=353;
-				class CustomData
-				{
-					type="Sync";
-				};
-			};
-			class Item5
-			{
-				linkID=5;
-				item0=334;
-				item1=353;
-				class CustomData
-				{
-					type="Sync";
-				};
-			};
-			class Item6
-			{
-				linkID=6;
-				item0=290;
-				item1=353;
-				class CustomData
-				{
-					type="Sync";
-				};
-			};
-			class Item7
-			{
-				linkID=7;
-				item0=292;
-				item1=353;
-				class CustomData
-				{
-					type="Sync";
-				};
-			};
-			class Item8
-			{
-				linkID=8;
-				item0=333;
-				item1=353;
-				class CustomData
-				{
-					type="Sync";
-				};
-			};
-			class Item9
-			{
-				linkID=9;
-				item0=25;
-				item1=353;
-				class CustomData
-				{
-					type="Sync";
-				};
-			};
-			class Item10
-			{
-				linkID=10;
-				item0=249;
-				item1=353;
-				class CustomData
-				{
-					type="Sync";
-				};
-			};
-			class Item11
-			{
-				linkID=11;
-				item0=311;
-				item1=353;
-				class CustomData
-				{
-					type="Sync";
-				};
-			};
-			class Item12
-			{
-				linkID=12;
-				item0=308;
-				item1=353;
-				class CustomData
-				{
-					type="Sync";
-				};
-			};
-			class Item13
-			{
-				linkID=13;
-				item0=262;
-				item1=353;
-				class CustomData
-				{
-					type="Sync";
-				};
-			};
-			class Item14
-			{
-				linkID=14;
-				item0=251;
-				item1=353;
-				class CustomData
-				{
-					type="Sync";
-				};
-			};
-			class Item15
-			{
-				linkID=15;
-				item0=254;
-				item1=353;
-				class CustomData
-				{
-					type="Sync";
-				};
-			};
-			class Item16
-			{
-				linkID=16;
-				item0=332;
-				item1=353;
-				class CustomData
-				{
-					type="Sync";
-				};
-			};
 		};
 	};
 };
