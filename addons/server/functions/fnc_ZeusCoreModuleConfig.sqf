@@ -25,12 +25,12 @@ missionNamespace setVariable ["armatak_tcp_socket_is_running", true];
 
 _syncUnits = [];
 
-missionNamespace setVariable ["armatak_marked_units", _syncUnits];
+missionNamespace setVariable ["armatak_server_syncedUnits", _syncUnits];
 
-GVAR(syncedUnits) = missionNamespace getVariable "armatak_marked_units";
+GVAR(syncedUnits) = missionNamespace getVariable "armatak_server_syncedUnits";
 
 [{
-	GVAR(syncedUnits) = missionNamespace getVariable "armatak_marked_units";
+	GVAR(syncedUnits) = missionNamespace getVariable "armatak_server_syncedUnits";
 
 	{
 		_objectType = _x call BIS_fnc_objectType;
