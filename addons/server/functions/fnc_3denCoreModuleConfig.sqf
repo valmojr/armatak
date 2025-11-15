@@ -21,12 +21,12 @@ if (isServer) exitWith {
 
 	_syncUnits = synchronizedObjects _logic;
 
-	missionNamespace setVariable ["armatak_marked_units", _syncUnits];
+	missionNamespace setVariable ["armatak_server_syncedUnits", _syncUnits];
 
-	GVAR(syncedUnits) = missionNamespace getVariable "armatak_marked_units";
+	GVAR(syncedUnits) = missionNamespace getVariable "armatak_server_syncedUnits";
 
 	[{
-		GVAR(syncedUnits) = missionNamespace getVariable "armatak_marked_units";
+		GVAR(syncedUnits) = missionNamespace getVariable "armatak_server_syncedUnits";
 
 		{
 			_objectType = _x call BIS_fnc_objectType;
@@ -45,6 +45,12 @@ if (isServer) exitWith {
 
 					[_x, _atak_type, _callsign] call armatak_fnc_send_marker_cot;
 				};
+				case ((_objectType select 0) == "VehicleAutonomous"): {
+					_atak_type = [_x] call armatak_fnc_extract_role;
+					_callsign = [_x] call armatak_fnc_extract_marker_callsign;
+
+					[_x, _atak_type, _callsign] call armatak_fnc_send_marker_cot;
+				}; 
 			};
 			if (unitIsUAV _x) then {
 				[_x] call armatak_fnc_send_drone_cot;

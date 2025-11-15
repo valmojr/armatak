@@ -27,16 +27,16 @@ switch (false) do {
 		deleteVehicle _logic;
 	};
 	default {
-		if (_unit in (missionNamespace getVariable ["armatak_marked_units", []])) exitWith {
+		if (_unit in (missionNamespace getVariable ["armatak_server_syncedUnits", []])) exitWith {
 			["Unit already marked", "warning", "TCP Socket"] call EFUNC(main,notify);
 			deleteVehicle _logic;
 		};
 
-		GVAR(syncedUnits) = missionNamespace getVariable "armatak_marked_units";
+		GVAR(syncedUnits) = missionNamespace getVariable "armatak_server_syncedUnits";
 
 		GVAR(syncedUnits) pushBack _unit;
 
-		missionNamespace setVariable ["armatak_marked_units", GVAR(syncedUnits)];
+		missionNamespace setVariable ["armatak_server_syncedUnits", GVAR(syncedUnits)];
 		SETVAR(_unit,GVAR(isRouting),true);
 
 		deleteVehicle _logic;

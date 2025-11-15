@@ -1,4 +1,4 @@
-// function name: armatak_fnc_extract_drone
+// function name: armatak_fnc_send_drone_cot
 // function author: Valmo
 // function description: Gets the drone information for the CoT Router
 
