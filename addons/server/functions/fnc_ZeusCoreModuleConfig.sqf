@@ -58,6 +58,6 @@ missionNamespace setVariable ["armatak_server_syncedUnits", _syncUnits];
 				};
 			};
 		} forEach GVAR(syncedUnits);
-	}, 2, []] call CBA_fnc_addPerFrameHandler;
+	}, 1, []] call CBA_fnc_addPerFrameHandler;
 deleteVehicle _logic;
 closeDialog 1;
