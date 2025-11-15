@@ -49,15 +49,12 @@ if (isServer) exitWith {
 					_atak_type = [_x] call armatak_fnc_extract_role;
 					_callsign = [_x] call armatak_fnc_extract_marker_callsign;
 
-					[_x, _atak_type, _callsign] call armatak_fnc_send_marker_cot;
-				}; 
-			};
-			if (unitIsUAV _x) then {
-				[_x] call armatak_fnc_send_drone_cot;
-				[_x] call armatak_fnc_send_digital_pointer_cot;
+					[_x, _atak_type, _callsign] call armatak_fnc_send_drone_cot;
+					[_x] call armatak_fnc_send_digital_pointer_cot;
+				};
 			};
 		} forEach GVAR(syncedUnits);
-	}, 2, []] call CBA_fnc_addPerFrameHandler;
+	}, 0.5, []] call CBA_fnc_addPerFrameHandler;
 };
 
 true;
