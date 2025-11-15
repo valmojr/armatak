@@ -63,7 +63,8 @@ workshop = [
   "2560276469", # Restrict Markers
   "3015795970", # Weapon Sight No Zoom Overhaul
   "2397360831", # USAF Mod - Main
-  "2397376046" # USAF Mod - Utility
+  "2397376046", # USAF Mod - Utility
+  "1779063631" # Zeus Enhanced
 ]
 
 parameters = [

@@ -12,7 +12,7 @@ class EditorData
 	};
 	class ItemIDProvider
 	{
-		nextID=350;
+		nextID=354;
 	};
 	class MarkerIDProvider
 	{
@@ -20,14 +20,14 @@ class EditorData
 	};
 	class LayerIndexProvider
 	{
-		nextID=49;
+		nextID=65;
 	};
 	class Camera
 	{
-		pos[]={1479.6041,43.693115,8568.3447};
-		dir[]={0.53661633,-0.52849549,0.65799862};
-		up[]={0.33401114,0.84890443,0.40956542};
-		aside[]={0.77506447,1.0195654e-06,-0.63208711};
+		pos[]={1593.6781,58.831642,8623.5967};
+		dir[]={-0.64798218,-0.53195918,0.5451113};
+		up[]={-0.40707514,0.84676778,0.34244972};
+		aside[]={0.64375275,-2.4912879e-08,0.76523846};
 	};
 };
 binarizationWanted=0;
@@ -67,13 +67,14 @@ addons[]=
 	"ace_compat_rhs_usf3_nightvision",
 	"A3_Characters_F_Common",
 	"UK3CB_Factions_ANA",
-	"USAF_Missilebox_C"
+	"USAF_Missilebox_C",
+	"armatak_server"
 };
 class AddonsMetaData
 {
 	class List
 	{
-		items=30;
+		items=31;
 		class Item0
 		{
 			className="A3_Ui_F";
@@ -279,6 +280,13 @@ class AddonsMetaData
 			className="USAF_Missilebox_C";
 			name="USAF_Missilebox_C";
 			author="USAF Mod Team";
+		};
+		class Item30
+		{
+			className="armatak_server";
+			name="ARMATAK - TCP Socket Client";
+			author="Valmo Trindade";
+			url="https://github.com/valmojr/armatak";
 		};
 	};
 };
@@ -587,7 +595,7 @@ class Mission
 	};
 	class Entities
 	{
-		items=25;
+		items=27;
 		class Item0
 		{
 			dataType="Marker";
@@ -643,7 +651,7 @@ class Mission
 			class PositionInfo
 			{
 				position[]={1451.25,35.682316,8519.375};
-				angles[]={-0,2.3818617,0};
+				angles[]={0,2.3818617,0};
 			};
 			side="Empty";
 			flags=4;
@@ -897,8 +905,8 @@ class Mission
 			dataType="Logic";
 			class PositionInfo
 			{
-				position[]={1495.5,35.090004,8601.5};
-				angles[]={6.269186,2.5337162,6.2611909};
+				position[]={1497.5,35.021999,8599.25};
+				angles[]={6.2791886,2.5337162,6.2611909};
 			};
 			id=71;
 			type="ModuleCurator_F";
@@ -1149,8 +1157,8 @@ class Mission
 					dataType="Object";
 					class PositionInfo
 					{
-						position[]={1421.75,38.678284,8503.1553};
-						angles[]={-0,1.9192863,0};
+						position[]={1422.625,38.678284,8501.6553};
+						angles[]={0,1.9192863,0};
 					};
 					side="Empty";
 					flags=4;
@@ -1184,7 +1192,7 @@ class Mission
 					class PositionInfo
 					{
 						position[]={1515.5,36.96347,8587.375};
-						angles[]={-0,3.0223126,0};
+						angles[]={0,3.0223126,0};
 					};
 					side="Empty";
 					flags=4;
@@ -1199,13 +1207,14 @@ class Mission
 					dataType="Object";
 					class PositionInfo
 					{
-						position[]={1568.6252,36.734703,8649.6348};
-						angles[]={-0,2.3531749,0};
+						position[]={1570.0002,36.734703,8648.1348};
+						angles[]={0,2.3531749,0};
 					};
 					side="West";
 					flags=6;
 					class Attributes
 					{
+						name="drone";
 					};
 					id=300;
 					type="USAF_MQ9";
@@ -1224,7 +1233,20 @@ class Mission
 								};
 							};
 						};
-						nAttributes=1;
+						class Attribute1
+						{
+							property="armatak_attribute_marker_type";
+							expression="_this setVariable ['armatak_attribute_marker_type',_value]";
+							class Value
+							{
+								class data
+								{
+									singleType="STRING";
+									value="a-f-A-M-F-Q-A";
+								};
+							};
+						};
+						nAttributes=2;
 					};
 				};
 				class Item4
@@ -1232,8 +1254,8 @@ class Mission
 					dataType="Object";
 					class PositionInfo
 					{
-						position[]={1408.625,37.66856,8486.373};
-						angles[]={-0,1.6751986,6.2812018};
+						position[]={1407.0162,37.665756,8483.873};
+						angles[]={-0,2.103467,0};
 					};
 					side="Empty";
 					flags=4;
@@ -1243,7 +1265,7 @@ class Mission
 					};
 					id=332;
 					type="RHS_UH60M";
-					atlOffset=1.1444092e-05;
+					atlOffset=-4.9591064e-05;
 					class CustomAttributes
 					{
 						class Attribute0
@@ -1264,7 +1286,7 @@ class Mission
 				};
 			};
 			id=246;
-			atlOffset=0.0030403137;
+			atlOffset=0.0016326904;
 		};
 		class Item16
 		{
@@ -1290,8 +1312,8 @@ class Mission
 					dataType="Object";
 					class PositionInfo
 					{
-						position[]={1480.4822,36.753468,8589.7246};
-						angles[]={6.2691903,2.4165227,0.0099949092};
+						position[]={1480.8572,36.755463,8589.5996};
+						angles[]={6.2691875,2.4165306,0.010000736};
 					};
 					side="Empty";
 					flags=4;
@@ -1303,14 +1325,45 @@ class Mission
 					};
 					id=251;
 					type="rhsusf_m1165a1_gmv_m134d_m240_socom_d";
+					atlOffset=-3.8146973e-06;
+					class CustomAttributes
+					{
+						class Attribute0
+						{
+							property="armatak_attribute_marker_callsign";
+							expression="_this setVariable ['armatak_attribute_marker_callsign',_value]";
+							class Value
+							{
+								class data
+								{
+									singleType="STRING";
+									value="Humvee Two";
+								};
+							};
+						};
+						class Attribute1
+						{
+							property="armatak_attribute_marker_type";
+							expression="_this setVariable ['armatak_attribute_marker_type',_value]";
+							class Value
+							{
+								class data
+								{
+									singleType="STRING";
+									value="a-f-G-E-V-A";
+								};
+							};
+						};
+						nAttributes=2;
+					};
 				};
 				class Item2
 				{
 					dataType="Object";
 					class PositionInfo
 					{
-						position[]={1483.5,36.528362,8564.375};
-						angles[]={-0,0.39067793,0};
+						position[]={1483.25,36.528362,8564.875};
+						angles[]={0,0.3906745,0};
 					};
 					side="Empty";
 					flags=4;
@@ -1319,6 +1372,49 @@ class Mission
 					};
 					id=249;
 					type="rhsusf_mrzr4_d";
+					class CustomAttributes
+					{
+						class Attribute0
+						{
+							property="armatak_attribute_marker_callsign";
+							expression="_this setVariable ['armatak_attribute_marker_callsign',_value]";
+							class Value
+							{
+								class data
+								{
+									singleType="STRING";
+									value="Tactical";
+								};
+							};
+						};
+						class Attribute1
+						{
+							property="rhs_define_mainset";
+							expression="_this setVariable ['rhs_define_mainset', _value];";
+							class Value
+							{
+								class data
+								{
+									singleType="STRING";
+									value="ODA_MRZR_D";
+								};
+							};
+						};
+						class Attribute2
+						{
+							property="armatak_attribute_marker_type";
+							expression="_this setVariable ['armatak_attribute_marker_type',_value]";
+							class Value
+							{
+								class data
+								{
+									singleType="STRING";
+									value="a-f-G-E-V";
+								};
+							};
+						};
+						nAttributes=3;
+					};
 				};
 				class Item3
 				{
@@ -1326,7 +1422,7 @@ class Mission
 					class PositionInfo
 					{
 						position[]={1472.4141,36.542938,8575.8096};
-						angles[]={0.039980642,1.3534718,6.2571888};
+						angles[]={0.039985489,1.3534678,6.2571802};
 					};
 					side="Empty";
 					flags=4;
@@ -1335,14 +1431,44 @@ class Mission
 					};
 					id=308;
 					type="UK3CB_ADC_C_Hilux_Civ_Closed";
+					class CustomAttributes
+					{
+						class Attribute0
+						{
+							property="armatak_attribute_marker_callsign";
+							expression="_this setVariable ['armatak_attribute_marker_callsign',_value]";
+							class Value
+							{
+								class data
+								{
+									singleType="STRING";
+									value="Hilux (cov)";
+								};
+							};
+						};
+						class Attribute1
+						{
+							property="armatak_attribute_marker_type";
+							expression="_this setVariable ['armatak_attribute_marker_type',_value]";
+							class Value
+							{
+								class data
+								{
+									singleType="STRING";
+									value="a-f-G-E-V-C-J";
+								};
+							};
+						};
+						nAttributes=2;
+					};
 				};
 				class Item4
 				{
 					dataType="Object";
 					class PositionInfo
 					{
-						position[]={1477.2531,36.461895,8569};
-						angles[]={-0,0.83752638,6.2812018};
+						position[]={1476.8781,36.46769,8570.625};
+						angles[]={6.2751913,1.3199053,6.2811952};
 					};
 					side="Empty";
 					flags=4;
@@ -1351,15 +1477,44 @@ class Mission
 					};
 					id=311;
 					type="UK3CB_MEC_C_Hilux_Civ_Open";
-					atlOffset=3.8146973e-06;
+					class CustomAttributes
+					{
+						class Attribute0
+						{
+							property="armatak_attribute_marker_type";
+							expression="_this setVariable ['armatak_attribute_marker_type',_value]";
+							class Value
+							{
+								class data
+								{
+									singleType="STRING";
+									value="a-f-G-E-V-C-J";
+								};
+							};
+						};
+						class Attribute1
+						{
+							property="armatak_attribute_marker_callsign";
+							expression="_this setVariable ['armatak_attribute_marker_callsign',_value]";
+							class Value
+							{
+								class data
+								{
+									singleType="STRING";
+									value="Hilux";
+								};
+							};
+						};
+						nAttributes=2;
+					};
 				};
 				class Item5
 				{
 					dataType="Object";
 					class PositionInfo
 					{
-						position[]={1475.0071,36.692535,8584.2754};
-						angles[]={0.013999403,2.4036732,0.037981652};
+						position[]={1475.0071,36.701286,8583.6504};
+						angles[]={0.01399754,2.1019697,0.037978366};
 					};
 					side="Empty";
 					flags=4;
@@ -1371,10 +1526,40 @@ class Mission
 					};
 					id=262;
 					type="rhsusf_m1165a1_gmv_m2_m240_socom_d";
+					class CustomAttributes
+					{
+						class Attribute0
+						{
+							property="armatak_attribute_marker_callsign";
+							expression="_this setVariable ['armatak_attribute_marker_callsign',_value]";
+							class Value
+							{
+								class data
+								{
+									singleType="STRING";
+									value="Humvee One";
+								};
+							};
+						};
+						class Attribute1
+						{
+							property="armatak_attribute_marker_type";
+							expression="_this setVariable ['armatak_attribute_marker_type',_value]";
+							class Value
+							{
+								class data
+								{
+									singleType="STRING";
+									value="a-f-G-E-V-A";
+								};
+							};
+						};
+						nAttributes=2;
+					};
 				};
 			};
 			id=247;
-			atlOffset=-0.0275383;
+			atlOffset=-0.021873474;
 		};
 		class Item17
 		{
@@ -1382,7 +1567,7 @@ class Mission
 			class PositionInfo
 			{
 				position[]={1492,38.926804,8564.25};
-				angles[]={-0,0.73944491,0};
+				angles[]={0,0.73944491,0};
 			};
 			side="Empty";
 			flags=4;
@@ -1459,7 +1644,7 @@ class Mission
 					class PositionInfo
 					{
 						position[]={1487.6989,34.951439,8580.4268};
-						angles[]={-0,1.9522519,0};
+						angles[]={0,1.9522519,0};
 					};
 					side="West";
 					flags=4;
@@ -1585,7 +1770,7 @@ class Mission
 					class PositionInfo
 					{
 						position[]={1488.6727,34.951439,8578.5332};
-						angles[]={-0,2.0228157,0};
+						angles[]={0,2.0228157,0};
 					};
 					side="West";
 					flags=4;
@@ -1712,7 +1897,7 @@ class Mission
 					class PositionInfo
 					{
 						position[]={1489,34.951439,8577.1748};
-						angles[]={-0,1.9523218,0};
+						angles[]={0,1.9523218,0};
 					};
 					side="West";
 					flags=6;
@@ -1840,7 +2025,7 @@ class Mission
 					class PositionInfo
 					{
 						position[]={1486.9681,34.951439,8576.8232};
-						angles[]={-0,1.9793394,0};
+						angles[]={0,1.9793394,0};
 					};
 					side="West";
 					flags=4;
@@ -2093,7 +2278,7 @@ class Mission
 					class PositionInfo
 					{
 						position[]={1485.0382,34.951439,8576.2422};
-						angles[]={-0,1.750649,0};
+						angles[]={0,1.750649,0};
 					};
 					side="West";
 					flags=4;
@@ -2691,12 +2876,13 @@ class Mission
 					class PositionInfo
 					{
 						position[]={1569.916,34.951439,8648.6592};
-						angles[]={-0,2.3531749,0};
+						angles[]={0,2.3531749,0};
 					};
 					side="West";
 					flags=6;
 					class Attributes
 					{
+						name="droneD";
 					};
 					id=301;
 					type="B_UAV_AI";
@@ -2707,12 +2893,13 @@ class Mission
 					class PositionInfo
 					{
 						position[]={1569.9163,36.736141,8648.0439};
-						angles[]={-0,2.3531749,0};
+						angles[]={0,2.3531749,0};
 					};
 					side="West";
 					flags=4;
 					class Attributes
 					{
+						name="droneG";
 					};
 					id=302;
 					type="B_UAV_AI";
@@ -2777,8 +2964,8 @@ class Mission
 			dataType="Object";
 			class PositionInfo
 			{
-				position[]={1554,34.942863,8657.2021};
-				angles[]={-0,1.8341188,6.2812018};
+				position[]={1554.5,34.941864,8657.8271};
+				angles[]={0,1.6751857,6.2812018};
 			};
 			side="Empty";
 			flags=4;
@@ -2788,6 +2975,243 @@ class Mission
 			id=318;
 			type="USAF_missileCart_W_AGM114";
 			atlOffset=3.8146973e-06;
+		};
+		class Item25
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={1561.75,34.940861,8665.8271};
+				angles[]={0,2.8105388,0};
+			};
+			side="Empty";
+			flags=4;
+			class Attributes
+			{
+			};
+			id=352;
+			type="USAF_missileCart_W_AGM114";
+		};
+		class Item26
+		{
+			dataType="Logic";
+			class PositionInfo
+			{
+				position[]={1509.8149,34.950001,8571.6172};
+			};
+			id=353;
+			type="armatak_server_coreModule";
+			class CustomAttributes
+			{
+				class Attribute0
+				{
+					property="armatak_server_moduleInstanceAddress";
+					expression="_this setVariable ['armatak_server_moduleInstanceAddress',_value,true];";
+					class Value
+					{
+						class data
+						{
+							singleType="STRING";
+							value="192.168.15.100";
+						};
+					};
+				};
+				class Attribute1
+				{
+					property="armatak_server_moduleInstancePort";
+					expression="_this setVariable ['armatak_server_moduleInstancePort',_value,true];";
+					class Value
+					{
+						class data
+						{
+							singleType="SCALAR";
+							value=8088;
+						};
+					};
+				};
+				nAttributes=2;
+			};
+		};
+	};
+	class Connections
+	{
+		class LinkIDProvider
+		{
+			nextID=17;
+		};
+		class Links
+		{
+			items=17;
+			class Item0
+			{
+				linkID=0;
+				item0=276;
+				item1=353;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item1
+			{
+				linkID=1;
+				item0=280;
+				item1=353;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item2
+			{
+				linkID=2;
+				item0=281;
+				item1=353;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item3
+			{
+				linkID=3;
+				item0=282;
+				item1=353;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item4
+			{
+				linkID=4;
+				item0=285;
+				item1=353;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item5
+			{
+				linkID=5;
+				item0=334;
+				item1=353;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item6
+			{
+				linkID=6;
+				item0=290;
+				item1=353;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item7
+			{
+				linkID=7;
+				item0=292;
+				item1=353;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item8
+			{
+				linkID=8;
+				item0=333;
+				item1=353;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item9
+			{
+				linkID=9;
+				item0=25;
+				item1=353;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item10
+			{
+				linkID=10;
+				item0=249;
+				item1=353;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item11
+			{
+				linkID=11;
+				item0=311;
+				item1=353;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item12
+			{
+				linkID=12;
+				item0=308;
+				item1=353;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item13
+			{
+				linkID=13;
+				item0=262;
+				item1=353;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item14
+			{
+				linkID=14;
+				item0=251;
+				item1=353;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item15
+			{
+				linkID=15;
+				item0=254;
+				item1=353;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item16
+			{
+				linkID=16;
+				item0=332;
+				item1=353;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
 		};
 	};
 };
