@@ -12,7 +12,7 @@ class EditorData
 	};
 	class ItemIDProvider
 	{
-		nextID=354;
+		nextID=355;
 	};
 	class MarkerIDProvider
 	{
@@ -20,14 +20,14 @@ class EditorData
 	};
 	class LayerIndexProvider
 	{
-		nextID=75;
+		nextID=79;
 	};
 	class Camera
 	{
-		pos[]={1392.063,137.14996,8696.5303};
-		dir[]={0.58758837,-0.5864141,-0.55767131};
-		up[]={0.42534733,0.81000799,-0.4036912};
-		aside[]={-0.6884532,-1.3827957e-06,-0.72539026};
+		pos[]={1427.6471,54.324188,8469.5264};
+		dir[]={0.64649278,-0.34839991,0.67889321};
+		up[]={0.24029902,0.93728733,0.2523421};
+		aside[]={0.72428429,1.3501558e-06,-0.68972617};
 	};
 };
 binarizationWanted=0;
@@ -67,13 +67,14 @@ addons[]=
 	"ace_compat_rhs_usf3_nightvision",
 	"A3_Characters_F_Common",
 	"UK3CB_Factions_ANA",
-	"USAF_Missilebox_C"
+	"USAF_Missilebox_C",
+	"armatak_server"
 };
 class AddonsMetaData
 {
 	class List
 	{
-		items=30;
+		items=31;
 		class Item0
 		{
 			className="A3_Ui_F";
@@ -279,6 +280,13 @@ class AddonsMetaData
 			className="USAF_Missilebox_C";
 			name="USAF_Missilebox_C";
 			author="USAF Mod Team";
+		};
+		class Item30
+		{
+			className="armatak_server";
+			name="ARMATAK - TCP Socket Client";
+			author="Valmo Trindade";
+			url="https://github.com/valmojr/armatak";
 		};
 	};
 };
@@ -587,7 +595,7 @@ class Mission
 	};
 	class Entities
 	{
-		items=26;
+		items=27;
 		class Item0
 		{
 			dataType="Marker";
@@ -1183,8 +1191,8 @@ class Mission
 					dataType="Object";
 					class PositionInfo
 					{
-						position[]={1515.5,36.96347,8587.375};
-						angles[]={0,3.0223126,0};
+						position[]={1515.625,36.96347,8585.375};
+						angles[]={-0,3.0223126,0};
 					};
 					side="Empty";
 					flags=4;
@@ -1304,8 +1312,8 @@ class Mission
 					dataType="Object";
 					class PositionInfo
 					{
-						position[]={1480.8572,36.755463,8589.5996};
-						angles[]={6.2691875,2.4165306,0.010000736};
+						position[]={1480.9822,36.747959,8588.8496};
+						angles[]={-0,2.3539977,6.2791886};
 					};
 					side="Empty";
 					flags=4;
@@ -1317,7 +1325,6 @@ class Mission
 					};
 					id=251;
 					type="rhsusf_m1165a1_gmv_m134d_m240_socom_d";
-					atlOffset=-3.8146973e-06;
 					class CustomAttributes
 					{
 						class Attribute0
@@ -1505,8 +1512,8 @@ class Mission
 					dataType="Object";
 					class PositionInfo
 					{
-						position[]={1475.0071,36.701286,8583.6504};
-						angles[]={0.01399754,2.1019697,0.037978366};
+						position[]={1475.1321,36.704281,8583.4004};
+						angles[]={0.013999403,2.1019697,6.2791886};
 					};
 					side="Empty";
 					flags=4;
@@ -1551,7 +1558,7 @@ class Mission
 				};
 			};
 			id=247;
-			atlOffset=-0.021873474;
+			atlOffset=-0.020832062;
 		};
 		class Item17
 		{
@@ -2983,6 +2990,237 @@ class Mission
 			};
 			id=352;
 			type="USAF_missileCart_W_AGM114";
+		};
+		class Item26
+		{
+			dataType="Logic";
+			class PositionInfo
+			{
+				position[]={1504.262,34.950001,8574.2246};
+			};
+			id=354;
+			type="armatak_server_coreModule";
+			class CustomAttributes
+			{
+				class Attribute0
+				{
+					property="armatak_server_moduleInstanceAddress";
+					expression="_this setVariable ['armatak_server_moduleInstanceAddress',_value,true];";
+					class Value
+					{
+						class data
+						{
+							singleType="STRING";
+							value="192.168.15.100";
+						};
+					};
+				};
+				class Attribute1
+				{
+					property="armatak_server_moduleInstancePort";
+					expression="_this setVariable ['armatak_server_moduleInstancePort',_value,true];";
+					class Value
+					{
+						class data
+						{
+							singleType="SCALAR";
+							value=8088;
+						};
+					};
+				};
+				nAttributes=2;
+			};
+		};
+	};
+	class Connections
+	{
+		class LinkIDProvider
+		{
+			nextID=18;
+		};
+		class Links
+		{
+			items=18;
+			class Item0
+			{
+				linkID=0;
+				item0=25;
+				item1=354;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item1
+			{
+				linkID=1;
+				item0=276;
+				item1=354;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item2
+			{
+				linkID=2;
+				item0=280;
+				item1=354;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item3
+			{
+				linkID=3;
+				item0=281;
+				item1=354;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item4
+			{
+				linkID=4;
+				item0=282;
+				item1=354;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item5
+			{
+				linkID=5;
+				item0=285;
+				item1=354;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item6
+			{
+				linkID=6;
+				item0=334;
+				item1=354;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item7
+			{
+				linkID=7;
+				item0=290;
+				item1=354;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item8
+			{
+				linkID=8;
+				item0=292;
+				item1=354;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item9
+			{
+				linkID=9;
+				item0=333;
+				item1=354;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item10
+			{
+				linkID=10;
+				item0=249;
+				item1=354;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item11
+			{
+				linkID=11;
+				item0=311;
+				item1=354;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item12
+			{
+				linkID=12;
+				item0=308;
+				item1=354;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item13
+			{
+				linkID=13;
+				item0=262;
+				item1=354;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item14
+			{
+				linkID=14;
+				item0=251;
+				item1=354;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item15
+			{
+				linkID=15;
+				item0=254;
+				item1=354;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item16
+			{
+				linkID=16;
+				item0=332;
+				item1=354;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item17
+			{
+				linkID=17;
+				item0=300;
+				item1=354;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
 		};
 	};
 };
