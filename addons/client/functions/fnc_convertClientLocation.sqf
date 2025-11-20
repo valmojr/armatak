@@ -77,6 +77,9 @@ switch (toLower worldName) do {
 	case "tanoa": {
 		_realLocation = _position call armatak_fnc_convert_to_tanoa;
 	};
+	case "zagor_zagorsk_reserved_forest": {
+		_realLocation = _position call armatak_fnc_convert_to_zagor_zagorsk_reserved_forest;
+	};
 	default {
 		_warning = format ["<t color='#FF8021'>ARMATAK</t><br/> %1", "Unsupported Map"];
 		[[_warning, 1.5]] call CBA_fnc_notify;
