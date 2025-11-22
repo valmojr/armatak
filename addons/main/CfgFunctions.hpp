@@ -86,6 +86,9 @@ class CfgFunctions {
 			class convert_to_vr {
 				file = "\armatak\armatak\addons\main\functions\map\fn_convert_to_vr.sqf";
 			};
+			class convert_to_zagor_zagorsk_reserved_forest {
+				file = "\armatak\armatak\addons\main\functions\map\fn_convert_to_zagor_zagorsk_reserved_forest.sqf";
+			};
 		};
 	};
 };
