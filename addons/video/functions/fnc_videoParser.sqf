@@ -29,7 +29,7 @@ if (isServer) exitWith {
 
 			_role = [_role] call BIS_fnc_filterString;
 			_name = [_name] call BIS_fnc_filterString; 
-			
+
 			_stream_path = _name + "_" + _role + "_" + _uuid_short; 
 
 			armatak_mediamtx_video_stream_instance_address = GETMVAR(instance_address,false);
@@ -64,6 +64,7 @@ if (isServer) exitWith {
 			GETVAR((this select 0),GVAR(isStreaming),false)
 		}
 	] call ace_interact_menu_fnc_createAction;
+
 	[
 		"Man",
 		1,
