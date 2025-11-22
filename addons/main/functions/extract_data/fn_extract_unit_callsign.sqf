@@ -16,6 +16,10 @@ if (roleDescription _unit != "") then {
 	};
 };
 
+if (side _unit == east) then {
+	_callsign = getText (configOf _unit >> "displayName");
+};
+
 armatak_attribute_unit_callsign = _unit getVariable "armatak_attribute_unit_callsign";
 
 if (!isNil "armatak_attribute_unit_callsign" or armatak_attribute_unit_callsign != '') then {

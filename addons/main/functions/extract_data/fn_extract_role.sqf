@@ -7,8 +7,13 @@ params["_unit"];
 private _affiliation = "f";
 private _type = "G";
 private _role = "a-f-G-U-C-I";
- 
-switch (str side _unit) do {
+private _side = side _unit;
+
+if (isNil {_unit getVariable "armatak_current_side"}) then {
+	_side = _unit getVariable "armatak_current_side";	
+};
+
+switch (str _side) do {
 	case "WEST": {
 		_affiliation = "f";
 	};
