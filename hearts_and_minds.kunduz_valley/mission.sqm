@@ -5,14 +5,14 @@ class EditorData
 	angleGridStep=0.2617994;
 	scaleGridStep=1;
 	autoGroupingDist=10;
-	toggles=517;
+	toggles=5;
 	mods[]=
 	{
 		"3denEnhanced"
 	};
 	class ItemIDProvider
 	{
-		nextID=355;
+		nextID=383;
 	};
 	class MarkerIDProvider
 	{
@@ -20,14 +20,14 @@ class EditorData
 	};
 	class LayerIndexProvider
 	{
-		nextID=79;
+		nextID=99;
 	};
 	class Camera
 	{
-		pos[]={1427.6471,54.324188,8469.5264};
-		dir[]={0.64649278,-0.34839991,0.67889321};
-		up[]={0.24029902,0.93728733,0.2523421};
-		aside[]={0.72428429,1.3501558e-06,-0.68972617};
+		pos[]={1526.35,50.097446,8554.6211};
+		dir[]={0.62874627,-0.42391562,0.65195101};
+		up[]={0.29428488,0.90569556,0.30514583};
+		aside[]={0.71983123,-6.040209e-07,-0.69420224};
 	};
 };
 binarizationWanted=0;
@@ -68,13 +68,15 @@ addons[]=
 	"A3_Characters_F_Common",
 	"UK3CB_Factions_ANA",
 	"USAF_Missilebox_C",
-	"armatak_server"
+	"armatak_server",
+	"rhsusf_c_f22",
+	"UK3CB_Factions_AAF_O"
 };
 class AddonsMetaData
 {
 	class List
 	{
-		items=31;
+		items=33;
 		class Item0
 		{
 			className="A3_Ui_F";
@@ -287,6 +289,20 @@ class AddonsMetaData
 			name="ARMATAK - TCP Socket Client";
 			author="Valmo Trindade";
 			url="https://github.com/valmojr/armatak";
+		};
+		class Item31
+		{
+			className="rhsusf_c_f22";
+			name="F-22 Fighter";
+			author="Red Hammer Studios";
+			url="http://www.rhsmods.org/";
+		};
+		class Item32
+		{
+			className="UK3CB_Factions_AAF";
+			name="3CB Factions - AAF";
+			author="3 Commando Brigade";
+			url="www.3commandobrigade.com";
 		};
 	};
 };
@@ -595,7 +611,7 @@ class Mission
 	};
 	class Entities
 	{
-		items=27;
+		items=30;
 		class Item0
 		{
 			dataType="Marker";
@@ -985,7 +1001,7 @@ class Mission
 			dataType="Logic";
 			class PositionInfo
 			{
-				position[]={1601.5,35.030731,8561};
+				position[]={1598.375,35.030731,8558.125};
 				angles[]={0,0.278355,0};
 			};
 			name="btc_hc_1";
@@ -1112,7 +1128,7 @@ class Mission
 			dataType="Logic";
 			class PositionInfo
 			{
-				position[]={1596.125,35.030731,8566.375};
+				position[]={1591.875,35.030731,8563.5};
 				angles[]={0,0.278355,0};
 			};
 			name="btc_hc_2";
@@ -1125,7 +1141,7 @@ class Mission
 			dataType="Logic";
 			class PositionInfo
 			{
-				position[]={1589.75,35.030731,8572.625};
+				position[]={1586.625,35.030731,8569.75};
 				angles[]={0,0.278355,0};
 			};
 			name="btc_hc_3";
@@ -1145,20 +1161,21 @@ class Mission
 					dataType="Comment";
 					class PositionInfo
 					{
-						position[]={1547.625,34.976501,8657.125};
-						angles[]={6.2751846,0.50630301,6.2791886};
+						position[]={1528.75,35.018997,8639.875};
+						angles[]={6.269186,0.50630301,6.2651882};
 					};
 					title="Add respawnable vehicles to this layer";
 					description="Add all vehicles that should automatically respawn to ""btc_veh_respawnable"" layer. If a vehicle should NOT automatically respawn, add it to the layer named ""btc_vehicles"".";
 					id=237;
+					atlOffset=-3.8146973e-06;
 				};
 				class Item1
 				{
 					dataType="Object";
 					class PositionInfo
 					{
-						position[]={1422.625,38.678284,8501.6553};
-						angles[]={0,1.9192863,0};
+						position[]={1421.375,38.678284,8502.0303};
+						angles[]={0,1.688411,0};
 					};
 					side="Empty";
 					flags=4;
@@ -1191,8 +1208,8 @@ class Mission
 					dataType="Object";
 					class PositionInfo
 					{
-						position[]={1515.625,36.96347,8585.375};
-						angles[]={-0,3.0223126,0};
+						position[]={1515.75,36.96347,8589.25};
+						angles[]={0,3.0223126,0};
 					};
 					side="Empty";
 					flags=4;
@@ -1207,7 +1224,7 @@ class Mission
 					dataType="Object";
 					class PositionInfo
 					{
-						position[]={1570.0002,36.734703,8648.1348};
+						position[]={1550.6252,36.734703,8630.5098};
 						angles[]={0,2.3531749,0};
 					};
 					side="West";
@@ -1254,8 +1271,8 @@ class Mission
 					dataType="Object";
 					class PositionInfo
 					{
-						position[]={1407.0162,37.665756,8483.873};
-						angles[]={0,2.103467,0};
+						position[]={1406.375,37.665806,8484.373};
+						angles[]={0,1.8468609,0};
 					};
 					side="Empty";
 					flags=4;
@@ -1265,7 +1282,6 @@ class Mission
 					};
 					id=332;
 					type="RHS_UH60M";
-					atlOffset=-4.9591064e-05;
 					class CustomAttributes
 					{
 						class Attribute0
@@ -1286,7 +1302,7 @@ class Mission
 				};
 			};
 			id=246;
-			atlOffset=0.0016326904;
+			atlOffset=0.0043144226;
 		};
 		class Item16
 		{
@@ -1313,7 +1329,7 @@ class Mission
 					class PositionInfo
 					{
 						position[]={1480.9822,36.747959,8588.8496};
-						angles[]={-0,2.3539977,6.2791886};
+						angles[]={0,2.3539977,6.2791886};
 					};
 					side="Empty";
 					flags=4;
@@ -1325,6 +1341,7 @@ class Mission
 					};
 					id=251;
 					type="rhsusf_m1165a1_gmv_m134d_m240_socom_d";
+					atlOffset=-0.00034713745;
 					class CustomAttributes
 					{
 						class Attribute0
@@ -1420,8 +1437,8 @@ class Mission
 					dataType="Object";
 					class PositionInfo
 					{
-						position[]={1472.4141,36.542938,8575.8096};
-						angles[]={0.039985489,1.3534678,6.2571802};
+						position[]={1472.7891,36.54818,8575.4346};
+						angles[]={0.039980642,1.23142,6.2571888};
 					};
 					side="Empty";
 					flags=4;
@@ -1466,8 +1483,8 @@ class Mission
 					dataType="Object";
 					class PositionInfo
 					{
-						position[]={1476.8781,36.46769,8570.625};
-						angles[]={6.2751913,1.3199053,6.2811952};
+						position[]={1477.6281,36.464088,8570.3623};
+						angles[]={6.2751846,1.1539831,6.2812018};
 					};
 					side="Empty";
 					flags=4;
@@ -1558,7 +1575,7 @@ class Mission
 				};
 			};
 			id=247;
-			atlOffset=-0.020832062;
+			atlOffset=-0.019428253;
 		};
 		class Item17
 		{
@@ -2963,8 +2980,8 @@ class Mission
 			dataType="Object";
 			class PositionInfo
 			{
-				position[]={1554.5,34.941864,8657.8271};
-				angles[]={0,1.6751857,6.2812018};
+				position[]={1540,34.940861,8634.3271};
+				angles[]={0,1.6751857,0};
 			};
 			side="Empty";
 			flags=4;
@@ -2973,14 +2990,13 @@ class Mission
 			};
 			id=318;
 			type="USAF_missileCart_W_AGM114";
-			atlOffset=3.8146973e-06;
 		};
 		class Item25
 		{
 			dataType="Object";
 			class PositionInfo
 			{
-				position[]={1561.75,34.940861,8665.8271};
+				position[]={1547.375,34.940861,8641.4521};
 				angles[]={0,2.8105388,0};
 			};
 			side="Empty";
@@ -3031,16 +3047,108 @@ class Mission
 				nAttributes=2;
 			};
 		};
+		class Item27
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={1095.2677,37.478516,8118.457};
+				angles[]={0,0.76759189,0};
+			};
+			side="Empty";
+			flags=4;
+			class Attributes
+			{
+				reportRemoteTargets=1;
+				receiveRemoteTargets=1;
+				reportOwnPosition=1;
+			};
+			id=370;
+			type="rhsusf_f22";
+		};
+		class Item28
+		{
+			dataType="Group";
+			side="East";
+			class Entities
+			{
+				items=1;
+				class Item0
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={8061.8062,16.639235,-1295.1194};
+					};
+					side="East";
+					flags=6;
+					class Attributes
+					{
+						name="test_iniD";
+					};
+					id=376;
+					type="UK3CB_AAF_O_JET_PILOT";
+					atlOffset=3.8146973e-06;
+				};
+			};
+			class Attributes
+			{
+			};
+			class CrewLinks
+			{
+				class LinkIDProvider
+				{
+					nextID=1;
+				};
+				class Links
+				{
+					items=1;
+					class Item0
+					{
+						linkID=0;
+						item0=376;
+						item1=375;
+						class CustomData
+						{
+							role=1;
+						};
+					};
+				};
+			};
+			id=374;
+			atlOffset=375.134;
+		};
+		class Item29
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={8061.7354,393.99066,-1295.1617};
+			};
+			side="East";
+			flags=2;
+			class Attributes
+			{
+				ammo=0;
+				name="test_ini";
+				reportRemoteTargets=1;
+				receiveRemoteTargets=1;
+				reportOwnPosition=1;
+			};
+			id=375;
+			type="UK3CB_AAF_O_MIG29S";
+			atlOffset=375.134;
+		};
 	};
 	class Connections
 	{
 		class LinkIDProvider
 		{
-			nextID=18;
+			nextID=19;
 		};
 		class Links
 		{
-			items=18;
+			items=19;
 			class Item0
 			{
 				linkID=0;
@@ -3216,6 +3324,16 @@ class Mission
 				linkID=17;
 				item0=300;
 				item1=354;
+				class CustomData
+				{
+					type="Sync";
+				};
+			};
+			class Item18
+			{
+				linkID=18;
+				item0=354;
+				item1=370;
 				class CustomData
 				{
 					type="Sync";
