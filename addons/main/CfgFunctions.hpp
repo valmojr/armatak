@@ -10,6 +10,9 @@ class CfgFunctions {
 			class send_group_cots {
 				file = "\armatak\armatak\addons\main\functions\api\fn_send_group_cots.sqf";
 			};
+			class send_enemy_cot {
+				file = "\armatak\armatak\addons\main\functions\api\fn_send_enemy_cot.sqf";
+			};
 			class send_eud_cot {
 				file = "\armatak\armatak\addons\main\functions\api\fn_send_eud_cot.sqf";
 			};
@@ -30,6 +33,9 @@ class CfgFunctions {
 			};
 			class extract_role {
 				file = "\armatak\armatak\addons\main\functions\extract_data\fn_extract_role.sqf";
+			};
+			class extract_sensor_data {
+				file = "\armatak\armatak\addons\main\functions\extract_data\fn_extract_sensor_data.sqf";
 			};
 			class extract_unit_callsign {
 				file = "\armatak\armatak\addons\main\functions\extract_data\fn_extract_unit_callsign.sqf";

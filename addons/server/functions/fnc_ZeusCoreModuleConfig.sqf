@@ -48,6 +48,8 @@ missionNamespace setVariable ["armatak_server_syncedUnits", _syncUnits];
 					_callsign = [_x] call armatak_fnc_extract_marker_callsign;
 
 					[_x, _atak_type, _callsign] call armatak_fnc_send_marker_cot;
+
+					_x call armatak_fnc_extract_sensor_data;
 				};
 				case ((_objectType select 0) == "VehicleAutonomous"): {
 					_atak_type = [_x] call armatak_fnc_extract_role;
@@ -55,6 +57,8 @@ missionNamespace setVariable ["armatak_server_syncedUnits", _syncUnits];
 
 					[_x, _atak_type, _callsign] call armatak_fnc_send_drone_cot;
 					[_x] call armatak_fnc_send_digital_pointer_cot;
+
+					_x call armatak_fnc_extract_sensor_data;
 				};
 			};
 		} forEach GVAR(syncedUnits);
