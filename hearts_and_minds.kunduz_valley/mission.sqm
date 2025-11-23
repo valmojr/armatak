@@ -20,14 +20,14 @@ class EditorData
 	};
 	class LayerIndexProvider
 	{
-		nextID=99;
+		nextID=105;
 	};
 	class Camera
 	{
-		pos[]={1526.35,50.097446,8554.6211};
-		dir[]={0.62874627,-0.42391562,0.65195101};
-		up[]={0.29428488,0.90569556,0.30514583};
-		aside[]={0.71983123,-6.040209e-07,-0.69420224};
+		pos[]={1565.7075,39.971188,8641.0283};
+		dir[]={0.52038604,-0.352548,0.77781516};
+		up[]={0.19604866,0.93577987,0.29303023};
+		aside[]={0.83117664,8.806237e-07,-0.55608439};
 	};
 };
 binarizationWanted=0;
@@ -331,6 +331,18 @@ class CustomAttributes
 		name="Multiplayer";
 		class Attribute0
 		{
+			property="RespawnTemplates";
+			expression="true";
+			class Value
+			{
+				class data
+				{
+					singleType="ARRAY";
+				};
+			};
+		};
+		class Attribute1
+		{
 			property="RespawnButton";
 			expression="true";
 			class Value
@@ -339,18 +351,6 @@ class CustomAttributes
 				{
 					singleType="SCALAR";
 					value=1;
-				};
-			};
-		};
-		class Attribute1
-		{
-			property="RespawnTemplates";
-			expression="true";
-			class Value
-			{
-				class data
-				{
-					singleType="ARRAY";
 				};
 			};
 		};
@@ -1239,19 +1239,6 @@ class Mission
 					{
 						class Attribute0
 						{
-							property="armatak_attribute_marker_type";
-							expression="_this setVariable ['armatak_attribute_marker_type',_value]";
-							class Value
-							{
-								class data
-								{
-									singleType="STRING";
-									value="a-f-A-M-F-Q-A";
-								};
-							};
-						};
-						class Attribute1
-						{
 							property="armatak_attribute_marker_callsign";
 							expression="_this setVariable ['armatak_attribute_marker_callsign',_value]";
 							class Value
@@ -1263,6 +1250,19 @@ class Mission
 								};
 							};
 						};
+						class Attribute1
+						{
+							property="armatak_attribute_marker_type";
+							expression="_this setVariable ['armatak_attribute_marker_type',_value]";
+							class Value
+							{
+								class data
+								{
+									singleType="STRING";
+									value="a-f-A-M-F-Q-A";
+								};
+							};
+						};
 						nAttributes=2;
 					};
 				};
@@ -1271,8 +1271,8 @@ class Mission
 					dataType="Object";
 					class PositionInfo
 					{
-						position[]={1406.375,37.665806,8484.373};
-						angles[]={0,1.8468609,0};
+						position[]={1406.375,37.667305,8485.748};
+						angles[]={6.2812018,1.8468609,0};
 					};
 					side="Empty";
 					flags=4;
@@ -1282,6 +1282,7 @@ class Mission
 					};
 					id=332;
 					type="RHS_UH60M";
+					atlOffset=-3.8146973e-06;
 					class CustomAttributes
 					{
 						class Attribute0
@@ -1302,7 +1303,7 @@ class Mission
 				};
 			};
 			id=246;
-			atlOffset=0.0043144226;
+			atlOffset=0.005065918;
 		};
 		class Item16
 		{
@@ -1346,19 +1347,6 @@ class Mission
 					{
 						class Attribute0
 						{
-							property="armatak_attribute_marker_type";
-							expression="_this setVariable ['armatak_attribute_marker_type',_value]";
-							class Value
-							{
-								class data
-								{
-									singleType="STRING";
-									value="a-f-G-E-V-A";
-								};
-							};
-						};
-						class Attribute1
-						{
 							property="armatak_attribute_marker_callsign";
 							expression="_this setVariable ['armatak_attribute_marker_callsign',_value]";
 							class Value
@@ -1367,6 +1355,19 @@ class Mission
 								{
 									singleType="STRING";
 									value="Humvee Two";
+								};
+							};
+						};
+						class Attribute1
+						{
+							property="armatak_attribute_marker_type";
+							expression="_this setVariable ['armatak_attribute_marker_type',_value]";
+							class Value
+							{
+								class data
+								{
+									singleType="STRING";
+									value="a-f-G-E-V-A";
 								};
 							};
 						};
@@ -1451,19 +1452,6 @@ class Mission
 					{
 						class Attribute0
 						{
-							property="armatak_attribute_marker_type";
-							expression="_this setVariable ['armatak_attribute_marker_type',_value]";
-							class Value
-							{
-								class data
-								{
-									singleType="STRING";
-									value="a-f-G-E-V-C-J";
-								};
-							};
-						};
-						class Attribute1
-						{
 							property="armatak_attribute_marker_callsign";
 							expression="_this setVariable ['armatak_attribute_marker_callsign',_value]";
 							class Value
@@ -1472,6 +1460,19 @@ class Mission
 								{
 									singleType="STRING";
 									value="Hilux (cov)";
+								};
+							};
+						};
+						class Attribute1
+						{
+							property="armatak_attribute_marker_type";
+							expression="_this setVariable ['armatak_attribute_marker_type',_value]";
+							class Value
+							{
+								class data
+								{
+									singleType="STRING";
+									value="a-f-G-E-V-C-J";
 								};
 							};
 						};
@@ -1497,19 +1498,6 @@ class Mission
 					{
 						class Attribute0
 						{
-							property="armatak_attribute_marker_callsign";
-							expression="_this setVariable ['armatak_attribute_marker_callsign',_value]";
-							class Value
-							{
-								class data
-								{
-									singleType="STRING";
-									value="Hilux";
-								};
-							};
-						};
-						class Attribute1
-						{
 							property="armatak_attribute_marker_type";
 							expression="_this setVariable ['armatak_attribute_marker_type',_value]";
 							class Value
@@ -1518,6 +1506,19 @@ class Mission
 								{
 									singleType="STRING";
 									value="a-f-G-E-V-C-J";
+								};
+							};
+						};
+						class Attribute1
+						{
+							property="armatak_attribute_marker_callsign";
+							expression="_this setVariable ['armatak_attribute_marker_callsign',_value]";
+							class Value
+							{
+								class data
+								{
+									singleType="STRING";
+									value="Hilux";
 								};
 							};
 						};
@@ -1546,19 +1547,6 @@ class Mission
 					{
 						class Attribute0
 						{
-							property="armatak_attribute_marker_type";
-							expression="_this setVariable ['armatak_attribute_marker_type',_value]";
-							class Value
-							{
-								class data
-								{
-									singleType="STRING";
-									value="a-f-G-E-V-A";
-								};
-							};
-						};
-						class Attribute1
-						{
 							property="armatak_attribute_marker_callsign";
 							expression="_this setVariable ['armatak_attribute_marker_callsign',_value]";
 							class Value
@@ -1567,6 +1555,19 @@ class Mission
 								{
 									singleType="STRING";
 									value="Humvee One";
+								};
+							};
+						};
+						class Attribute1
+						{
+							property="armatak_attribute_marker_type";
+							expression="_this setVariable ['armatak_attribute_marker_type',_value]";
+							class Value
+							{
+								class data
+								{
+									singleType="STRING";
+									value="a-f-G-E-V-A";
 								};
 							};
 						};
@@ -3052,7 +3053,7 @@ class Mission
 			dataType="Object";
 			class PositionInfo
 			{
-				position[]={1095.2677,37.478516,8118.457};
+				position[]={1111.7467,37.478516,8136.6333};
 				angles[]={0,0.76759189,0};
 			};
 			side="Empty";
