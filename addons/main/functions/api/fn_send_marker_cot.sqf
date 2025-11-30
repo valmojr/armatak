@@ -10,4 +10,4 @@ _uuid = _unit call armatak_fnc_extract_uuid;
  
 _marker_cot = [_uuid, _type, _unit_position select 1, _unit_position select 2, _unit_position select 3, _callsign, _unit_position select 5, _unit_position select 6]; 
  
-"armatak" callExtension ["tcp_socket:send_marker_cot", [_marker_cot]]; 
+"armatak" callExtension ["tcp_socket:cot:marker", [_marker_cot]]; 
