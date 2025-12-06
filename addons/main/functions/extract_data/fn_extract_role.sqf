@@ -9,8 +9,10 @@ private _type = "G";
 private _role = "a-f-G-U-C-I";
 private _side = side _unit;
 
-if (isNil {_unit getVariable "armatak_current_side"}) then {
-	_side = _unit getVariable "armatak_current_side";	
+if (isNil {
+	_unit getVariable "armatak_current_side"
+}) then {
+	_side = _unit getVariable "armatak_current_side";
 };
 
 switch (str _side) do {
@@ -27,7 +29,7 @@ switch (str _side) do {
 		_affiliation = "u";
 	};
 	default {
-		_affiliation = "f";
+		_affiliation = "u";
 	};
 };
 
