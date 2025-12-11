@@ -34,7 +34,7 @@ switch (false) do {
 			};
 		} forEach GVAR(syncedUnits);
 
-		missionNmaespace setVariable ["armatak_server_syncedUnits", GVAR(syncedUnits)];
+		missionNamespace setVariable ["armatak_server_syncedUnits", GVAR(syncedUnits)];
 		SETVAR(_unit,GVAR(isRouting),false);
 
 		deleteVehicle _logic;
