@@ -74,6 +74,18 @@ class CfgFunctions {
 			class convert_to_malden {
 				file = "\armatak\armatak\addons\main\functions\map\fn_convert_to_malden.sqf";
 			};
+			class convert_to_malvinas_malvinasfalkands {
+				file = "\armatak\armatak\addons\main\functions\map\fn_convert_to_malvinas_malvinasfalkands.sqf";
+			};
+			class convert_to_malvinas_p_argentino_stanley {
+				file = "\armatak\armatak\addons\main\functions\map\fn_convert_to_malvinas_p_argentino_stanley.sqf";
+			};
+			class convert_to_malvinas_pebble_island_airfield {
+				file = "\armatak\armatak\addons\main\functions\map\fn_convert_to_malvinas_pebble_island_airfield.sqf";
+			};
+			class convert_to_malvinas_top_malo_house {
+				file = "\armatak\armatak\addons\main\functions\map\fn_convert_to_malvinas_top_malo_house.sqf";
+			};
 			class convert_to_southen_sahrani {
 				file = "\armatak\armatak\addons\main\functions\map\fn_convert_to_southen_sahrani.sqf";
 			};

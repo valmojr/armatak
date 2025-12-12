@@ -74,6 +74,21 @@ switch (toLower worldName) do {
 	case "kunduz_valley": {
 		_realLocation = _position call armatak_fnc_convert_to_kunduz_valley;
 	};
+	case "malvinasfalkands": {
+		_realLocation = _position call armatak_fnc_convert_to_malvinas_malvinasfalkands;
+	};
+	case "pebble_island_airfield": {
+		_realLocation = _position call armatak_fnc_convert_to_malvinas_pebble_island_airfield;
+	};
+	case "p_argentino_stanley": {
+		_realLocation = _position call armatak_fnc_convert_to_malvinas_p_argentino_stanley;
+	};
+	case "top_malo_house": {
+		_realLocation = _position call armatak_fnc_convert_to_malvinas_top_malo_house;
+	};
+	case "pradera_ganso": {
+		_realLocation = _position call armatak_fnc_convert_to_malvinas_pradera_ganso;
+	};
 	case "tanoa": {
 		_realLocation = _position call armatak_fnc_convert_to_tanoa;
 	};
