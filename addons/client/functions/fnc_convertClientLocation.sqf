@@ -38,6 +38,9 @@ switch (toLower worldName) do {
 	case "vr": {
 		_realLocation = _position call armatak_fnc_convert_to_vr;
 	};
+	case "lawn": {
+		_realLocation = _position call armatak_fnc_convert_to_lawn;
+	};
 	case "cucui": {
 		_realLocation = _position call armatak_fnc_convert_to_cucui;
 	};
