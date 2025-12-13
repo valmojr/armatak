@@ -86,6 +86,9 @@ class CfgFunctions {
 			class convert_to_malvinas_pebble_island_airfield {
 				file = "\armatak\armatak\addons\main\functions\map\fn_convert_to_malvinas_pebble_island_airfield.sqf";
 			};
+			class convert_to_malvinas_pradera_ganso {
+				file = "\armatak\armatak\addons\main\functions\map\fn_convert_to_malvinas_pradera_ganso.sqf";
+			};
 			class convert_to_malvinas_top_malo_house {
 				file = "\armatak\armatak\addons\main\functions\map\fn_convert_to_malvinas_top_malo_house.sqf";
 			};
