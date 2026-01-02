@@ -116,6 +116,9 @@ class CfgFunctions {
 			class convert_to_colombia {
 				file = "\armatak\armatak\addons\main\functions\map\fn_convert_to_colombia.sqf";
 			};
+			class convert_to_clafghan {
+				file = "\armatak\armatak\addons\main\functions\map\fn_convert_to_clafghan.sqf";
+			};
 		};
 	};
 };
