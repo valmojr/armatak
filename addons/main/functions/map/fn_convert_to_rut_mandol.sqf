@@ -5,14 +5,14 @@ _playerPosition = [_latitude, _longitude, _altitude];
 _playerLatitude = _playerPosition select 0;
 _playerLongitude = _playerPosition select 1;
 
-_playerMaxLatitude = 20480;
-_playerMaxLongitude = 20480;
+_playerMaxLatitude = 32768;
+_playerMaxLongitude = 32768;
 
-_MapMaxLongitude = 33.728772;
-_MapMinLongitude = 33.542815;
+_MapMaxLongitude = 35.285485;
+_MapMinLongitude = 34.927617;
 
-_MapMaxLatitude = 63.169746;
-_MapMinLatitude = 62.938820;
+_MapMaxLatitude = 70.445404;
+_MapMinLatitude = 70.016783;
 
 _LongitudeDifference = _MapMaxLongitude - _MapMinLongitude;
 _LatitudeDifference = _MapMaxLatitude - _MapMinLatitude;

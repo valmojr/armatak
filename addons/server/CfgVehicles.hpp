@@ -4,19 +4,11 @@ class CfgVehicles {
 	{
 		class AttributesBase
 		{
-			class Default;
 			class Edit;
-			class Combo;
-			class Checkbox;
-			class CheckboxNumber;
 			class ModuleDescription;
-			class Units;
 		};
 
-		class ModuleDescription
-		{
-			class AnyBrain;
-		};
+		class ModuleDescription;
 	};
 
 	class GVAR(moduleBase): Module_F {
