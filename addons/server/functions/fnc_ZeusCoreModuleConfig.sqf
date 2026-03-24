@@ -13,15 +13,57 @@ disableSerialization;
 
 ["Connecting to TCP Socket", "success", "TCP Socket"] call EFUNC(main,notify);
 
+_transport_mode = toLower (ctrlText 14006);
 _tak_server_instance_address = ctrlText 14000;
 _tak_server_instance_port = ctrlText 14001;
+_tak_server_tls_name = ctrlText 14002;
+_tak_server_tls_ca_cert_path = ctrlText 14003;
+_tak_server_tls_client_cert_path = ctrlText 14004;
+_tak_server_tls_client_key_path = ctrlText 14005;
+_tak_server_enrollment_port = ctrlText 14007;
+_tak_server_enrollment_username = ctrlText 14008;
+_tak_server_enrollment_password = ctrlText 14009;
+_tak_server_enrollment_client_uid = ctrlText 14010;
 
 _tak_server_fulladdress = ((_tak_server_instance_address) + ":" + (_tak_server_instance_port));
 
 missionNamespace setVariable ["armatak_server_instance", _tak_server_fulladdress];
 missionNamespace setVariable ["armatak_tcp_socket_is_running", true];
 
-"armatak" callExtension ["tcp_socket:start", [_tak_server_fulladdress]];
+if (_tak_server_tls_name == "") then {
+	_tak_server_tls_name = _tak_server_instance_address;
+};
+
+switch (_transport_mode) do {
+	case "manual_mtls": {
+		"armatak" callExtension [
+			"tcp_socket:start_mtls",
+			[
+				_tak_server_fulladdress,
+				_tak_server_tls_name,
+				_tak_server_tls_ca_cert_path,
+				_tak_server_tls_client_cert_path,
+				_tak_server_tls_client_key_path
+			]
+		];
+	};
+	case "enroll_mtls": {
+		"armatak" callExtension [
+			"tcp_socket:start_enroll_mtls",
+			[
+				_tak_server_instance_address,
+				_tak_server_tls_name,
+				_tak_server_enrollment_port,
+				_tak_server_enrollment_username,
+				_tak_server_enrollment_password,
+				_tak_server_enrollment_client_uid
+			]
+		];
+	};
+	default {
+		"armatak" callExtension ["tcp_socket:start", [_tak_server_fulladdress]];
+	};
+};
 
 _syncUnits = [];
 
