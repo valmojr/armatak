@@ -47,6 +47,8 @@ pub fn init() -> Extension {
             "tcp_socket",
             Group::new()
                 .command("start", tcp::start)
+                .command("start_mtls", tcp::start_mtls)
+                .command("start_enroll_mtls", tcp::start_enroll_mtls)
                 .command("stop", tcp::stop)
                 .command("send_payload", tcp::send_payload)
                 .group(
