@@ -3,6 +3,7 @@
 hemtt
 hemtt.exe
 *.biprivatekey
+.hemttprivatekey
 source/
 .vscode
 releases/
