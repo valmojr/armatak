@@ -1,5 +1,5 @@
 use arma_rs::{FromArma, FromArmaError};
-use chrono::{Utc, Duration, SecondsFormat};
+use chrono::{Duration, SecondsFormat, Utc};
 use uuid::Uuid;
 
 pub struct MessagePayload {
@@ -14,8 +14,7 @@ pub struct MessagePayload {
 
 impl FromArma for MessagePayload {
     fn from_arma(data: String) -> Result<Self, FromArmaError> {
-        let (sender_callsign, chatroom, message_text,
-            point_lat, point_lon, point_hae, sender_uid) =
+        let (sender_callsign, chatroom, message_text, point_lat, point_lon, point_hae, sender_uid) =
             <(String, String, String, f64, f64, f32, String)>::from_arma(data)?;
 
         Ok(Self {
@@ -55,8 +54,8 @@ impl MessageCot {
 
     pub fn to_xml(&self) -> String {
         let created_time = Utc::now().to_rfc3339_opts(SecondsFormat::Millis, true);
-        let stale_time = (Utc::now() + Duration::days(1))
-            .to_rfc3339_opts(SecondsFormat::Millis, true);
+        let stale_time =
+            (Utc::now() + Duration::days(1)).to_rfc3339_opts(SecondsFormat::Millis, true);
 
         // MESSAGE ID (random UUID)
         let message_uuid = Uuid::new_v4().to_string();
@@ -98,10 +97,7 @@ impl MessageCot {
             format!(
                 "<__chat parent=\"RootContactGroup\" groupOwner=\"false\" \
                  messageId=\"{}\" chatroom=\"{}\" id=\"{}\" senderCallsign=\"{}\">",
-                message_uuid,
-                self.chatroom,
-                self.chatroom,
-                self.sender_callsign,
+                message_uuid, self.chatroom, self.chatroom, self.sender_callsign,
             )
             .as_str(),
         );
@@ -109,9 +105,7 @@ impl MessageCot {
         xml.push_str(
             format!(
                 "<chatgrp uid0=\"{}\" uid1=\"{}\" id=\"{}\" />",
-                self.sender_uid,
-                self.chatroom,
-                self.chatroom
+                self.sender_uid, self.chatroom, self.chatroom
             )
             .as_str(),
         );

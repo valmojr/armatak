@@ -1,7 +1,7 @@
 pub fn get_uuid() -> String {
-  use uuid::Uuid;
+    use uuid::Uuid;
 
-  let id = Uuid::new_v4().to_string();
+    let id = Uuid::new_v4().to_string();
 
-  return id;
+    return id;
 }

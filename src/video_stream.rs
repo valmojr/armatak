@@ -16,7 +16,13 @@ lazy_static! {
 #[cfg(target_os = "windows")]
 const CREATE_NO_WINDOW: u32 = 0x08000000;
 
-fn build_rtsp_url(address: &str, port: &str, stream_path: &str, username: &str, password: &str) -> String {
+fn build_rtsp_url(
+    address: &str,
+    port: &str,
+    stream_path: &str,
+    username: &str,
+    password: &str,
+) -> String {
     if username.is_empty() || password.is_empty() {
         format!("rtsp://{}:{}/{}", address, port, stream_path)
     } else {
@@ -28,20 +34,22 @@ fn build_rtsp_url(address: &str, port: &str, stream_path: &str, username: &str, 
 }
 
 #[cfg(any(target_os = "windows", target_os = "linux"))]
-fn spawn_ffmpeg(
-    rtsp_url: String,
-    stop_rx: Receiver<()>,
-    status_tx: Sender<Result<(), String>>,
-) {
+fn spawn_ffmpeg(rtsp_url: String, stop_rx: Receiver<()>, status_tx: Sender<Result<(), String>>) {
     thread::spawn(move || {
         let mut cmd = Command::new("ffmpeg");
         cmd.args(&[
-            "-f","x11grab",
-            "-framerate","30",
-            "-video_size","1920x1080",
-            "-i" ,":0",
-            "-f","rtsp",
-            "-rtsp_transport","tcp",
+            "-f",
+            "x11grab",
+            "-framerate",
+            "30",
+            "-video_size",
+            "1920x1080",
+            "-i",
+            ":0",
+            "-f",
+            "rtsp",
+            "-rtsp_transport",
+            "tcp",
             &rtsp_url,
         ]);
 

@@ -1,5 +1,5 @@
-use uuid::Uuid;
 use chrono::{Duration, SecondsFormat, Utc};
+use uuid::Uuid;
 
 pub struct CursorOverTime {
     pub uuid: Option<String>,

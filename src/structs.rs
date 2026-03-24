@@ -10,9 +10,6 @@ pub struct LogPayload {
 impl FromArma for LogPayload {
     fn from_arma(data: String) -> Result<LogPayload, FromArmaError> {
         let (status, message) = <(String, String)>::from_arma(data)?;
-        Ok(Self {
-            status,
-            message
-        })
+        Ok(Self { status, message })
     }
 }
