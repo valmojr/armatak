@@ -51,6 +51,21 @@ fn enrollment_http_client() -> Result<Client, String> {
         .map_err(|e| format!("failed to build enrollment HTTP client: {}", e))
 }
 
+fn response_error_details(response: reqwest::blocking::Response) -> String {
+    let status = response.status();
+    match response.text() {
+        Ok(body) => {
+            let trimmed = body.trim();
+            if trimmed.is_empty() {
+                status.to_string()
+            } else {
+                format!("{}: {}", status, trimmed)
+            }
+        }
+        Err(_) => status.to_string(),
+    }
+}
+
 fn fetch_enrollment_config(host: &str, enroll_port: &str) -> Result<EnrollmentConfig, String> {
     let url = format!(
         "https://{}:{}/Marti/api/tls/config",
@@ -58,11 +73,20 @@ fn fetch_enrollment_config(host: &str, enroll_port: &str) -> Result<EnrollmentCo
         enroll_port.trim()
     );
 
-    let response_text = enrollment_http_client()?
+    let response = enrollment_http_client()?
         .get(&url)
         .send()
-        .and_then(|response| response.error_for_status())
-        .map_err(|e| format!("failed to fetch {}: {}", url, e))?
+        .map_err(|e| format!("failed to fetch {}: {}", url, e))?;
+
+    if !response.status().is_success() {
+        return Err(format!(
+            "failed to fetch {}: {}",
+            url,
+            response_error_details(response)
+        ));
+    }
+
+    let response_text = response
         .text()
         .map_err(|e| format!("failed to read config response from {}: {}", url, e))?;
 
@@ -99,9 +123,8 @@ fn enroll_client_certificate(
 
     let csr = params
         .serialize_request(&key_pair)
-        .map_err(|e| format!("failed to generate CSR: {}", e))?
-        .pem()
-        .map_err(|e| format!("failed to serialize CSR to PEM: {}", e))?;
+        .map_err(|e| format!("failed to generate CSR: {}", e))?;
+    let csr_der = csr.der().as_ref().to_vec();
 
     let url = format!(
         "https://{}:{}{}?clientUid={}",
@@ -115,11 +138,18 @@ fn enroll_client_certificate(
         .post(&url)
         .basic_auth(username.trim(), Some(password.to_string()))
         .header("Accept", "application/json")
-        .header("Content-Type", "application/x-pem-file")
-        .body(csr)
+        .header("Content-Type", "application/pkcs10")
+        .body(csr_der)
         .send()
-        .and_then(|response| response.error_for_status())
         .map_err(|e| format!("failed to enroll client certificate at {}: {}", url, e))?;
+
+    if !response.status().is_success() {
+        return Err(format!(
+            "failed to enroll client certificate at {}: {}",
+            url,
+            response_error_details(response)
+        ));
+    }
 
     let enrollment: EnrollmentResponse = response
         .json()

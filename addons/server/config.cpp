@@ -4,8 +4,10 @@ class CfgPatches {
   class ADDON {
     name = COMPONENT_NAME;
     units[] = {
-			QGVAR(coreModule),
-			QGVAR(coreModuleCurator),
+			QGVAR(tcpModule),
+			QGVAR(tcpModuleCurator),
+			QGVAR(enrollModule),
+			QGVAR(enrollModuleCurator),
       QGVAR(markEntity)
 		};
     weapons[] = {};

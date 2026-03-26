@@ -35,7 +35,12 @@ addMissionEventHandler ["ExtensionCallback", {
 			[_function, "success", _name] call FUNC(notify);
 		};
 		case "TCP SOCKET ERROR": {
-			[_function, "error", _name] call FUNC(notify);
+			_message = _function;
+			if (_data isNotEqualTo "") then {
+				_message = format ["%1: %2", _function, _data];
+			};
+
+			[_message, "error", _name] call FUNC(notify);
 		};
 		case "VIDEO": {
 			[_function, "success", _name] call FUNC(notify);

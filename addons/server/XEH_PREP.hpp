@@ -1,4 +1,7 @@
-PREP(3denCoreModuleConfig);
+PREP(3denEnrollModuleConfig);
+PREP(3denTcpModuleConfig);
 PREP(routerEntityAdd);
 PREP(routerEntityRemove);
-PREP(ZeusCoreModuleConfig);
+PREP(startCotRouter);
+PREP(ZeusEnrollModuleConfig);
+PREP(ZeusTcpModuleConfig);
