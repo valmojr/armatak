@@ -1,4 +1,3 @@
-pub mod artifacts;
 mod connector;
 mod enrollment;
 

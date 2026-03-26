@@ -1,4 +1,5 @@
 use arma_rs::{arma, Extension, Group};
+use rustls::crypto::aws_lc_rs;
 mod structs;
 mod tcp;
 mod tests;
@@ -30,6 +31,9 @@ pub fn init() -> Extension {
         .unwrap();
 
     log4rs::init_config(config).unwrap();
+
+    let _ = aws_lc_rs::default_provider().install_default();
+    log::info!("Initialized rustls aws-lc crypto provider.");
 
     Extension::build()
         .command("local_ip", utils::address::get_local_address)

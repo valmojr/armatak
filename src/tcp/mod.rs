@@ -14,13 +14,13 @@ pub mod draw;
 
 use client::{TcpClient, TcpCommand};
 use config::ConnectionConfig;
-use tls::artifacts::clear_enrollment_artifacts;
 
 lazy_static! {
     static ref TCP_CLIENT: Arc<Mutex<Option<TcpClient>>> = Arc::new(Mutex::new(None));
 }
 
 fn start_with_config(ctx: Context, config: ConnectionConfig) {
+    info!("Starting TCP client with config: {}", config.describe());
     let (tx, rx): (Sender<TcpCommand>, Receiver<TcpCommand>) = mpsc::channel();
 
     let client = TcpClient { tx };
@@ -67,7 +67,6 @@ pub fn start_enroll_mtls(
     password: String,
     client_uid: String,
 ) -> &'static str {
-    clear_enrollment_artifacts();
     start_with_config(
         ctx,
         ConnectionConfig::EnrollMtls {
@@ -85,6 +84,7 @@ pub fn start_enroll_mtls(
 
 pub fn send_payload(ctx: Context, payload: String) -> &'static str {
     if let Some(ref client) = *TCP_CLIENT.lock().unwrap() {
+        info!("Queueing TCP payload ({} bytes)", payload.len());
         client.send_payload(ctx, payload);
     } else {
         let _ = ctx.callback_null("TCP SOCKET ERROR", "TCP Client is not running");
@@ -96,9 +96,9 @@ pub fn send_payload(ctx: Context, payload: String) -> &'static str {
 
 pub fn stop(ctx: Context) -> &'static str {
     if let Some(ref client) = *TCP_CLIENT.lock().unwrap() {
+        info!("Stopping TCP client via extension command.");
         client.stop();
         let _ = ctx.callback_null("TCP SOCKET", "TCP client stopped");
-        clear_enrollment_artifacts();
     } else {
         let _ = ctx.callback_null("TCP SOCKET ERROR", "TCP client is not running");
     }

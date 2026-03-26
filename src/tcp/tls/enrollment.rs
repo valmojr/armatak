@@ -1,12 +1,10 @@
-use rcgen::{CertificateParams, DistinguishedName, DnType, KeyPair, PKCS_ECDSA_P256_SHA256};
+use rcgen::{CertificateParams, DistinguishedName, DnType, KeyPair, PKCS_RSA_SHA256};
+use log::info;
 use reqwest::blocking::Client;
 use serde::Deserialize;
 use uuid::Uuid;
 
-use super::artifacts::{
-    persist_enrollment_artifacts, store_enrollment_artifacts, EnrollmentArtifacts,
-};
-use super::connector::connect_mtls;
+use super::connector::connect_mtls_from_pem;
 use crate::tcp::transport::TransportStream;
 
 #[derive(Deserialize)]
@@ -72,6 +70,7 @@ fn fetch_enrollment_config(host: &str, enroll_port: &str) -> Result<EnrollmentCo
         host.trim(),
         enroll_port.trim()
     );
+    info!("Fetching TAK enrollment config from {}", url);
 
     let response = enrollment_http_client()?
         .get(&url)
@@ -95,6 +94,11 @@ fn fetch_enrollment_config(host: &str, enroll_port: &str) -> Result<EnrollmentCo
     let enroll_path = extract_tag_value(&response_text, "enrollPath")
         .ok_or_else(|| "missing enrollPath in /Marti/api/tls/config response".to_string())?;
 
+    info!(
+        "Enrollment config received: server_port={} enroll_path={}",
+        server_port, enroll_path
+    );
+
     Ok(EnrollmentConfig {
         server_port,
         enroll_path,
@@ -108,8 +112,12 @@ fn enroll_client_certificate(
     username: &str,
     password: &str,
     client_uid: &str,
-) -> Result<EnrollmentArtifacts, String> {
-    let key_pair = KeyPair::generate_for(&PKCS_ECDSA_P256_SHA256)
+) -> Result<(String, String, String), String> {
+    info!(
+        "Generating RSA client keypair and CSR for enrolled TAK client {}",
+        client_uid
+    );
+    let key_pair = KeyPair::generate_for(&PKCS_RSA_SHA256)
         .map_err(|e| format!("failed to generate client keypair: {}", e))?;
 
     let mut distinguished_name = DistinguishedName::new();
@@ -133,6 +141,10 @@ fn enroll_client_certificate(
         enroll_path.trim(),
         client_uid.trim()
     );
+    info!(
+        "Submitting client certificate enrollment request for {} to {}",
+        client_uid, url
+    );
 
     let response = enrollment_http_client()?
         .post(&url)
@@ -154,6 +166,12 @@ fn enroll_client_certificate(
     let enrollment: EnrollmentResponse = response
         .json()
         .map_err(|e| format!("failed to parse enrollment response: {}", e))?;
+    info!(
+        "Enrollment response parsed successfully for {} (signed_cert_len={}, ca_len={})",
+        client_uid,
+        enrollment.signed_cert.len(),
+        enrollment.ca0.len()
+    );
 
     let cert_pem = wrap_pem_body(
         &enrollment.signed_cert,
@@ -162,7 +180,7 @@ fn enroll_client_certificate(
     );
     let key_pem = key_pair.serialize_pem();
 
-    persist_enrollment_artifacts(client_uid, &enrollment.ca0, &cert_pem, &key_pem)
+    Ok((enrollment.ca0, cert_pem, key_pem))
 }
 
 pub fn enroll_and_connect(
@@ -178,9 +196,16 @@ pub fn enroll_and_connect(
     } else {
         client_uid.trim().to_string()
     };
+    info!(
+        "Starting enroll_and_connect for host={} enroll_port={} server_name={} client_uid={}",
+        host,
+        enroll_port,
+        server_name,
+        normalized_client_uid
+    );
 
     let enrollment_config = fetch_enrollment_config(host, enroll_port)?;
-    let artifacts = enroll_client_certificate(
+    let (ca_cert_pem, client_cert_pem, client_key_pem) = enroll_client_certificate(
         host,
         enroll_port,
         &enrollment_config.enroll_path,
@@ -189,17 +214,15 @@ pub fn enroll_and_connect(
         &normalized_client_uid,
     )?;
 
-    store_enrollment_artifacts(artifacts.clone());
-
-    connect_mtls(
+    connect_mtls_from_pem(
         &format!("{}:{}", host.trim(), enrollment_config.server_port.trim()),
         if server_name.trim().is_empty() {
             host.trim()
         } else {
             server_name.trim()
         },
-        &artifacts.ca_cert_path,
-        &artifacts.client_cert_path,
-        &artifacts.client_key_path,
+        &ca_cert_pem,
+        &client_cert_pem,
+        &client_key_pem,
     )
 }

@@ -34,4 +34,31 @@ impl ConnectionConfig {
             Self::EnrollMtls { host, .. } => host.clone(),
         }
     }
+
+    pub fn describe(&self) -> String {
+        match self {
+            Self::Plain { address } => format!("plain tcp -> {}", address),
+            Self::Mtls {
+                address,
+                server_name,
+                ca_cert_path,
+                client_cert_path,
+                client_key_path,
+            } => format!(
+                "manual mtls -> {} (server_name={}, ca={}, cert={}, key={})",
+                address, server_name, ca_cert_path, client_cert_path, client_key_path
+            ),
+            Self::EnrollMtls {
+                host,
+                server_name,
+                enroll_port,
+                username,
+                client_uid,
+                ..
+            } => format!(
+                "enroll mtls -> host={} enroll_port={} server_name={} username={} client_uid={}",
+                host, enroll_port, server_name, username, client_uid
+            ),
+        }
+    }
 }
