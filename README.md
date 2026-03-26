@@ -6,7 +6,7 @@ ARMATAK is a server side Arma 3 addons for streaming unit positions to TAK Clien
 
 The server-side CoT router supports two transports:
 - Plain TCP, for legacy TAK ingress.
-- Mutual TLS, using a CA PEM, client certificate PEM, and client key PEM so the Arma session can publish as an authenticated TAK device on port `8089`.
+- Mutual TLS, using the TAK Server authentication API, so the Arma session can publish as an authenticated TAK device on port `8089`.
 
 ## Get in Touch
 
