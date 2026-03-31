@@ -31,6 +31,9 @@ class CfgFunctions {
 			class extract_marker_callsign {
 				file = "\armatak\armatak\addons\main\functions\extract_data\fn_extract_marker_callsign.sqf";
 			};
+			class extract_marker_video_url {
+				file = "\armatak\armatak\addons\main\functions\extract_data\fn_extract_marker_video_url.sqf";
+			};
 			class extract_role {
 				file = "\armatak\armatak\addons\main\functions\extract_data\fn_extract_role.sqf";
 			};

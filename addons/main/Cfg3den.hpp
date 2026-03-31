@@ -78,6 +78,16 @@ class Cfg3den {
             condition = "objectVehicle";
             typeName = "STRING";
           };
+          class armatak_attribute_marker_video_url {
+            displayName = "Video Feed URL";
+            tooltip = "Video feed URL injected into __video on TAK";
+            property = "armatak_attribute_marker_video_url";
+            control = "Edit";
+            expression = "_this setVariable ['armatak_attribute_marker_video_url',_value]";
+            defaultValue = "''";
+            condition = "objectVehicle";
+            typeName = "STRING";
+          };
         };
       };
     };
