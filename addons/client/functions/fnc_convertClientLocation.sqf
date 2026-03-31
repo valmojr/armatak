@@ -110,6 +110,9 @@ switch (toLower worldName) do {
 	case "hellanmaa": {
 		_realLocation = _position call armatak_fnc_convert_to_hellanmaa;
 	};
+	case "hellanmaaw": {
+		_realLocation = _position call armatak_fnc_convert_to_hellanmaa;
+	};
 	default {
 		_warning = format ["<t color='#FF8021'>ARMATAK</t><br/> %1", "Unsupported Map"];
 		[[_warning, 1.5]] call CBA_fnc_notify;
