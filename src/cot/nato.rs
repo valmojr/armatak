@@ -11,10 +11,40 @@ pub struct MarkerCoTPayload {
     pub contact_callsign: String,
     pub track_course: i32,
     pub track_speed: f32,
+    pub video_url: Option<String>,
 }
 
 impl FromArma for MarkerCoTPayload {
     fn from_arma(data: String) -> Result<MarkerCoTPayload, FromArmaError> {
+        if let Ok((
+            uuid,
+            r#type,
+            point_lat,
+            point_lon,
+            point_hae,
+            contact_callsign,
+            track_course,
+            track_speed,
+            video_url,
+        )) = <(String, String, f64, f64, f32, String, i32, f32, String)>::from_arma(data.clone())
+        {
+            return Ok(Self {
+                uuid,
+                r#type,
+                point_lat,
+                point_lon,
+                point_hae,
+                contact_callsign,
+                track_course,
+                track_speed,
+                video_url: if video_url.trim().is_empty() {
+                    None
+                } else {
+                    Some(video_url)
+                },
+            });
+        }
+
         let (
             uuid,
             r#type,
@@ -34,6 +64,7 @@ impl FromArma for MarkerCoTPayload {
             contact_callsign,
             track_course,
             track_speed,
+            video_url: None,
         })
     }
 }
@@ -55,6 +86,7 @@ impl MarkerCoTPayload {
             track_speed: Some(self.track_speed),
             link_uid: None,
             remarker: None,
+            video_url: self.video_url.clone(),
         }
     }
 }

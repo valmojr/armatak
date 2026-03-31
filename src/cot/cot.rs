@@ -16,9 +16,18 @@ pub struct CursorOverTime {
     pub track_speed: Option<f32>,
     pub link_uid: Option<String>,
     pub remarker: Option<String>,
+    pub video_url: Option<String>,
 }
 
 impl CursorOverTime {
+    fn escape_xml_attribute(value: &str) -> String {
+        value
+            .replace('&', "&amp;")
+            .replace('"', "&quot;")
+            .replace('<', "&lt;")
+            .replace('>', "&gt;")
+    }
+
     pub fn convert_to_xml(&self) -> String {
         let uuid = match &self.uuid {
             Some(uuid) => uuid,
@@ -105,6 +114,18 @@ impl CursorOverTime {
 
         if let Some(remark) = &self.remarker {
             xml.push_str(format!("<remarks>ARMATAK | {}</remarks>", remark).as_str());
+        }
+
+        if let Some(video_url) = &self.video_url {
+            if !video_url.trim().is_empty() {
+                xml.push_str(
+                    format!(
+                        "<__video url=\"{}\" />",
+                        Self::escape_xml_attribute(video_url.trim())
+                    )
+                    .as_str(),
+                );
+            }
         }
 
         xml.push_str("</detail></event>");

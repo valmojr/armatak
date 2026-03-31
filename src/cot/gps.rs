@@ -54,6 +54,8 @@ impl ExternalPositionPayload {
             track_speed: Some(self.track_speed),
             link_uid: None,
             remarker: Some(self.remarker.clone()),
+            video_url: None,
         }
     }
 }
+

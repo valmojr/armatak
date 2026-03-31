@@ -57,6 +57,8 @@ impl EudCoTPayload {
             track_speed: Some(self.track_speed),
             link_uid: None,
             remarker: None,
+            video_url: None,
         }
     }
 }
+

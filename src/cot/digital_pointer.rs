@@ -40,6 +40,8 @@ impl DigitalPointerPayload {
             track_speed: None,
             link_uid: Some(self.link_uid.clone()),
             remarker: None,
+            video_url: None,
         }
     }
 }
+
