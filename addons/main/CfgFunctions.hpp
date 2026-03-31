@@ -122,6 +122,9 @@ class CfgFunctions {
 			class convert_to_rut_mandol {
 				file = "\armatak\armatak\addons\main\functions\map\fn_convert_to_rut_mandol.sqf";
 			};
+			class convert_to_hellanmaa {
+				file = "\armatak\armatak\addons\main\functions\map\fn_convert_to_hellanmaa.sqf";
+			};
 		};
 	};
 };
