@@ -1,0 +1,17 @@
+[package]
+name = "arma-rs-proc"
+description = "proc macros for arma-rs"
+version = "1.11.1"
+edition = "2021"
+authors = ["Brett Mayson"]
+repository = "https://github.com/brettmayson/arma-rs"
+license = "MIT"
+keywords = ["arma"]
+
+[lib]
+proc-macro = true
+
+[dependencies]
+proc-macro2 = "1.0.92"
+quote = "1.0.37"
+syn = { version = "2.0.90", features = ["full"] }
