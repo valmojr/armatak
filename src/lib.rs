@@ -61,7 +61,10 @@ pub fn init() -> Extension {
                         .command("eud", tcp::cot::send_eud_cot)
                         .command("marker", tcp::cot::send_marker_cot)
                         .command("digital_pointer", tcp::cot::send_digital_pointer_cot)
-                        .command("chat", tcp::cot::send_message_cot),
+                        .command("chat", tcp::cot::send_message_cot)
+                        // UAS Tool integration
+                        .command("uas_video", tcp::cot::send_uas_video_cot)
+                        .command("uas_sensor", tcp::cot::send_uas_sensor_cot),
                 )
                 .group(
                     "draw",

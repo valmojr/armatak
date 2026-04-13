@@ -32,3 +32,6 @@ if (!isNil "_pre_defined_role") then {
 };
 
 _cot = [_drone, _atak_role, _atak_callsign] call armatak_fnc_send_marker_cot;
+
+[_drone] call armatak_fnc_send_uas_video_cot;
+[_drone] call armatak_fnc_send_uas_sensor_cot;

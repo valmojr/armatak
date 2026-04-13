@@ -39,3 +39,32 @@ pub fn send_message_cot(
 
     "Sending Message CoT to TCP server"
 }
+
+/// Send a b-i-v CoT that declares the RTSP video endpoint for a drone.
+/// Called by SQF via:  "armatak" callExtension ["tcp_socket:cot:uas_video", [payload]]
+///
+/// Returns early without sending if the RTSP URL in the payload cannot be parsed.
+pub fn send_uas_video_cot(
+    ctx: Context,
+    payload: cot::uas::UasVideoCoTPayload,
+) -> &'static str {
+    let xml = payload.to_xml();
+    if !xml.is_empty() {
+        send_payload(ctx, xml);
+    }
+
+    "Sending UAS Video (b-i-v) CoT to TCP server"
+}
+
+/// Send a b-m-p-s-p-loc CoT carrying the drone camera's azimuth, FOV, and
+/// slant-range so the UAS Tool can draw the FOV cone on the map.
+/// Called by SQF via:  "armatak" callExtension ["tcp_socket:cot:uas_sensor", [payload]]
+pub fn send_uas_sensor_cot(
+    ctx: Context,
+    payload: cot::uas::UasSensorCoTPayload,
+) -> &'static str {
+    let xml = payload.to_xml();
+    send_payload(ctx, xml);
+
+    "Sending UAS Sensor (b-m-p-s-p-loc) CoT to TCP server"
+}

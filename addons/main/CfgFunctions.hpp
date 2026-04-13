@@ -19,6 +19,12 @@ class CfgFunctions {
 			class send_marker_cot {
 				file = "\armatak\armatak\addons\main\functions\api\fn_send_marker_cot.sqf";
 			};
+			class send_uas_video_cot {
+				file = "\armatak\armatak\addons\main\functions\api\fn_send_uas_video_cot.sqf";
+			};
+			class send_uas_sensor_cot {
+				file = "\armatak\armatak\addons\main\functions\api\fn_send_uas_sensor_cot.sqf";
+			};
 			class stop_tcp_socket {
 				file = "\armatak\armatak\addons\main\functions\api\fn_stop_tcp_socket.sqf";
 			};
@@ -30,9 +36,6 @@ class CfgFunctions {
 			};
 			class extract_marker_callsign {
 				file = "\armatak\armatak\addons\main\functions\extract_data\fn_extract_marker_callsign.sqf";
-			};
-			class extract_marker_video_url {
-				file = "\armatak\armatak\addons\main\functions\extract_data\fn_extract_marker_video_url.sqf";
 			};
 			class extract_role {
 				file = "\armatak\armatak\addons\main\functions\extract_data\fn_extract_role.sqf";
@@ -124,9 +127,6 @@ class CfgFunctions {
 			};
 			class convert_to_rut_mandol {
 				file = "\armatak\armatak\addons\main\functions\map\fn_convert_to_rut_mandol.sqf";
-			};
-			class convert_to_hellanmaa {
-				file = "\armatak\armatak\addons\main\functions\map\fn_convert_to_hellanmaa.sqf";
 			};
 		};
 	};

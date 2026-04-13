@@ -78,12 +78,12 @@ class Cfg3den {
             condition = "objectVehicle";
             typeName = "STRING";
           };
-          class armatak_attribute_marker_video_url {
-            displayName = "Video Feed URL";
-            tooltip = "Video feed URL injected into __video on TAK";
-            property = "armatak_attribute_marker_video_url";
+          class armatak_attribute_video_url {
+            displayName = "Video URL (RTSP)";
+            tooltip = "RTSP stream URL for UAS Tool integration. When set, the drone will appear in the ATAK UAS Tool with FOV cone and video feed. Format: rtsp://address:port/path  (e.g. rtsp://192.168.1.10:8554/live/drone1). Leave empty to disable UAS Tool integration for this entity.";
+            property = "armatak_attribute_video_url";
             control = "Edit";
-            expression = "_this setVariable ['armatak_attribute_marker_video_url',_value]";
+            expression = "_this setVariable ['armatak_attribute_video_url',_value]";
             defaultValue = "''";
             condition = "objectVehicle";
             typeName = "STRING";
