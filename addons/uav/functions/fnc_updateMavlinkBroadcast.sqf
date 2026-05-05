@@ -1,12 +1,19 @@
 #include "..\script_component.hpp"
 
-if !(player getVariable [QEGVAR(client,eudConnected), false]) exitWith {};
+private _broadcastingUav = player getVariable [QGVAR(broadcastingUav), objNull];
+
+if !(player getVariable [QEGVAR(client,eudConnected), false]) exitWith {
+	if (!isNull _broadcastingUav) then {
+		_broadcastingUav setVariable ["armatak_uav_mavlink_broadcasting", false, true];
+		player setVariable [QGVAR(broadcastingUav), objNull];
+	};
+};
 
 private _uav = getConnectedUAV player;
-private _broadcastingUav = player getVariable [QGVAR(broadcastingUav), objNull];
 
 if (isNull _uav) exitWith {
 	if (!isNull _broadcastingUav) then {
+		_broadcastingUav setVariable ["armatak_uav_mavlink_broadcasting", false, true];
 		player setVariable [QGVAR(broadcastingUav), objNull];
 		systemChat "UAV broadcasting stopped";
 		"armatak" callExtension ["log", [["info", "UAV broadcasting stopped because player is no longer connected to a UAV"]]];
@@ -14,11 +21,17 @@ if (isNull _uav) exitWith {
 };
 
 if (_broadcastingUav isNotEqualTo _uav) then {
+	if (!isNull _broadcastingUav) then {
+		_broadcastingUav setVariable ["armatak_uav_mavlink_broadcasting", false, true];
+	};
 	player setVariable [QGVAR(broadcastingUav), _uav];
+	_uav setVariable ["armatak_uav_mavlink_broadcasting", true, true];
 	private _callsign = [_uav] call armatak_fnc_extract_marker_callsign;
 	systemChat format ["Broadcasting UAV %1", _callsign];
 	"armatak" callExtension ["log", [["info", format ["Broadcasting UAV %1 via MAVLink mock to %2", _callsign, player getVariable [QEGVAR(client,mavlink_address), ""]]]]];
 };
+
+_uav setVariable ["armatak_uav_mavlink_broadcasting", true, true];
 
 private _mavlinkAddress = player getVariable [QEGVAR(client,mavlink_address), ""];
 if (_mavlinkAddress isEqualTo "") exitWith {};

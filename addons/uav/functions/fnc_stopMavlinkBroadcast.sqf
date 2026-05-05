@@ -10,6 +10,7 @@ if (_existingPfh >= 0) then {
 
 private _broadcastingUav = player getVariable [QGVAR(broadcastingUav), objNull];
 if (!isNull _broadcastingUav) then {
+	_broadcastingUav setVariable ["armatak_uav_mavlink_broadcasting", false, true];
 	systemChat "UAV broadcasting stopped";
 };
 

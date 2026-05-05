@@ -5,6 +5,7 @@ private _uavControl = UAVControl _drone;
 private _controller = _uavControl param [0, objNull];
 private _controller_uid = if (!isNull _controller) then { [_controller] call armatak_fnc_extract_uuid } else { _drone getVariable ["armatak_uas_controller_uid", _uuid] };
 private _callsign = [_drone] call armatak_fnc_extract_marker_callsign;
+private _video_url = [_drone] call armatak_fnc_extract_marker_video_url;
 
 private _atak_role = "a-f-A-M-H-Q";
 switch (side _drone) do {
@@ -44,7 +45,11 @@ private _pitch = (vectorDir _drone) select 2;
 private _roll = (vectorUp _drone) select 0;
 private _isFlying = parseNumber (isEngineOn _drone);
 private _hal = ((getPosATL _drone) select 2) max 0;
-private _vehicleType = typeOf _drone;
+private _vehicleType = if (_video_url == "") then {
+    typeOf _drone
+} else {
+    format ["%1|armatak_video_url=%2", typeOf _drone, _video_url]
+};
 
 private _payload = [
     _uuid,
