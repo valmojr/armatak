@@ -1,5 +1,7 @@
 use arma_rs::{arma, Extension, Group};
 use rustls::crypto::aws_lc_rs;
+mod mavlink_mock;
+mod mdns;
 mod structs;
 mod tcp;
 mod tests;
@@ -40,6 +42,16 @@ pub fn init() -> Extension {
         .command("uuid", utils::uuid::get_uuid)
         .command("log", utils::log::log_info)
         .group(
+            "mavlink_mock",
+            Group::new().command("send_uas_telemetry", mavlink_mock::send_uas_telemetry),
+        )
+        .group(
+            "mdns",
+            Group::new()
+                .command("start_uas_advertisement", mdns::start_uas_advertisement)
+                .command("stop", mdns::stop),
+        )
+        .group(
             "udp_socket",
             Group::new()
                 .command("start", udp_socket::start)
@@ -61,7 +73,10 @@ pub fn init() -> Extension {
                         .command("eud", tcp::cot::send_eud_cot)
                         .command("marker", tcp::cot::send_marker_cot)
                         .command("digital_pointer", tcp::cot::send_digital_pointer_cot)
-                        .command("chat", tcp::cot::send_message_cot),
+                        .command("chat", tcp::cot::send_message_cot)
+                        .command("uas_platform", tcp::cot::send_uas_platform_cot)
+                        .command("uas_video", tcp::cot::send_uas_video_cot)
+                        .command("uas_sensor", tcp::cot::send_uas_sensor_cot),
                 )
                 .group(
                     "draw",

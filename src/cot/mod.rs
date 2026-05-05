@@ -5,3 +5,5 @@ pub mod eud;
 pub mod gps;
 pub mod message;
 pub mod nato;
+pub mod uas;
+pub mod video;
