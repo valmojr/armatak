@@ -13,6 +13,8 @@ addMissionEventHandler ["ExtensionCallback", {
 				};
 				case "EUD Disconnected": {
 					SETVAR(player,EGVAR(client,eudConnected),false);
+					call EFUNC(uav,stopMavlinkBroadcast);
+					"armatak" callExtension ["mdns:stop", []];
 				};
 				default {};
 			};
@@ -25,10 +27,14 @@ addMissionEventHandler ["ExtensionCallback", {
 			
 			if (_function == "UDP Socket is not running") then {
 				SETVAR(player,EGVAR(client,eudConnected),false);
+				call EFUNC(uav,stopMavlinkBroadcast);
+				"armatak" callExtension ["mdns:stop", []];
 			};
 
 			if (_function == "failed to bind UDP socket") then {
 				SETVAR(player,EGVAR(client,eudConnected),false);
+				call EFUNC(uav,stopMavlinkBroadcast);
+				"armatak" callExtension ["mdns:stop", []];
 			};
 		};
 		case "TCP SOCKET": {
@@ -44,6 +50,12 @@ addMissionEventHandler ["ExtensionCallback", {
 		};
 		case "VIDEO": {
 			[_function, "success", _name] call FUNC(notify);
+		};
+		case "MDNS": {
+			[_function, "success", _name] call FUNC(notify);
+		};
+		case "MDNS ERROR": {
+			[_function, "warning", _name] call FUNC(notify);
 		};
 		case "VIDEO ERROR": {
 			[_function, "error", _name] call FUNC(notify);

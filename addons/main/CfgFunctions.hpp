@@ -19,6 +19,18 @@ class CfgFunctions {
 			class send_marker_cot {
 				file = "\armatak\armatak\addons\main\functions\api\fn_send_marker_cot.sqf";
 			};
+			class send_uas_platform_cot {
+				file = "\armatak\armatak\addons\main\functions\api\fn_send_uas_platform_cot.sqf";
+			};
+			class send_uas_video_cot {
+				file = "\armatak\armatak\addons\main\functions\api\fn_send_uas_video_cot.sqf";
+			};
+			class send_uas_sensor_cot {
+				file = "\armatak\armatak\addons\main\functions\api\fn_send_uas_sensor_cot.sqf";
+			};
+			class set_uas_camera_override {
+				file = "\armatak\armatak\addons\main\functions\api\fn_set_uas_camera_override.sqf";
+			};
 			class stop_tcp_socket {
 				file = "\armatak\armatak\addons\main\functions\api\fn_stop_tcp_socket.sqf";
 			};
@@ -39,6 +51,9 @@ class CfgFunctions {
 			};
 			class extract_sensor_data {
 				file = "\armatak\armatak\addons\main\functions\extract_data\fn_extract_sensor_data.sqf";
+			};
+			class extract_uas_camera_data {
+				file = "\armatak\armatak\addons\main\functions\extract_data\fn_extract_uas_camera_data.sqf";
 			};
 			class extract_unit_callsign {
 				file = "\armatak\armatak\addons\main\functions\extract_data\fn_extract_unit_callsign.sqf";
@@ -131,3 +146,4 @@ class CfgFunctions {
 		};
 	};
 };
+
