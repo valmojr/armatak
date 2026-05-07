@@ -1,6 +1,6 @@
 use arma_rs::{arma, Extension, Group};
 use rustls::crypto::aws_lc_rs;
-mod mavlink_mock;
+mod uas;
 mod mdns;
 mod structs;
 mod tcp;
@@ -42,8 +42,12 @@ pub fn init() -> Extension {
         .command("uuid", utils::uuid::get_uuid)
         .command("log", utils::log::log_info)
         .group(
-            "mavlink_mock",
-            Group::new().command("send_uas_telemetry", mavlink_mock::send_uas_telemetry),
+            "uas",
+            Group::new()
+                .command("start_endpoint", uas::start_endpoint)
+                .command("stop_endpoint", uas::stop_endpoint)
+                .command("send_uas_telemetry", uas::send_uas_telemetry)
+                .command("send_uas_system", uas::send_uas_system),
         )
         .group(
             "mdns",
