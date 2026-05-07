@@ -37,6 +37,9 @@ private _mavlinkAddress = player getVariable [QEGVAR(client,mavlink_address), ""
 if (_mavlinkAddress isEqualTo "") exitWith {};
 
 private _pos = [_uav] call EFUNC(client,extractClientPosition);
+private _uuid = [_uav] call armatak_fnc_extract_uuid;
+private _callsign = [_uav] call armatak_fnc_extract_marker_callsign;
+private _videoUri = [_uav] call FUNC(resolveVideoUri);
 private _dir = vectorDir _uav;
 private _up = vectorUp _uav;
 private _yaw = getDir _uav;
@@ -45,24 +48,14 @@ private _roll = asin (((_up select 0) max -1) min 1);
 private _relAlt = ((getPosATL _uav) select 2) max 0;
 private _uavType = if (_uav isKindOf "Plane") then {1} else {[2, 3] select (_uav isKindOf "Helicopter")};
 
-private _bodyPayload = [
-	_mavlinkAddress,
-	1,
-	1,
-	_uavType,
-	_pos select 1,
-	_pos select 2,
-	_pos select 3,
-	_relAlt,
-	_pos select 5,
-	_pos select 6,
-	_roll,
-	_pitch,
-	_yaw,
-	parseNumber isEngineOn _uav
-];
-
-"armatak" callExtension ["mavlink_mock:send_uas_telemetry", [_bodyPayload]];
+private _gimbalRoll = 0;
+private _gimbalPitch = _pitch;
+private _gimbalYaw = _yaw;
+private _hfov = _uav getVariable ["armatak_uas_fov", 60];
+private _vfov = _uav getVariable ["armatak_uas_vfov", (_hfov * 0.5625)];
+private _imageLat = _pos select 1;
+private _imageLon = _pos select 2;
+private _imageAlt = _pos select 3;
 
 private _laser = laserTarget _uav;
 if (!isNull _laser) then {
@@ -84,27 +77,40 @@ if (!isNull _laser) then {
 
 		private _camYaw = ((_dirX atan2 _dirY) + 360) mod 360;
 		private _camPitch = _dirZ atan2 (_horizontalMag max 0.001);
+		_gimbalPitch = _camPitch;
+		_gimbalYaw = _camYaw;
 
-		private _spiAgl = ASLToAGL _spiASL;
-		private _camRelAlt = (_spiAgl select 2) max 0;
-
-		private _camPayload = [
-			_mavlinkAddress,
-			2,
-			1,
-			_uavType,
-			_pos select 1,
-			_pos select 2,
-			_pos select 3,
-			_camRelAlt,
-			_camYaw,
-			0,
-			0,
-			_camPitch,
-			_camYaw,
-			1
-		];
-
-		"armatak" callExtension ["mavlink_mock:send_uas_telemetry", [_camPayload]];
+		private _imageGeo = [_targetWorld select 0, _targetWorld select 1, _targetAslZ] call EFUNC(client,convertClientLocation);
+		_imageLat = _imageGeo select 0;
+		_imageLon = _imageGeo select 1;
+		_imageAlt = _imageGeo select 2;
 	};
 };
+
+private _systemPayload = [
+	_mavlinkAddress,
+	_uuid,
+	_callsign,
+	_uavType,
+	_pos select 1,
+	_pos select 2,
+	_pos select 3,
+	_relAlt,
+	_pos select 5,
+	_pos select 6,
+	_roll,
+	_pitch,
+	_yaw,
+	parseNumber isEngineOn _uav,
+	_gimbalRoll,
+	_gimbalPitch,
+	_gimbalYaw,
+	_videoUri,
+	_hfov,
+	_vfov,
+	_imageLat,
+	_imageLon,
+	_imageAlt
+];
+
+"armatak" callExtension ["uas:send_uas_system", [_systemPayload]];

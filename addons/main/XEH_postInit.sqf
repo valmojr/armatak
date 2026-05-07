@@ -14,6 +14,7 @@ addMissionEventHandler ["ExtensionCallback", {
 				case "EUD Disconnected": {
 					SETVAR(player,EGVAR(client,eudConnected),false);
 					call EFUNC(uav,stopMavlinkBroadcast);
+					"armatak" callExtension ["uas:stop_endpoint", []];
 					"armatak" callExtension ["mdns:stop", []];
 				};
 				default {};
@@ -28,13 +29,43 @@ addMissionEventHandler ["ExtensionCallback", {
 			if (_function == "UDP Socket is not running") then {
 				SETVAR(player,EGVAR(client,eudConnected),false);
 				call EFUNC(uav,stopMavlinkBroadcast);
+				"armatak" callExtension ["uas:stop_endpoint", []];
 				"armatak" callExtension ["mdns:stop", []];
 			};
 
 			if (_function == "failed to bind UDP socket") then {
 				SETVAR(player,EGVAR(client,eudConnected),false);
 				call EFUNC(uav,stopMavlinkBroadcast);
+				"armatak" callExtension ["uas:stop_endpoint", []];
 				"armatak" callExtension ["mdns:stop", []];
+			};
+		};
+		case "MAVLINK UDP ERROR": {
+			_message = _function;
+			if (_data isNotEqualTo "") then {
+				_message = format ["%1: %2", _function, _data];
+			};
+
+			[_message, "warning", _name] call FUNC(notify);
+		};
+		case "MAVLINK UDP": {
+			private _history = missionNamespace getVariable ["armatak_uav_mavlink_callback_history", []];
+			_history pushBack [diag_tickTime, _function, _data];
+			if ((count _history) > 50) then {
+				_history deleteRange [0, (count _history) - 50];
+			};
+			missionNamespace setVariable ["armatak_uav_mavlink_callback_history", _history];
+			missionNamespace setVariable ["armatak_uav_last_mavlink_callback", [diag_tickTime, _function, _data]];
+
+			switch (_function) do {
+				case "COMMAND_LONG";
+				case "COMMAND_INT";
+				case "COMMAND_ACK";
+				case "MANUAL_CONTROL": {
+					"armatak" callExtension ["log", [["info", format ["MAVLINK UDP CALLBACK %1 %2", _function, _data]]]];
+					[_function, _data] call EFUNC(uav,handleMavlinkCallback);
+				};
+				default {};
 			};
 		};
 		case "TCP SOCKET": {

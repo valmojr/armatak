@@ -80,7 +80,7 @@ class Cfg3den {
           };
           class armatak_attribute_marker_video_url {
             displayName = "Video Feed URL";
-            tooltip = "Video feed URL injected into __video on TAK";
+            tooltip = "Shared UAV video URL. This per-vehicle value overrides the optional session video URL from Connect to EUD.";
             property = "armatak_attribute_marker_video_url";
             control = "Edit";
             expression = "_this setVariable ['armatak_attribute_marker_video_url',_value]";
