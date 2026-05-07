@@ -28,6 +28,10 @@ if (!isNull _uav && {_activelyControlledUav isEqualTo _uav}) then {
 	};
 };
 
+if (!isNull _uav) exitWith {
+	_defaultVideoUri
+};
+
 private _sessionVideoUrl = player getVariable [QEGVAR(client,video_feed_url), ""];
 private _normalizedSessionVideoUrl = [_sessionVideoUrl] call _normalize;
 if (_normalizedSessionVideoUrl isNotEqualTo "") exitWith {

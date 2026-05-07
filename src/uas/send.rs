@@ -125,6 +125,11 @@ pub fn send_uas_system(ctx: Context, payload: UasSystemPayload) -> &'static str 
     ];
 
     if should_send_video_stream_information(&payload.video_uri) {
+        info!(
+            "Sending VIDEO_STREAM_INFORMATION for sysid={} uri={}",
+            system_id,
+            payload.video_uri
+        );
         packets.push(video_stream_information_packet(
             system_id,
             &payload.callsign,

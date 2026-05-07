@@ -10,13 +10,16 @@ if !(player getVariable [QEGVAR(client,eudConnected), false]) exitWith {
 };
 
 private _uav = getConnectedUAV player;
+if (isNull _uav) then {
+	_uav = _broadcastingUav;
+};
 
-if (isNull _uav) exitWith {
+if (isNull _uav || {!alive _uav}) exitWith {
 	if (!isNull _broadcastingUav) then {
 		_broadcastingUav setVariable ["armatak_uav_mavlink_broadcasting", false, true];
 		player setVariable [QGVAR(broadcastingUav), objNull];
 		systemChat "UAV broadcasting stopped";
-		"armatak" callExtension ["log", [["info", "UAV broadcasting stopped because player is no longer connected to a UAV"]]];
+		"armatak" callExtension ["log", [["info", "UAV broadcasting stopped because the UAV is no longer available"]]];
 	};
 };
 
