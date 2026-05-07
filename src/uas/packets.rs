@@ -265,13 +265,31 @@ pub(crate) fn video_stream_information_packet(
     msg.extend_from_slice(&720u16.to_le_bytes());
     msg.extend_from_slice(&0u16.to_le_bytes());
     msg.extend_from_slice(&(hfov_deg.clamp(1.0, 360.0).round() as u16).to_le_bytes());
-    msg.push(0);
+    msg.push(1);
     msg.push(1);
     msg.push(stream_type);
     msg.extend_from_slice(&name);
     msg.extend_from_slice(&uri);
     msg.push(VIDEO_STREAM_ENCODING_H264);
-    msg.push(CAMERA_COMPONENT_ID);
+    msg.push(0);
 
     build_v2_packet(system_id, CAMERA_COMPONENT_ID, 269, &msg, 109)
+}
+
+pub(crate) fn video_stream_status_packet(
+    system_id: u8,
+    hfov_deg: f32,
+) -> Vec<u8> {
+    let mut msg = Vec::with_capacity(19);
+    msg.extend_from_slice(&30f32.to_le_bytes());
+    msg.extend_from_slice(&4_000_000u32.to_le_bytes());
+    msg.extend_from_slice(&VIDEO_STREAM_STATUS_FLAGS_RUNNING.to_le_bytes());
+    msg.extend_from_slice(&1280u16.to_le_bytes());
+    msg.extend_from_slice(&720u16.to_le_bytes());
+    msg.extend_from_slice(&0u16.to_le_bytes());
+    msg.extend_from_slice(&(hfov_deg.clamp(1.0, 360.0).round() as u16).to_le_bytes());
+    msg.push(1);
+    msg.push(0);
+
+    build_v2_packet(system_id, CAMERA_COMPONENT_ID, 270, &msg, 59)
 }

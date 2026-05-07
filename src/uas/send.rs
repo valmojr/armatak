@@ -9,7 +9,7 @@ use super::packets::{
     attitude_packet, autopilot_version_packet, camera_information_packet,
     component_heartbeat_packet, extended_sys_state_packet, global_position_int_packet,
     gps_raw_int_packet, heartbeat_packet, system_status_packet, vfr_hud_packet,
-    video_stream_information_packet,
+    video_stream_information_packet, video_stream_status_packet,
 };
 use super::payload::{UasSystemPayload, UasTelemetryPayload};
 
@@ -136,6 +136,7 @@ pub fn send_uas_system(ctx: Context, payload: UasSystemPayload) -> &'static str 
             &payload.video_uri,
             payload.hfov_deg,
         ));
+        packets.push(video_stream_status_packet(system_id, payload.hfov_deg));
     } else if !payload.video_uri.trim().is_empty() {
         info!(
             "Skipping VIDEO_STREAM_INFORMATION for sysid={} because URI is not a supported stream URI: {}",
