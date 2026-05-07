@@ -38,28 +38,31 @@ preset = "Hemtt"
 [hemtt.launch.default]
 workshop = [
   "450814997", # CBA_A3
-  "463939057", # ACE
+  "463939057", # ace
   "751965892", # ACRE2
-  "2522638637", # ACE Extended Arsenal
+  "2522638637", # ACE3 Arsenal Extended - Core
   "333310405", # Enhanced Movement
   "2034363662", # Enhanced Movement Rework
-  "2941986336", # Hatchet Interaction Framework - Stable Version
-  "1745501605", # Hatchet H-60 pack - Stable Version
   "843577117", # RHSUSAF
-  "843425103", # RHSAFRF
-  "843632231", # RHSSAF
-  "843593391", # RHSGREF
-  "1673456286", # 3CB Factions
+  "3147473073", # TOTT Core
   "623475643", # 3den Enhanced
-  "2257686620", # Blastcore Murr Edition
+  "520618345", # Jbad
+  "1779063631", # Zeus Enhanced
+  "2397360831", # USAF Mod - Main
+  "2397376046", # USAF Mod - Utility
+  "3147476552", # TOTT Optics
   "583496184", # CUP Terrains - Core
-  "3078351739", # Kunduz River
-  "1858075458", # LAMBS_Danger.fsm
-  "1808238502", # LAMBS_Suppression
-  "3425368881", # M4A1_URGI
-  "2268351256", # Tier One Weapons
   "2560276469", # Restrict Markers
-  "3493557838" # Ballad of the Green Berets
+  "1858075458", # LAMBS_Danger.fsm
+  "3407948300", # JSRS SOUNDMOD 2025
+  "2834576684", # ITN - Illuminate The Night
+  "3375788189", # Immersion Cigs - Rewrite
+  "2095827925", # Brighter Flares
+  "2257686620", # Blastcore Murr Edition
+  "2260572637", # BettIR NVG
+  "3493557838", # Broad Spectrum Warfare
+  "1291778160", # Hellanmaa
+  "3533734689", # FPV
 ]
 
 parameters = [
