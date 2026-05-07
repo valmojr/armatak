@@ -20,10 +20,10 @@ if (side _unit == east) then {
 	_callsign = getText (configOf _unit >> "displayName");
 };
 
-armatak_attribute_unit_callsign = _unit getVariable "armatak_attribute_unit_callsign";
+private _unitCallsignOverride = _unit getVariable ["armatak_attribute_unit_callsign", ""];
 
-if (!isNil "armatak_attribute_unit_callsign" or armatak_attribute_unit_callsign != '') then {
-	_callsign = armatak_attribute_unit_callsign;
+if (_unitCallsignOverride isNotEqualTo "") then {
+	_callsign = _unitCallsignOverride;
 };
 
 _callsign
