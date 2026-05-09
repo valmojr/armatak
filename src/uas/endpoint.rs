@@ -6,7 +6,7 @@ use std::sync::{Arc, Mutex};
 use std::thread::{self, JoinHandle};
 use std::time::Duration;
 
-use super::callbacks::{mavlink_callback_event, mavlink_packet_summary};
+use super::callbacks::{mavlink_callback_event, mavlink_packet_summary, mavlink_response_packets};
 
 pub(crate) struct MavlinkEndpoint {
     pub socket: UdpSocket,
@@ -18,10 +18,11 @@ pub(crate) struct MavlinkEndpoint {
 static MAVLINK_ENDPOINT: Mutex<Option<MavlinkEndpoint>> = Mutex::new(None);
 
 pub(crate) fn socket_for_send() -> Option<UdpSocket> {
-    MAVLINK_ENDPOINT
-        .lock()
-        .ok()
-        .and_then(|endpoint| endpoint.as_ref().and_then(|entry| entry.socket.try_clone().ok()))
+    MAVLINK_ENDPOINT.lock().ok().and_then(|endpoint| {
+        endpoint
+            .as_ref()
+            .and_then(|entry| entry.socket.try_clone().ok())
+    })
 }
 
 fn stop_endpoint_internal() {
@@ -102,14 +103,27 @@ pub fn start_endpoint(ctx: Context, bind_port: i32) -> &'static str {
                         source,
                         mavlink_packet_summary(&buffer[..received])
                     );
-                    if let Some(event) = mavlink_callback_event(&buffer[..received], &source_string) {
-                        let _ = listener_ctx.callback_data("MAVLINK UDP", event.function, event.data);
+                    if let Some(event) = mavlink_callback_event(&buffer[..received], &source_string)
+                    {
+                        let _ =
+                            listener_ctx.callback_data("MAVLINK UDP", event.function, event.data);
+                    }
+                    for packet in mavlink_response_packets(&buffer[..received]) {
+                        if let Err(error) = listener_socket.send_to(&packet, source) {
+                            info!(
+                                "MAVLink UDP endpoint failed sending response to {}: {}",
+                                source, error
+                            );
+                            break;
+                        }
                     }
                 }
                 Err(error)
                     if matches!(
                         error.kind(),
-                        std::io::ErrorKind::WouldBlock | std::io::ErrorKind::TimedOut
+                        std::io::ErrorKind::WouldBlock
+                            | std::io::ErrorKind::TimedOut
+                            | std::io::ErrorKind::ConnectionReset
                     ) => {}
                 Err(error) => {
                     if listener_running.load(Ordering::Relaxed) {

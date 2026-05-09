@@ -3,8 +3,20 @@ pub(crate) struct MavlinkCallbackEvent {
     pub data: String,
 }
 
+use super::constants::{AUTOPILOT_COMPONENT_ID, CAMERA_COMPONENT_ID, TURRET_CAMERA_COMPONENT_ID};
+use super::identity::should_send_video_stream_information;
+use super::packets::{
+    autopilot_version_packet, camera_fov_status_packet_for_component,
+    camera_information_packet_for_component, command_ack_packet, gimbal_manager_information_packet,
+    home_position_packet, mount_orientation_packet_for_component, mount_status_packet,
+    video_stream_information_packet_for_component, video_stream_status_packet_for_component,
+};
+use super::state::{latest_system, set_active_camera};
+use log::info;
+
 pub(crate) fn hex_preview(bytes: &[u8], max_len: usize) -> String {
-    bytes.iter()
+    bytes
+        .iter()
         .take(max_len)
         .map(|byte| format!("{:02X}", byte))
         .collect::<Vec<_>>()
@@ -21,7 +33,12 @@ pub(crate) fn mav_cmd_name(command_id: u16) -> &'static str {
         251 => "VIDEO_STOP_CAPTURE",
         252 => "DO_CONTROL_VIDEO",
         400 => "COMPONENT_ARM_DISARM",
-        521 => "REQUEST_MESSAGE",
+        512 => "REQUEST_MESSAGE",
+        521 => "REQUEST_CAMERA_INFORMATION",
+        2502 => "VIDEO_START_STREAMING",
+        2503 => "VIDEO_STOP_STREAMING",
+        2504 => "REQUEST_VIDEO_STREAM_INFORMATION",
+        2505 => "REQUEST_VIDEO_STREAM_STATUS",
         _ => "UNKNOWN",
     }
 }
@@ -46,10 +63,10 @@ fn read_f32(payload: &[u8], offset: usize) -> Option<f32> {
 
 fn mavlink_message_detail(msg_id: u8, payload: &[u8]) -> String {
     match msg_id {
-        76 if payload.len() >= 33 => {
+        76 if payload.len() >= 31 => {
             let command = u16::from_le_bytes([payload[28], payload[29]]);
             let target_system = payload[30];
-            let target_component = payload[31];
+            let target_component = payload.get(31).copied().unwrap_or(0);
             format!(
                 " command={}({}) target={}:{}",
                 command,
@@ -86,7 +103,8 @@ pub(crate) fn mavlink_packet_summary(bytes: &[u8]) -> String {
             let system_id = bytes[3];
             let component_id = bytes[4];
             let msg_id = bytes[5];
-            let detail = mavlink_message_detail(msg_id, bytes.get(6..6 + payload_len).unwrap_or(&[]));
+            let detail =
+                mavlink_message_detail(msg_id, bytes.get(6..6 + payload_len).unwrap_or(&[]));
             format!(
                 "MAVLink v1 msgid={}{} sysid={} compid={} seq={} payload_len={} preview={}",
                 msg_id,
@@ -104,7 +122,10 @@ pub(crate) fn mavlink_packet_summary(bytes: &[u8]) -> String {
             let system_id = bytes[5];
             let component_id = bytes[6];
             let msg_id = bytes[7] as u32 | ((bytes[8] as u32) << 8) | ((bytes[9] as u32) << 16);
-            let detail = mavlink_message_detail(msg_id as u8, bytes.get(10..10 + payload_len).unwrap_or(&[]));
+            let detail = mavlink_message_detail(
+                msg_id as u8,
+                bytes.get(10..10 + payload_len).unwrap_or(&[]),
+            );
             format!(
                 "MAVLink v2 msgid={}{} sysid={} compid={} seq={} payload_len={} preview={}",
                 msg_id,
@@ -163,11 +184,11 @@ pub(crate) fn mavlink_callback_event(bytes: &[u8], source: &str) -> Option<Mavli
                 ),
             })
         }
-        76 if payload.len() >= 33 => {
+        76 if payload.len() >= 31 => {
             let command = read_u16(payload, 28)?;
             let target_system = *payload.get(30)?;
-            let target_component = *payload.get(31)?;
-            let confirmation = *payload.get(32)?;
+            let target_component = payload.get(31).copied().unwrap_or(0);
+            let confirmation = payload.get(32).copied().unwrap_or(0);
             Some(MavlinkCallbackEvent {
                 function: "COMMAND_LONG",
                 data: format!(
@@ -236,4 +257,375 @@ pub(crate) fn mavlink_callback_event(bytes: &[u8], source: &str) -> Option<Mavli
         }
         _ => None,
     }
+}
+
+pub(crate) fn mavlink_response_packets(bytes: &[u8]) -> Vec<Vec<u8>> {
+    if bytes.len() < 8 {
+        return Vec::new();
+    }
+
+    let (msg_id, payload) = match bytes[0] {
+        0xFE if bytes.len() >= 8 => {
+            let payload_len = bytes[1] as usize;
+            (
+                bytes[5] as u32,
+                bytes.get(6..6 + payload_len).unwrap_or(&[]),
+            )
+        }
+        0xFD if bytes.len() >= 12 => {
+            let payload_len = bytes[1] as usize;
+            (
+                bytes[7] as u32 | ((bytes[8] as u32) << 8) | ((bytes[9] as u32) << 16),
+                bytes.get(10..10 + payload_len).unwrap_or(&[]),
+            )
+        }
+        _ => return Vec::new(),
+    };
+
+    match msg_id {
+        76 if payload.len() >= 31 => command_long_response_packets(payload),
+        75 if payload.len() >= 35 => command_int_response_packets(payload),
+        _ => Vec::new(),
+    }
+}
+
+fn command_long_response_packets(payload: &[u8]) -> Vec<Vec<u8>> {
+    let command = match read_u16(payload, 28) {
+        Some(command) => command,
+        None => return Vec::new(),
+    };
+    let target_system = *payload.get(30).unwrap_or(&0);
+    let target_component = *payload.get(31).unwrap_or(&0);
+    if target_system == 0 {
+        return Vec::new();
+    }
+
+    let ack_component = if target_component == 0 {
+        AUTOPILOT_COMPONENT_ID
+    } else {
+        target_component
+    };
+    let mut packets = vec![command_ack_packet(target_system, ack_component, command, 0)];
+
+    match command {
+        512 => {
+            let requested_message = read_f32(payload, 0).unwrap_or(0.0).round() as u32;
+            packets.extend(requested_message_packets(target_system, requested_message));
+        }
+        521 => {
+            if let Some(system) = latest_system(target_system) {
+                let camera_component =
+                    camera_component_for_target(target_component, system.has_turret_camera);
+                set_active_camera(target_system, camera_component);
+                info!(
+                    "MAVLink camera selection command={} target_system={} target_component={} resolved_camera_component={}",
+                    command, target_system, target_component, camera_component
+                );
+                packets.push(camera_information_packet_for_component(
+                    target_system,
+                    camera_component,
+                    &camera_name(&system.callsign, camera_component, system.has_turret_camera),
+                    gimbal_device_for_target(target_component, system.has_turret_camera),
+                ));
+            }
+        }
+        2502 | 2503 | 2505 => {
+            if let Some(system) = latest_system(target_system) {
+                let camera_component =
+                    camera_component_for_target(target_component, system.has_turret_camera);
+                set_active_camera(target_system, camera_component);
+                info!(
+                    "MAVLink camera selection command={} target_system={} target_component={} resolved_camera_component={}",
+                    command, target_system, target_component, camera_component
+                );
+                packets.push(video_stream_status_packet_for_component(
+                    target_system,
+                    camera_component,
+                    system.hfov_deg,
+                    1,
+                    false,
+                ));
+            }
+        }
+        2504 => {
+            if let Some(system) = latest_system(target_system) {
+                if should_send_video_stream_information(&system.video_uri) {
+                    let camera_component =
+                        camera_component_for_target(target_component, system.has_turret_camera);
+                    set_active_camera(target_system, camera_component);
+                    info!(
+                        "MAVLink camera selection command={} target_system={} target_component={} resolved_camera_component={}",
+                        command, target_system, target_component, camera_component
+                    );
+                    packets.push(video_stream_information_packet_for_component(
+                        target_system,
+                        camera_component,
+                        &camera_name(&system.callsign, camera_component, system.has_turret_camera),
+                        &system.video_uri,
+                        system.hfov_deg,
+                        1,
+                        1,
+                        false,
+                    ));
+                }
+            }
+        }
+        _ => {}
+    }
+
+    packets
+}
+
+fn command_int_response_packets(payload: &[u8]) -> Vec<Vec<u8>> {
+    let command = match read_u16(payload, 28) {
+        Some(command) => command,
+        None => return Vec::new(),
+    };
+    let target_system = *payload.get(30).unwrap_or(&0);
+    let target_component = *payload.get(31).unwrap_or(&AUTOPILOT_COMPONENT_ID);
+    if target_system == 0 {
+        return Vec::new();
+    }
+
+    vec![command_ack_packet(
+        target_system,
+        if target_component == 0 {
+            AUTOPILOT_COMPONENT_ID
+        } else {
+            target_component
+        },
+        command,
+        0,
+    )]
+}
+
+fn requested_message_packets(system_id: u8, requested_message: u32) -> Vec<Vec<u8>> {
+    let Some(system) = latest_system(system_id) else {
+        return Vec::new();
+    };
+
+    match requested_message {
+        148 => vec![autopilot_version_packet(
+            system_id,
+            &system.mavlink_identity,
+        )],
+        242 => vec![home_position_packet(
+            system_id,
+            system.lat_deg,
+            system.lon_deg,
+            system.alt_msl_m - system.rel_alt_m,
+            system.heading_deg,
+        )],
+        259 => {
+            let mut packets = vec![camera_information_packet_for_component(
+                system_id,
+                CAMERA_COMPONENT_ID,
+                &camera_name(
+                    &system.callsign,
+                    CAMERA_COMPONENT_ID,
+                    system.has_turret_camera,
+                ),
+                0,
+            )];
+            if system.has_turret_camera {
+                packets.push(camera_information_packet_for_component(
+                    system_id,
+                    TURRET_CAMERA_COMPONENT_ID,
+                    &camera_name(&system.callsign, TURRET_CAMERA_COMPONENT_ID, true),
+                    super::constants::GIMBAL_COMPONENT_ID,
+                ));
+            }
+            packets
+        }
+        269 => {
+            if should_send_video_stream_information(&system.video_uri) {
+                let mut packets = vec![video_stream_information_packet_for_component(
+                    system_id,
+                    CAMERA_COMPONENT_ID,
+                    &camera_name(
+                        &system.callsign,
+                        CAMERA_COMPONENT_ID,
+                        system.has_turret_camera,
+                    ),
+                    &system.video_uri,
+                    system.hfov_deg,
+                    1,
+                    1,
+                    false,
+                )];
+                if system.has_turret_camera {
+                    packets.push(video_stream_information_packet_for_component(
+                        system_id,
+                        TURRET_CAMERA_COMPONENT_ID,
+                        &camera_name(&system.callsign, TURRET_CAMERA_COMPONENT_ID, true),
+                        &system.video_uri,
+                        system.hfov_deg,
+                        1,
+                        1,
+                        false,
+                    ));
+                }
+                packets
+            } else {
+                Vec::new()
+            }
+        }
+        270 => {
+            let mut packets = vec![video_stream_status_packet_for_component(
+                system_id,
+                CAMERA_COMPONENT_ID,
+                system.hfov_deg,
+                1,
+                false,
+            )];
+            if system.has_turret_camera {
+                packets.push(video_stream_status_packet_for_component(
+                    system_id,
+                    TURRET_CAMERA_COMPONENT_ID,
+                    system.hfov_deg,
+                    1,
+                    false,
+                ));
+            }
+            packets
+        }
+        265 => {
+            let mut packets = vec![mount_orientation_packet_for_component(
+                system_id,
+                CAMERA_COMPONENT_ID,
+                system.fpv_pitch_deg,
+                system.fpv_yaw_deg,
+            )];
+            if system.has_turret_camera {
+                packets.push(mount_orientation_packet_for_component(
+                    system_id,
+                    TURRET_CAMERA_COMPONENT_ID,
+                    system.gimbal_pitch_deg,
+                    system.gimbal_yaw_deg,
+                ));
+            }
+            packets
+        }
+        271 => {
+            let (fpv_image_lat, fpv_image_lon, fpv_image_alt) = fpv_image_point(
+                system.lat_deg,
+                system.lon_deg,
+                system.alt_msl_m,
+                system.rel_alt_m,
+                system.fpv_pitch_deg,
+                system.fpv_yaw_deg,
+            );
+            let mut packets = vec![camera_fov_status_packet_for_component(
+                system_id,
+                CAMERA_COMPONENT_ID,
+                system.lat_deg,
+                system.lon_deg,
+                system.alt_msl_m,
+                fpv_image_lat,
+                fpv_image_lon,
+                fpv_image_alt,
+                0.0,
+                system.fpv_pitch_deg,
+                system.fpv_yaw_deg,
+                system.hfov_deg,
+                system.vfov_deg,
+            )];
+            if system.has_turret_camera {
+                packets.push(camera_fov_status_packet_for_component(
+                    system_id,
+                    TURRET_CAMERA_COMPONENT_ID,
+                    system.lat_deg,
+                    system.lon_deg,
+                    system.alt_msl_m,
+                    system.image_lat_deg,
+                    system.image_lon_deg,
+                    system.image_alt_msl_m,
+                    0.0,
+                    system.gimbal_pitch_deg,
+                    system.gimbal_yaw_deg,
+                    system.hfov_deg,
+                    system.vfov_deg,
+                ));
+            }
+            packets
+        }
+        158 => {
+            let active_component = if system.has_turret_camera {
+                system.active_camera_component
+            } else {
+                CAMERA_COMPONENT_ID
+            };
+            let (pitch, roll, relative_yaw) = if active_component == TURRET_CAMERA_COMPONENT_ID {
+                (
+                    system.gimbal_pitch_deg,
+                    0.0,
+                    normalize_signed_deg(system.gimbal_yaw_deg - system.fpv_yaw_deg),
+                )
+            } else {
+                (system.fpv_pitch_deg, 0.0, 0.0)
+            };
+            vec![mount_status_packet(system_id, pitch, roll, relative_yaw)]
+        }
+        280 => vec![gimbal_manager_information_packet(system_id)],
+        _ => Vec::new(),
+    }
+}
+
+fn camera_component_for_target(target_component: u8, has_turret_camera: bool) -> u8 {
+    if has_turret_camera && target_component == TURRET_CAMERA_COMPONENT_ID {
+        TURRET_CAMERA_COMPONENT_ID
+    } else {
+        CAMERA_COMPONENT_ID
+    }
+}
+
+fn gimbal_device_for_target(target_component: u8, has_turret_camera: bool) -> u8 {
+    if has_turret_camera && target_component == TURRET_CAMERA_COMPONENT_ID {
+        super::constants::GIMBAL_COMPONENT_ID
+    } else {
+        0
+    }
+}
+
+fn camera_name(callsign: &str, component_id: u8, has_turret_camera: bool) -> String {
+    if has_turret_camera && component_id == TURRET_CAMERA_COMPONENT_ID {
+        format!("{callsign} Turret")
+    } else {
+        format!("{callsign} FPV")
+    }
+}
+
+fn normalize_signed_deg(value: f32) -> f32 {
+    let normalized = ((value % 360.0) + 360.0) % 360.0;
+    if normalized > 180.0 {
+        normalized - 360.0
+    } else {
+        normalized
+    }
+}
+
+fn fpv_image_point(
+    lat_deg: f64,
+    lon_deg: f64,
+    alt_msl_m: f32,
+    rel_alt_m: f32,
+    pitch_deg: f32,
+    yaw_deg: f32,
+) -> (f64, f64, f32) {
+    let pitch_rad = pitch_deg.to_radians();
+    let vertical = (-pitch_rad.sin()).max(0.01);
+    let slant_m = (rel_alt_m.max(1.0) / vertical).clamp(1.0, 15_000.0);
+    let ground_m = slant_m * pitch_rad.cos().abs();
+    let yaw_rad = yaw_deg.to_radians();
+    let north_m = ground_m * yaw_rad.cos();
+    let east_m = ground_m * yaw_rad.sin();
+    let lat_rad = lat_deg.to_radians();
+    let meters_per_degree_lat = 111_320.0;
+    let meters_per_degree_lon = (111_320.0 * lat_rad.cos().abs()).max(1.0);
+
+    (
+        lat_deg + north_m as f64 / meters_per_degree_lat,
+        lon_deg + east_m as f64 / meters_per_degree_lon,
+        alt_msl_m - rel_alt_m,
+    )
 }

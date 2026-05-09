@@ -1,6 +1,4 @@
-use super::constants::{
-    MAV_TYPE_FIXED_WING, MAV_TYPE_HELICOPTER, MAV_TYPE_QUADROTOR,
-};
+use super::constants::{MAV_TYPE_FIXED_WING, MAV_TYPE_HELICOPTER, MAV_TYPE_QUADROTOR};
 
 pub(crate) fn map_vehicle_type(vehicle_type: u8) -> u8 {
     match vehicle_type {
@@ -23,6 +21,23 @@ pub(crate) fn stable_system_id(entity_uuid: &str) -> u8 {
     }
 
     ((hash % 250) as u8) + 1
+}
+
+pub(crate) fn stable_mavlink_identity(callsign: &str, entity_uuid: &str) -> String {
+    let mut identity = callsign.trim().to_string();
+
+    for suffix in [" [ON]", " [OFF]"] {
+        if identity.ends_with(suffix) {
+            identity.truncate(identity.len() - suffix.len());
+            break;
+        }
+    }
+
+    if identity.is_empty() {
+        entity_uuid.trim().to_string()
+    } else {
+        identity
+    }
 }
 
 fn uuid16(entity_uuid: &str) -> [u8; 16] {

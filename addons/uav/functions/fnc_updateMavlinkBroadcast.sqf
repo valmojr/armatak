@@ -59,34 +59,22 @@ private _vfov = _uav getVariable ["armatak_uas_vfov", (_hfov * 0.5625)];
 private _imageLat = _pos select 1;
 private _imageLon = _pos select 2;
 private _imageAlt = _pos select 3;
+private _cameraData = [_uav, "turret"] call armatak_fnc_extract_uas_camera_data;
+private _uavControl = UAVControl _uav;
+private _controlledTurretPath = _uavControl param [1, []];
+private _hasTurretCamera = ((_controlledTurretPath isEqualType []) && {_controlledTurretPath isNotEqualTo []}) || {(allTurrets _uav) isNotEqualTo []};
 
-private _laser = laserTarget _uav;
-if (!isNull _laser) then {
-	private _originASL = getPosASL _uav;
-	private _targetWorld = getPosWorld _laser;
-	private _targetAslZ = (getPosASL _laser) select 2;
-	private _spiASL = [_targetWorld select 0, _targetWorld select 1, _targetAslZ];
+if (_cameraData isEqualType [] && {(count _cameraData) >= 6}) then {
+	_gimbalYaw = _cameraData param [0, _yaw];
+	_gimbalPitch = _cameraData param [1, _pitch];
+	_hfov = _cameraData param [2, _hfov];
+	_vfov = _uav getVariable ["armatak_uas_vfov", (_hfov * 0.5625)];
 
-	private _los = _spiASL vectorDiff _originASL;
-	private _losMag = vectorMagnitude _los;
-
-	if (_losMag > 0) then {
-		_los = _los vectorMultiply (1 / _losMag);
-
-		private _dirX = _los select 0;
-		private _dirY = _los select 1;
-		private _dirZ = _los select 2;
-		private _horizontalMag = sqrt ((_dirX * _dirX) + (_dirY * _dirY));
-
-		private _camYaw = ((_dirX atan2 _dirY) + 360) mod 360;
-		private _camPitch = _dirZ atan2 (_horizontalMag max 0.001);
-		_gimbalPitch = _camPitch;
-		_gimbalYaw = _camYaw;
-
-		private _imageGeo = [_targetWorld select 0, _targetWorld select 1, _targetAslZ] call EFUNC(client,convertClientLocation);
-		_imageLat = _imageGeo select 0;
-		_imageLon = _imageGeo select 1;
-		_imageAlt = _imageGeo select 2;
+	private _spiGeo = _cameraData param [5, []];
+	if (_spiGeo isEqualType [] && {(count _spiGeo) >= 3}) then {
+		_imageLat = _spiGeo select 0;
+		_imageLon = _spiGeo select 1;
+		_imageAlt = _spiGeo select 2;
 	};
 };
 
@@ -113,7 +101,8 @@ private _systemPayload = [
 	_vfov,
 	_imageLat,
 	_imageLon,
-	_imageAlt
+	_imageAlt,
+	parseNumber _hasTurretCamera
 ];
 
 "armatak" callExtension ["uas:send_uas_system", [_systemPayload]];

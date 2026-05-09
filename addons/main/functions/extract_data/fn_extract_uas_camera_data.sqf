@@ -1,4 +1,4 @@
-params ["_drone"];
+params ["_drone", ["_cameraMode", "turret"]];
 
 private _override = _drone getVariable ["armatak_uas_camera_data_override", []];
 private _isLocalController = hasInterface && {!isNull player} && {(getConnectedUAV player) isEqualTo _drone};
@@ -22,16 +22,18 @@ private _cameraDir = [];
 private _spiASL = [];
 private _slantRange = 0;
 
-private _laserTarget = laserTarget _drone;
-if (!isNull _laserTarget) then {
-    private _laserTargetWorld = getPosWorld _laserTarget;
-    private _laserTargetAslZ = (getPosASL _laserTarget) select 2;
-    _spiASL = [_laserTargetWorld select 0, _laserTargetWorld select 1, _laserTargetAslZ];
-    _cameraDir = _spiASL vectorDiff _originASL;
-    _slantRange = _originASL vectorDistance _spiASL;
+if (_cameraMode isNotEqualTo "fpv") then {
+    private _laserTarget = laserTarget _drone;
+    if (!isNull _laserTarget) then {
+        private _laserTargetWorld = getPosWorld _laserTarget;
+        private _laserTargetAslZ = (getPosASL _laserTarget) select 2;
+        _spiASL = [_laserTargetWorld select 0, _laserTargetWorld select 1, _laserTargetAslZ];
+        _cameraDir = _spiASL vectorDiff _originASL;
+        _slantRange = _originASL vectorDistance _spiASL;
+    };
 };
 
-if (_cameraDir isEqualTo []) then {
+if (_cameraDir isEqualTo [] && {_cameraMode isNotEqualTo "fpv"}) then {
     private _uavControl = UAVControl _drone;
     private _controlledTurretPath = _uavControl param [1, []];
     private _candidateTurrets = [];

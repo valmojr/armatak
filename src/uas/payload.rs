@@ -42,6 +42,7 @@ pub struct UasSystemPayload {
     pub image_lat_deg: f64,
     pub image_lon_deg: f64,
     pub image_alt_msl_m: f32,
+    pub has_turret_camera: bool,
 }
 
 impl FromArma for UasTelemetryPayload {
@@ -123,6 +124,7 @@ impl FromArma for UasSystemPayload {
             image_lat_deg,
             image_lon_deg,
             image_alt_msl_m,
+            has_turret_camera,
         ) = <(
             String,
             String,
@@ -147,6 +149,7 @@ impl FromArma for UasSystemPayload {
             f64,
             f64,
             f32,
+            i32,
         )>::from_arma(data)?;
 
         Ok(Self {
@@ -173,6 +176,7 @@ impl FromArma for UasSystemPayload {
             image_lat_deg,
             image_lon_deg,
             image_alt_msl_m,
+            has_turret_camera: has_turret_camera != 0,
         })
     }
 }

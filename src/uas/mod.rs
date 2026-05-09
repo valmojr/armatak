@@ -6,6 +6,7 @@ mod identity;
 mod packets;
 mod payload;
 mod send;
+mod state;
 
 pub use endpoint::{start_endpoint, stop_endpoint};
 #[allow(unused_imports)]
