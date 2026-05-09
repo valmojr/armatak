@@ -20,15 +20,19 @@ private _normalize = {
 	format ["rtp://%1", _url]
 };
 
-if (!isNull _uav && {_activelyControlledUav isEqualTo _uav}) then {
+if (!isNull _uav) then {
 	private _objectVideoUrl = [_uav] call armatak_fnc_extract_marker_video_url;
 	private _normalizedObjectVideoUrl = [_objectVideoUrl] call _normalize;
 	if (_normalizedObjectVideoUrl isNotEqualTo "") exitWith {
 		_normalizedObjectVideoUrl
 	};
-};
 
-if (!isNull _uav) exitWith {
+	private _activeSessionVideoUrl = player getVariable [QEGVAR(client,video_feed_url), ""];
+	private _normalizedActiveSessionVideoUrl = [_activeSessionVideoUrl] call _normalize;
+	if (_normalizedActiveSessionVideoUrl isNotEqualTo "") exitWith {
+		_normalizedActiveSessionVideoUrl
+	};
+
 	_defaultVideoUri
 };
 
