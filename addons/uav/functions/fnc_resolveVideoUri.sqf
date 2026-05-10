@@ -2,7 +2,7 @@
 
 params [["_uav", objNull, [objNull]]];
 
-private _defaultVideoUri = "rtsp://irontak.com:554/fpv";
+private _defaultVideoUri = "rtsp://undefined:554/fpv";
 private _activelyControlledUav = if (!isNull player) then {getConnectedUAV player} else {objNull};
 
 private _normalize = {
