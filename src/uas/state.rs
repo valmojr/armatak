@@ -26,6 +26,9 @@ pub(crate) struct LatestUasSystem {
     pub image_alt_msl_m: f32,
     pub has_turret_camera: bool,
     pub active_camera_component: u8,
+    pub home_lat_deg: f64,
+    pub home_lon_deg: f64,
+    pub home_alt_msl_m: f32,
 }
 
 lazy_static! {
@@ -38,6 +41,20 @@ pub(crate) fn record_system(system_id: u8, mavlink_identity: &str, payload: &Uas
             .get(&system_id)
             .map(|system| system.active_camera_component)
             .unwrap_or(super::constants::CAMERA_COMPONENT_ID);
+        let home = systems
+            .get(&system_id)
+            .map(|system| {
+                (
+                    system.home_lat_deg,
+                    system.home_lon_deg,
+                    system.home_alt_msl_m,
+                )
+            })
+            .unwrap_or((
+                payload.lat_deg,
+                payload.lon_deg,
+                payload.alt_msl_m - payload.rel_alt_m,
+            ));
 
         systems.insert(
             system_id,
@@ -61,8 +78,21 @@ pub(crate) fn record_system(system_id: u8, mavlink_identity: &str, payload: &Uas
                 image_alt_msl_m: payload.image_alt_msl_m,
                 has_turret_camera: payload.has_turret_camera,
                 active_camera_component,
+                home_lat_deg: home.0,
+                home_lon_deg: home.1,
+                home_alt_msl_m: home.2,
             },
         );
+    }
+}
+
+pub(crate) fn set_home(system_id: u8, lat_deg: f64, lon_deg: f64, alt_msl_m: f32) {
+    if let Ok(mut systems) = LATEST_UAS_SYSTEMS.lock() {
+        if let Some(system) = systems.get_mut(&system_id) {
+            system.home_lat_deg = lat_deg;
+            system.home_lon_deg = lon_deg;
+            system.home_alt_msl_m = alt_msl_m;
+        }
     }
 }
 

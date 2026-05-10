@@ -100,6 +100,19 @@ pub fn send_uas_system(ctx: Context, payload: UasSystemPayload) -> &'static str 
     let active_camera_component = latest_system(system_id)
         .map(|system| system.active_camera_component)
         .unwrap_or(CAMERA_COMPONENT_ID);
+    let (home_lat_deg, home_lon_deg, home_alt_msl_m) = latest_system(system_id)
+        .map(|system| {
+            (
+                system.home_lat_deg,
+                system.home_lon_deg,
+                system.home_alt_msl_m,
+            )
+        })
+        .unwrap_or((
+            payload.lat_deg,
+            payload.lon_deg,
+            payload.alt_msl_m - payload.rel_alt_m,
+        ));
 
     info!(
         "MAVLink system send requested to {} entity_uuid={} mavlink_identity={} sysid={} callsign={} lat={} lon={} alt_msl={} rel_alt={} heading={} gimbal_pitch={} gimbal_yaw={} video_uri={}",
@@ -186,14 +199,14 @@ pub fn send_uas_system(ctx: Context, payload: UasSystemPayload) -> &'static str 
         global_position_int_packet(&autopilot_payload),
         attitude_packet(&autopilot_payload),
         vfr_hud_packet(&autopilot_payload),
-        system_status_packet(system_id),
-        extended_sys_state_packet(system_id, payload.flying),
+        system_status_packet(system_id, payload.battery_remaining_pct),
+        extended_sys_state_packet(system_id, payload.landed),
         autopilot_version_packet(system_id, &mavlink_identity),
         home_position_packet(
             system_id,
-            payload.lat_deg,
-            payload.lon_deg,
-            payload.alt_msl_m - payload.rel_alt_m,
+            home_lat_deg,
+            home_lon_deg,
+            home_alt_msl_m,
             payload.heading_deg,
         ),
         component_heartbeat_packet(system_id, CAMERA_COMPONENT_ID, MAV_TYPE_CAMERA),

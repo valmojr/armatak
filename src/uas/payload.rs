@@ -33,6 +33,7 @@ pub struct UasSystemPayload {
     pub pitch_deg: f32,
     pub yaw_deg: f32,
     pub flying: bool,
+    pub landed: bool,
     pub gimbal_roll_deg: f32,
     pub gimbal_pitch_deg: f32,
     pub gimbal_yaw_deg: f32,
@@ -43,6 +44,7 @@ pub struct UasSystemPayload {
     pub image_lon_deg: f64,
     pub image_alt_msl_m: f32,
     pub has_turret_camera: bool,
+    pub battery_remaining_pct: i8,
 }
 
 impl FromArma for UasTelemetryPayload {
@@ -115,6 +117,7 @@ impl FromArma for UasSystemPayload {
             pitch_deg,
             yaw_deg,
             flying,
+            landed,
             gimbal_roll_deg,
             gimbal_pitch_deg,
             gimbal_yaw_deg,
@@ -125,6 +128,7 @@ impl FromArma for UasSystemPayload {
             image_lon_deg,
             image_alt_msl_m,
             has_turret_camera,
+            battery_remaining_pct,
         ) = <(
             String,
             String,
@@ -140,6 +144,7 @@ impl FromArma for UasSystemPayload {
             f32,
             f32,
             i32,
+            i32,
             f32,
             f32,
             f32,
@@ -149,6 +154,7 @@ impl FromArma for UasSystemPayload {
             f64,
             f64,
             f32,
+            i32,
             i32,
         )>::from_arma(data)?;
 
@@ -167,6 +173,7 @@ impl FromArma for UasSystemPayload {
             pitch_deg,
             yaw_deg,
             flying: flying != 0,
+            landed: landed != 0,
             gimbal_roll_deg,
             gimbal_pitch_deg,
             gimbal_yaw_deg,
@@ -177,6 +184,7 @@ impl FromArma for UasSystemPayload {
             image_lon_deg,
             image_alt_msl_m,
             has_turret_camera: has_turret_camera != 0,
+            battery_remaining_pct: battery_remaining_pct.clamp(0, 100) as i8,
         })
     }
 }
