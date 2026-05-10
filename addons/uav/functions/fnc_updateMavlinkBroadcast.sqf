@@ -40,6 +40,11 @@ private _mavlinkAddress = player getVariable [QEGVAR(client,mavlink_address), ""
 if (_mavlinkAddress isEqualTo "") exitWith {};
 
 private _pos = [_uav] call EFUNC(client,extractClientPosition);
+private _relAlt = ((getPosATL _uav) select 2) max 0;
+if (isNil {_uav getVariable "armatak_uas_home_atl"}) then {
+	_uav setVariable ["armatak_uas_home_atl", getPosATL _uav, true];
+	_uav setVariable ["armatak_uas_home_geo", [_pos select 1, _pos select 2, (_pos select 3) - _relAlt], true];
+};
 private _uuid = [_uav] call armatak_fnc_extract_uuid;
 private _callsign = [_uav] call armatak_fnc_extract_marker_callsign;
 private _videoUri = [_uav] call FUNC(resolveVideoUri);
@@ -48,8 +53,15 @@ private _up = vectorUp _uav;
 private _yaw = getDir _uav;
 private _pitch = asin (((_dir select 2) max -1) min 1);
 private _roll = asin (((_up select 0) max -1) min 1);
-private _relAlt = ((getPosATL _uav) select 2) max 0;
 private _uavType = if (_uav isKindOf "Plane") then {1} else {[2, 3] select (_uav isKindOf "Helicopter")};
+private _armed = _uav getVariable ["armatak_uas_armed", isEngineOn _uav];
+if !(isEngineOn _uav) then {
+	_armed = false;
+	_uav setVariable ["armatak_uas_armed", false, true];
+};
+private _groundSpeed = abs (_pos select 6);
+private _landed = (_relAlt <= 1.5) && {_groundSpeed <= 0.5};
+private _batteryRemaining = round ((((fuel _uav) max 0) min 1) * 100);
 
 private _gimbalRoll = 0;
 private _gimbalPitch = _pitch;
@@ -92,7 +104,8 @@ private _systemPayload = [
 	_roll,
 	_pitch,
 	_yaw,
-	parseNumber isEngineOn _uav,
+	parseNumber _armed,
+	parseNumber _landed,
 	_gimbalRoll,
 	_gimbalPitch,
 	_gimbalYaw,
@@ -102,7 +115,8 @@ private _systemPayload = [
 	_imageLat,
 	_imageLon,
 	_imageAlt,
-	parseNumber _hasTurretCamera
+	parseNumber _hasTurretCamera,
+	_batteryRemaining
 ];
 
 "armatak" callExtension ["uas:send_uas_system", [_systemPayload]];

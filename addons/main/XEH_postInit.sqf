@@ -61,6 +61,14 @@ addMissionEventHandler ["ExtensionCallback", {
 				case "COMMAND_LONG";
 				case "COMMAND_INT";
 				case "COMMAND_ACK";
+				case "MISSION_COUNT";
+				case "MISSION_ITEM";
+				case "MISSION_ITEM_INT";
+				case "MISSION_CLEAR_ALL";
+				case "MISSION_SET_CURRENT";
+				case "SET_HOME_POSITION";
+				case "SET_MODE";
+				case "SET_POSITION_TARGET_GLOBAL_INT";
 				case "MANUAL_CONTROL": {
 					"armatak" callExtension ["log", [["info", format ["MAVLINK UDP CALLBACK %1 %2", _function, _data]]]];
 					[_function, _data] call EFUNC(uav,handleMavlinkCallback);

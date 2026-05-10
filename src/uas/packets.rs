@@ -49,6 +49,37 @@ pub(crate) fn command_ack_packet(
     build_v2_packet(system_id, component_id, 77, &msg, 143)
 }
 
+pub(crate) fn mission_request_int_packet(
+    system_id: u8,
+    component_id: u8,
+    target_system: u8,
+    target_component: u8,
+    seq: u16,
+    mission_type: u8,
+) -> Vec<u8> {
+    let mut msg = Vec::with_capacity(5);
+    msg.extend_from_slice(&seq.to_le_bytes());
+    msg.push(target_system);
+    msg.push(target_component);
+    msg.push(mission_type);
+    build_v2_packet(system_id, component_id, 51, &msg, 196)
+}
+
+pub(crate) fn mission_ack_packet(
+    system_id: u8,
+    component_id: u8,
+    target_system: u8,
+    target_component: u8,
+    mission_type: u8,
+) -> Vec<u8> {
+    let mut msg = Vec::with_capacity(4);
+    msg.push(target_system);
+    msg.push(target_component);
+    msg.push(0);
+    msg.push(mission_type);
+    build_v2_packet(system_id, component_id, 47, &msg, 153)
+}
+
 pub(crate) fn gps_raw_int_packet(payload: &UasTelemetryPayload) -> Vec<u8> {
     let time_usec = (Utc::now().timestamp_millis().max(0) as u64) * 1_000;
     let fix_type = if payload.flying { 3u8 } else { 2u8 };
@@ -119,7 +150,7 @@ pub(crate) fn vfr_hud_packet(payload: &UasTelemetryPayload) -> Vec<u8> {
     build_v1_packet(payload.system_id, payload.component_id, 74, &msg, 20)
 }
 
-pub(crate) fn system_status_packet(system_id: u8) -> Vec<u8> {
+pub(crate) fn system_status_packet(system_id: u8, battery_remaining_pct: i8) -> Vec<u8> {
     let fields = [
         FieldSpec {
             ty: "uint32_t",
@@ -203,12 +234,12 @@ pub(crate) fn system_status_packet(system_id: u8) -> Vec<u8> {
     msg.extend_from_slice(&0u16.to_le_bytes());
     msg.extend_from_slice(&0u16.to_le_bytes());
     msg.extend_from_slice(&0u16.to_le_bytes());
-    msg.push(100u8);
+    msg.push(battery_remaining_pct.clamp(0, 100) as u8);
 
     build_v2_packet(system_id, AUTOPILOT_COMPONENT_ID, 1, &msg, crc_extra)
 }
 
-pub(crate) fn extended_sys_state_packet(system_id: u8, flying: bool) -> Vec<u8> {
+pub(crate) fn extended_sys_state_packet(system_id: u8, landed: bool) -> Vec<u8> {
     let fields = [
         FieldSpec {
             ty: "uint8_t",
@@ -225,10 +256,10 @@ pub(crate) fn extended_sys_state_packet(system_id: u8, flying: bool) -> Vec<u8> 
 
     let mut msg = Vec::with_capacity(2);
     msg.push(MAV_LANDED_STATE_UNDEFINED);
-    msg.push(if flying {
-        MAV_LANDED_STATE_IN_AIR
-    } else {
+    msg.push(if landed {
         MAV_LANDED_STATE_ON_GROUND
+    } else {
+        MAV_LANDED_STATE_IN_AIR
     });
 
     build_v2_packet(system_id, AUTOPILOT_COMPONENT_ID, 245, &msg, crc_extra)
