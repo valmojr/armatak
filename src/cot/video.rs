@@ -13,7 +13,9 @@ fn parse_video_url(url: &str) -> Option<(String, String, String, String)> {
         Some((authority, path)) => (authority, format!("/{}", path)),
         None => (rest, String::new()),
     };
-    let host_port = authority.rsplit_once('@').map_or(authority, |(_, host_port)| host_port);
+    let host_port = authority
+        .rsplit_once('@')
+        .map_or(authority, |(_, host_port)| host_port);
     let (address, port) = host_port.rsplit_once(':')?;
 
     if protocol.is_empty() || address.is_empty() || port.is_empty() {
@@ -35,10 +37,7 @@ pub fn video_detail_xml(video_url: &str, uid: &str, callsign: &str) -> String {
     }
 
     let Some((protocol, address, port, path)) = parse_video_url(trimmed_url) else {
-        return format!(
-            "<__video url=\"{}\"/>",
-            escape_xml_attribute(trimmed_url)
-        );
+        return format!("<__video url=\"{}\"/>", escape_xml_attribute(trimmed_url));
     };
 
     format!(

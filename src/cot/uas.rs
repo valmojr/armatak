@@ -131,8 +131,8 @@ impl UasPlatformCoTPayload {
                 None => (escape_xml(&self.vehicle_type_tag), None),
             };
         let now = Utc::now().to_rfc3339_opts(SecondsFormat::Millis, true);
-        let stale =
-            (Utc::now() + Duration::milliseconds(3500)).to_rfc3339_opts(SecondsFormat::Millis, true);
+        let stale = (Utc::now() + Duration::milliseconds(3500))
+            .to_rfc3339_opts(SecondsFormat::Millis, true);
 
         let mut xml = String::new();
         xml.push_str("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
@@ -153,8 +153,7 @@ impl UasPlatformCoTPayload {
         xml.push_str("<_uastool extendedCot=\"true\" activeRoute=\"false\"/>");
         xml.push_str(&format!(
             "<track course=\"{}\" slope=\"0.0\" speed=\"{}\"/>",
-            self.track_course,
-            self.track_speed,
+            self.track_course, self.track_speed,
         ));
         xml.push_str(&format!(
             "<sensor elevation=\"{}\" vfov=\"{}\" north=\"0.0\" roll=\"0.0\" range=\"{}\" azimuth=\"{}\" fov=\"{}\" type=\"r-e\" version=\"0.6\"/>",
@@ -186,7 +185,10 @@ impl UasPlatformCoTPayload {
         } else {
             xml.push_str("<__video></__video>");
         }
-        xml.push_str(&format!("<link uid=\"{}\" type=\"a-f-G-U-C\" relation=\"p-p\" />", link_uid));
+        xml.push_str(&format!(
+            "<link uid=\"{}\" type=\"a-f-G-U-C\" relation=\"p-p\" />",
+            link_uid
+        ));
         xml.push_str("</detail></event>");
         xml
     }
@@ -326,5 +328,3 @@ impl UasSensorCoTPayload {
         xml
     }
 }
-
-

@@ -54,17 +54,15 @@ fn send_over_stream(
 ) -> Result<(), String> {
     let message_len = message.len();
     info!("Sending TCP payload ({} bytes)", message_len);
-    stream
-        .write_message(message.as_bytes())
-        .map_err(|e| {
-            let message = e.to_string();
-            let _ = context.callback_data(
-                "TCP SOCKET ERROR",
-                "TAK Socket disconnected",
-                message.clone(),
-            );
-            message
-        })
+    stream.write_message(message.as_bytes()).map_err(|e| {
+        let message = e.to_string();
+        let _ = context.callback_data(
+            "TCP SOCKET ERROR",
+            "TAK Socket disconnected",
+            message.clone(),
+        );
+        message
+    })
 }
 
 fn flush_pending_messages(
@@ -145,10 +143,14 @@ impl TcpClient {
             let mut pending_messages: VecDeque<(String, Context)> = VecDeque::new();
             let (connect_tx, connect_rx) = mpsc::channel();
 
-            info!("TCP worker thread started with config: {}", config_description);
+            info!(
+                "TCP worker thread started with config: {}",
+                config_description
+            );
 
             let tcp_thread = thread::spawn(move || {
-                let connect_result = panic::catch_unwind(AssertUnwindSafe(|| connect_stream(&config)));
+                let connect_result =
+                    panic::catch_unwind(AssertUnwindSafe(|| connect_stream(&config)));
 
                 match connect_result {
                     Ok(Ok(stream)) => {
@@ -184,7 +186,8 @@ impl TcpClient {
                         match &mut state {
                             ConnectionState::Connected => {
                                 if let Some(stream) = connection.as_mut() {
-                                    if let Err(error) = send_over_stream(stream, &context, message) {
+                                    if let Err(error) = send_over_stream(stream, &context, message)
+                                    {
                                         info!("Failed to send message: {}", error);
                                         state = ConnectionState::Failed(error);
                                         connection = None;

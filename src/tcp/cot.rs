@@ -50,10 +50,7 @@ pub fn send_uas_platform_cot(
     "Sending UAS Platform main CoT to TCP server"
 }
 
-pub fn send_uas_video_cot(
-    ctx: Context,
-    payload: cot::uas::UasVideoCoTPayload,
-) -> &'static str {
+pub fn send_uas_video_cot(ctx: Context, payload: cot::uas::UasVideoCoTPayload) -> &'static str {
     let xml = payload.to_xml();
     if !xml.is_empty() {
         send_payload(ctx, xml);
@@ -62,10 +59,7 @@ pub fn send_uas_video_cot(
     "Sending UAS Video (b-i-v) CoT to TCP server"
 }
 
-pub fn send_uas_sensor_cot(
-    ctx: Context,
-    payload: cot::uas::UasSensorCoTPayload,
-) -> &'static str {
+pub fn send_uas_sensor_cot(ctx: Context, payload: cot::uas::UasSensorCoTPayload) -> &'static str {
     let xml = payload.to_xml();
     send_payload(ctx, xml);
 

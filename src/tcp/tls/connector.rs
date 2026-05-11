@@ -6,8 +6,8 @@ use std::fs::File;
 use std::io::BufReader;
 use std::io::Cursor;
 use std::net::{SocketAddr, TcpStream, ToSocketAddrs};
-use std::time::Duration;
 use std::sync::Arc;
+use std::time::Duration;
 
 use crate::tcp::transport::TransportStream;
 
@@ -65,7 +65,12 @@ fn resolve_address(address: &str) -> Result<SocketAddr, String> {
         .to_socket_addrs()
         .map_err(|e| format!("failed to resolve {}: {}", address, e))?
         .next()
-        .ok_or_else(|| format!("failed to resolve {}: no socket addresses returned", address))
+        .ok_or_else(|| {
+            format!(
+                "failed to resolve {}: no socket addresses returned",
+                address
+            )
+        })
 }
 
 fn connect_tcp(address: &str) -> Result<TcpStream, String> {

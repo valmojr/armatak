@@ -35,7 +35,12 @@ fn connect_plain(address: &str) -> Result<TransportStream, String> {
         .to_socket_addrs()
         .map_err(|e| format!("failed to resolve {}: {}", address, e))?
         .next()
-        .ok_or_else(|| format!("failed to resolve {}: no socket addresses returned", address))?;
+        .ok_or_else(|| {
+            format!(
+                "failed to resolve {}: no socket addresses returned",
+                address
+            )
+        })?;
 
     info!(
         "Opening plain TCP connection to {} (resolved={}) with timeout {:?}",

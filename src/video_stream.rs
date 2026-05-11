@@ -70,7 +70,10 @@ pub fn start_stream(
     let rtsp_url = if username.is_empty() || password.is_empty() {
         format!("rtsp://{}:{}/{}", address, port, stream_path)
     } else {
-        format!("rtsp://{}:{}@{}:{}/{}", username, password, address, port, stream_path)
+        format!(
+            "rtsp://{}:{}@{}:{}/{}",
+            username, password, address, port, stream_path
+        )
     };
 
     let mut cmd = Command::new("ffmpeg");

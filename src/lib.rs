@@ -5,6 +5,7 @@ mod mdns;
 mod structs;
 mod tcp;
 mod tests;
+mod uas;
 mod udp_socket;
 mod video_stream;
 

@@ -23,7 +23,13 @@ fn detect_local_ipv4() -> Result<Ipv4Addr, String> {
 fn sanitize_label(value: &str, fallback: &str) -> String {
     let mut sanitized = value
         .chars()
-        .map(|c| if c.is_ascii_alphanumeric() || c == '-' { c } else { '-' })
+        .map(|c| {
+            if c.is_ascii_alphanumeric() || c == '-' {
+                c
+            } else {
+                '-'
+            }
+        })
         .collect::<String>()
         .trim_matches('-')
         .to_string();
@@ -67,7 +73,13 @@ fn push_record(buf: &mut Vec<u8>, name: &str, rr_type: u16, rr_class: u16, ttl: 
     buf.extend_from_slice(rdata);
 }
 
-fn build_mdns_packet(instance_name: &str, host_name: &str, ip: Ipv4Addr, port: u16, video_uri: &str) -> Vec<u8> {
+fn build_mdns_packet(
+    instance_name: &str,
+    host_name: &str,
+    ip: Ipv4Addr,
+    port: u16,
+    video_uri: &str,
+) -> Vec<u8> {
     let service_type = "_mavlink._udp.local";
     let instance_fqdn = format!("{}.{}", instance_name, service_type);
     let host_fqdn = format!("{}.local", host_name);
@@ -122,7 +134,11 @@ pub fn start_uas_advertisement(
     let local_ip = match detect_local_ipv4() {
         Ok(ip) => ip,
         Err(error) => {
-            let _ = ctx.callback_data("MDNS ERROR", "Failed to determine local IPv4", error.clone());
+            let _ = ctx.callback_data(
+                "MDNS ERROR",
+                "Failed to determine local IPv4",
+                error.clone(),
+            );
             return "mdns local IPv4 error";
         }
     };
@@ -161,7 +177,10 @@ pub fn start_uas_advertisement(
 
         loop {
             match socket.send_to(&packet, multicast_addr) {
-                Ok(size) => info!("Sent mDNS UAS advertisement ({} bytes) to {}", size, multicast_addr),
+                Ok(size) => info!(
+                    "Sent mDNS UAS advertisement ({} bytes) to {}",
+                    size, multicast_addr
+                ),
                 Err(error) => info!("Failed sending mDNS UAS advertisement: {}", error),
             }
 
@@ -172,7 +191,10 @@ pub fn start_uas_advertisement(
             }
         }
 
-        info!("Stopped mDNS UAS advertisement for instance={}", safe_instance);
+        info!(
+            "Stopped mDNS UAS advertisement for instance={}",
+            safe_instance
+        );
     });
 
     let _ = ctx.callback_data(

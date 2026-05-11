@@ -1,5 +1,5 @@
-use rcgen::{CertificateParams, DistinguishedName, DnType, KeyPair, PKCS_RSA_SHA256};
 use log::info;
+use rcgen::{CertificateParams, DistinguishedName, DnType, KeyPair, PKCS_RSA_SHA256};
 use reqwest::blocking::Client;
 use serde::Deserialize;
 use uuid::Uuid;
@@ -198,10 +198,7 @@ pub fn enroll_and_connect(
     };
     info!(
         "Starting enroll_and_connect for host={} enroll_port={} server_name={} client_uid={}",
-        host,
-        enroll_port,
-        server_name,
-        normalized_client_uid
+        host, enroll_port, server_name, normalized_client_uid
     );
 
     let enrollment_config = fetch_enrollment_config(host, enroll_port)?;
