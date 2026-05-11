@@ -58,7 +58,7 @@ impl EudCoTPayload {
             link_uid: None,
             remarker: None,
             video_url: None,
+            stale_seconds: None,
         }
     }
 }
-

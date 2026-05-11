@@ -1,47 +1,49 @@
-use super::cot::CursorOverTime;
 use arma_rs::{FromArma, FromArmaError};
 
-pub struct ExternalPositionPayload {
+use super::cot::CursorOverTime;
+
+pub struct ReportMarkerCoTPayload {
     pub uuid: String,
+    pub r#type: String,
     pub point_lat: f64,
     pub point_lon: f64,
     pub point_hae: f32,
     pub contact_callsign: String,
-    pub track_course: i32,
-    pub track_speed: f32,
-    pub remarker: String,
+    pub stale_seconds: i64,
+    pub remarks: String,
 }
 
-impl FromArma for ExternalPositionPayload {
-    fn from_arma(data: String) -> Result<ExternalPositionPayload, FromArmaError> {
+impl FromArma for ReportMarkerCoTPayload {
+    fn from_arma(data: String) -> Result<ReportMarkerCoTPayload, FromArmaError> {
         let (
             uuid,
+            r#type,
             point_lat,
             point_lon,
             point_hae,
             contact_callsign,
-            track_course,
-            track_speed,
-            remarker,
-        ) = <(String, f64, f64, f32, String, i32, f32, String)>::from_arma(data)?;
+            stale_seconds,
+            remarks,
+        ) = <(String, String, f64, f64, f32, String, i64, String)>::from_arma(data)?;
+
         Ok(Self {
             uuid,
+            r#type,
             point_lat,
             point_lon,
             point_hae,
             contact_callsign,
-            track_course,
-            track_speed,
-            remarker,
+            stale_seconds,
+            remarks,
         })
     }
 }
 
-impl ExternalPositionPayload {
+impl ReportMarkerCoTPayload {
     pub fn to_cot(&self) -> CursorOverTime {
         CursorOverTime {
             uuid: Some(self.uuid.clone()),
-            r#type: None,
+            r#type: Some(self.r#type.clone()),
             point_lat: self.point_lat,
             point_lon: self.point_lon,
             point_hae: self.point_hae,
@@ -50,12 +52,12 @@ impl ExternalPositionPayload {
             contact_callsign: self.contact_callsign.clone(),
             group_name: None,
             group_role: None,
-            track_course: Some(self.track_course),
-            track_speed: Some(self.track_speed),
+            track_course: None,
+            track_speed: None,
             link_uid: None,
-            remarker: Some(self.remarker.clone()),
+            remarker: Some(self.remarks.clone()),
             video_url: None,
-            stale_seconds: None,
+            stale_seconds: Some(self.stale_seconds),
         }
     }
 }

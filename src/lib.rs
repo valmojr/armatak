@@ -1,6 +1,5 @@
 use arma_rs::{arma, Extension, Group};
 use rustls::crypto::aws_lc_rs;
-mod uas;
 mod mdns;
 mod structs;
 mod tcp;
@@ -77,6 +76,7 @@ pub fn init() -> Extension {
                     Group::new()
                         .command("eud", tcp::cot::send_eud_cot)
                         .command("marker", tcp::cot::send_marker_cot)
+                        .command("report_marker", tcp::cot::send_report_marker_cot)
                         .command("digital_pointer", tcp::cot::send_digital_pointer_cot)
                         .command("chat", tcp::cot::send_message_cot)
                         .command("uas_platform", tcp::cot::send_uas_platform_cot)

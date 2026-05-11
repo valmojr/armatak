@@ -87,6 +87,7 @@ impl MarkerCoTPayload {
             link_uid: None,
             remarker: None,
             video_url: self.video_url.clone(),
+            stale_seconds: None,
         }
     }
 }

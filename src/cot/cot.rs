@@ -18,6 +18,7 @@ pub struct CursorOverTime {
     pub link_uid: Option<String>,
     pub remarker: Option<String>,
     pub video_url: Option<String>,
+    pub stale_seconds: Option<i64>,
 }
 
 impl CursorOverTime {
@@ -34,8 +35,9 @@ impl CursorOverTime {
 
         let created_time = Utc::now().to_rfc3339_opts(SecondsFormat::Millis, true);
 
-        let stale_time =
-            (Utc::now() + Duration::seconds(360)).to_rfc3339_opts(SecondsFormat::Millis, true);
+        let stale_seconds = self.stale_seconds.unwrap_or(360).max(1);
+        let stale_time = (Utc::now() + Duration::seconds(stale_seconds))
+            .to_rfc3339_opts(SecondsFormat::Millis, true);
 
         let mut xml = String::new();
 
