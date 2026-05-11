@@ -19,6 +19,16 @@ pub fn send_marker_cot(
     "Sending Marker Cursor Over Time to TCP server"
 }
 
+pub fn send_report_marker_cot(
+    ctx: Context,
+    cursor_over_time: cot::report_marker::ReportMarkerCoTPayload,
+) -> &'static str {
+    let payload = cursor_over_time.to_cot().convert_to_xml();
+    send_payload(ctx, payload);
+
+    "Sending Report Marker Cursor Over Time to TCP server"
+}
+
 pub fn send_digital_pointer_cot(
     ctx: Context,
     cursor_over_time: cot::digital_pointer::DigitalPointerPayload,

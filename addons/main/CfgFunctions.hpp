@@ -19,6 +19,24 @@ class CfgFunctions {
 			class send_marker_cot {
 				file = "\armatak\armatak\addons\main\functions\api\fn_send_marker_cot.sqf";
 			};
+			class report_marker {
+				file = "\armatak\armatak\addons\main\functions\api\fn_report_marker.sqf";
+			};
+			class draw_circle {
+				file = "\armatak\armatak\addons\main\functions\api\fn_draw_circle.sqf";
+			};
+			class draw_ellipse {
+				file = "\armatak\armatak\addons\main\functions\api\fn_draw_ellipse.sqf";
+			};
+			class draw_rectangle {
+				file = "\armatak\armatak\addons\main\functions\api\fn_draw_rectangle.sqf";
+			};
+			class draw_polyline {
+				file = "\armatak\armatak\addons\main\functions\api\fn_draw_polyline.sqf";
+			};
+			class draw_tactical_graphic {
+				file = "\armatak\armatak\addons\main\functions\api\fn_draw_tactical_graphic.sqf";
+			};
 			class send_uas_platform_cot {
 				file = "\armatak\armatak\addons\main\functions\api\fn_send_uas_platform_cot.sqf";
 			};
