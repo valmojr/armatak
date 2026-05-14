@@ -1,4 +1,5 @@
 pub mod cot;
+pub mod delete;
 pub mod digital_pointer;
 pub mod draws;
 pub mod eud;

@@ -39,6 +39,12 @@ pub fn send_digital_pointer_cot(
     "Sending Digital Pointer Cursor Over Time to TCP server"
 }
 
+pub fn send_delete_cot(ctx: Context, payload: cot::delete::DeleteCoTPayload) -> &'static str {
+    send_payload(ctx, payload.to_xml());
+
+    "Sending Delete Cursor Over Time to TCP server"
+}
+
 pub fn send_message_cot(
     ctx: Context,
     message_payload: cot::message::MessagePayload,

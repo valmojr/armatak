@@ -78,6 +78,7 @@ pub fn init() -> Extension {
                         .command("marker", tcp::cot::send_marker_cot)
                         .command("report_marker", tcp::cot::send_report_marker_cot)
                         .command("digital_pointer", tcp::cot::send_digital_pointer_cot)
+                        .command("delete", tcp::cot::send_delete_cot)
                         .command("chat", tcp::cot::send_message_cot)
                         .command("uas_platform", tcp::cot::send_uas_platform_cot)
                         .command("uas_video", tcp::cot::send_uas_video_cot)
