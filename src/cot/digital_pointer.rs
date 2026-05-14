@@ -41,7 +41,7 @@ impl DigitalPointerPayload {
             link_uid: Some(self.link_uid.clone()),
             remarker: None,
             video_url: None,
-            stale_seconds: None,
+            stale_seconds: Some(7),
         }
     }
 }

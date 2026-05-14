@@ -59,8 +59,17 @@ pub fn init() -> Extension {
             "udp_socket",
             Group::new()
                 .command("start", udp_socket::start)
+                .command("start_lrf", udp_socket::start_lrf)
+                .command("start_cot", udp_socket::start_cot)
                 .command("send_payload", udp_socket::send_payload)
                 .command("send_gps_cot", udp_socket::send_gps_cot)
+                .command("send_eud_cot", udp_socket::send_eud_cot)
+                .command("send_lrf", udp_socket::send_lrf)
+                .command("clear_lrf", udp_socket::clear_lrf)
+                .command(
+                    "send_digital_pointer_cot",
+                    udp_socket::send_digital_pointer_cot,
+                )
                 .command("stop", udp_socket::stop),
         )
         .group(

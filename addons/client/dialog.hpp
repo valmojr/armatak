@@ -12,7 +12,7 @@ class armatak_udp_socket_start_dialog {
       x = "0.386562 * safezoneW + safezoneX";
       y = "0.357 * safezoneH + safezoneY";
       w = "0.216563 * safezoneW";
-      h = "0.418 * safezoneH";
+      h = "0.495 * safezoneH";
       colorBackground[]={0,0,0,0.45};
     };
   };
@@ -48,11 +48,21 @@ class armatak_udp_socket_start_dialog {
       idc = 16969;
       text = "";
       x = "0.391719 * safezoneW + safezoneX";
-      y = "0.632 * safezoneH + safezoneY";
+      y = "0.709 * safezoneH + safezoneY";
       w = "0.20625 * safezoneW";
       h = "0.044 * safezoneH";
       colorBackground[]={0,0,0,0.5};
       tooltip = "Optional shared feed URL. If empty, the UAV 3DEN URL is used first, then a local RTP fallback.";
+    };
+    class armatak_gui_module_udp_socket_dialog_lrf_port_edit: RscEdit {
+      idc = 16971;
+      text = "17211";
+      x = "0.391719 * safezoneW + safezoneX";
+      y = "0.632 * safezoneH + safezoneY";
+      w = "0.20625 * safezoneW";
+      h = "0.044 * safezoneH";
+      colorBackground[]={0,0,0,0.5};
+      tooltip = "ATAK local Laser Range Finder UDP input. Leave empty to disable.";
     };
     class armatak_gui_module_udp_socket_dialog_address_text: RscText {
       idc = 16963;
@@ -82,6 +92,14 @@ class armatak_udp_socket_start_dialog {
       idc = 16970;
       text = "Video Feed URL (Optional)";
       x = "0.391719 * safezoneW + safezoneX";
+      y = "0.676 * safezoneH + safezoneY";
+      w = "0.20625 * safezoneW";
+      h = "0.033 * safezoneH";
+    };
+    class armatak_gui_module_udp_socket_dialog_lrf_port_text: RscText {
+      idc = 16972;
+      text = "Laser Range Finder Port";
+      x = "0.391719 * safezoneW + safezoneX";
       y = "0.599 * safezoneH + safezoneY";
       w = "0.20625 * safezoneW";
       h = "0.033 * safezoneH";
@@ -91,7 +109,7 @@ class armatak_udp_socket_start_dialog {
       text = "Cancel";
       action = "closeDialog 2;";
       x = "0.551563 * safezoneW + safezoneX";
-      y = "0.709 * safezoneH + safezoneY";
+      y = "0.786 * safezoneH + safezoneY";
       w = "0.0464063 * safezoneW";
       h = "0.055 * safezoneH";
     };
@@ -100,7 +118,7 @@ class armatak_udp_socket_start_dialog {
       text = "Ok";
       action = QUOTE(call FUNC(startUDPSocket));
       x = "0.5 * safezoneW + safezoneX";
-      y = "0.709 * safezoneH + safezoneY";
+      y = "0.786 * safezoneH + safezoneY";
       w = "0.0464063 * safezoneW";
       h = "0.055 * safezoneH";
     };

@@ -9,10 +9,11 @@ addMissionEventHandler ["ExtensionCallback", {
 
 			switch (_function) do {
 				case "EUD Connected": {
-					SETVAR(player,EGVAR(client,eudConnected),true);
+					player setVariable [QEGVAR(client,eudConnected), true, true];
 				};
 				case "EUD Disconnected": {
-					SETVAR(player,EGVAR(client,eudConnected),false);
+					player setVariable [QEGVAR(client,eudConnected), false, true];
+					SETVAR(player,EGVAR(client,lrfEnabled),false);
 					call EFUNC(uav,stopMavlinkBroadcast);
 					"armatak" callExtension ["uas:stop_endpoint", []];
 					"armatak" callExtension ["mdns:stop", []];
@@ -27,14 +28,16 @@ addMissionEventHandler ["ExtensionCallback", {
 			[_function, "error", _name] call FUNC(notify);
 			
 			if (_function == "UDP Socket is not running") then {
-				SETVAR(player,EGVAR(client,eudConnected),false);
+				player setVariable [QEGVAR(client,eudConnected), false, true];
+				SETVAR(player,EGVAR(client,lrfEnabled),false);
 				call EFUNC(uav,stopMavlinkBroadcast);
 				"armatak" callExtension ["uas:stop_endpoint", []];
 				"armatak" callExtension ["mdns:stop", []];
 			};
 
 			if (_function == "failed to bind UDP socket") then {
-				SETVAR(player,EGVAR(client,eudConnected),false);
+				player setVariable [QEGVAR(client,eudConnected), false, true];
+				SETVAR(player,EGVAR(client,lrfEnabled),false);
 				call EFUNC(uav,stopMavlinkBroadcast);
 				"armatak" callExtension ["uas:stop_endpoint", []];
 				"armatak" callExtension ["mdns:stop", []];
