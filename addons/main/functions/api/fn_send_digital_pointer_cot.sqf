@@ -6,7 +6,13 @@ if (!isNull _digitalPointer) then {
  _digitalPointerPosition = _digitalPointer call armatak_client_fnc_extractClientPosition; 
  
  _link_uid = [_unit] call armatak_fnc_extract_uuid; 
- _contact_callsign = ([player] call armatak_fnc_extract_unit_callsign) + ".DP1"; 
+ _objectType = [_unit] call BIS_fnc_objectType;
+ _ownerCallsign = if ((_objectType select 0) == "Soldier") then {
+  [_unit] call armatak_fnc_extract_unit_callsign
+ } else {
+  [_unit] call armatak_fnc_extract_marker_callsign
+ };
+ _contact_callsign = _ownerCallsign + ".DP1"; 
  
  _dpCot = [_link_uid, _contact_callsign, _digitalPointerPosition select 1, _digitalPointerPosition select 2, _digitalPointerPosition select 3]; 
  

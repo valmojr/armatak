@@ -41,6 +41,7 @@ GVAR(syncedUnits) = missionNamespace getVariable "armatak_server_syncedUnits";
 				_group_role = [_x] call armatak_fnc_extract_group_role;
 
 				[_x, _callsign, _group_name, _group_role] call armatak_fnc_send_eud_cot;
+				[_x] call armatak_fnc_send_digital_pointer_cot;
 			};
 			case (unitIsUAV _x): {
 				if !(_x getVariable ["armatak_uav_mavlink_broadcasting", false]) then {
@@ -49,6 +50,7 @@ GVAR(syncedUnits) = missionNamespace getVariable "armatak_server_syncedUnits";
 
 					[_x, _atak_type, _callsign] call armatak_fnc_send_drone_cot;
 					_x call armatak_fnc_extract_sensor_data;
+					[_x] call armatak_fnc_send_digital_pointer_cot;
 				};
 			};
 			case ((_objectType select 0) == "Vehicle"): {
@@ -57,6 +59,7 @@ GVAR(syncedUnits) = missionNamespace getVariable "armatak_server_syncedUnits";
 
 				[_x, _atak_type, _callsign] call armatak_fnc_send_marker_cot;
 				_x call armatak_fnc_extract_sensor_data;
+				[_x] call armatak_fnc_send_digital_pointer_cot;
 			};
 			case ((_objectType select 0) == "VehicleAutonomous"): {
 				if !(_x getVariable ["armatak_uav_mavlink_broadcasting", false]) then {
@@ -65,6 +68,7 @@ GVAR(syncedUnits) = missionNamespace getVariable "armatak_server_syncedUnits";
 
 					[_x, _atak_type, _callsign] call armatak_fnc_send_drone_cot;
 					_x call armatak_fnc_extract_sensor_data;
+					[_x] call armatak_fnc_send_digital_pointer_cot;
 				};
 			};
 		};
