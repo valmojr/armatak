@@ -89,3 +89,6 @@ target/
 local.properties
 
 *.apk
+
+
+.hemtt/missions
