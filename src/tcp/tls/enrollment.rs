@@ -7,6 +7,9 @@ use uuid::Uuid;
 use super::connector::connect_mtls_from_pem;
 use crate::tcp::transport::TransportStream;
 
+const DEFAULT_MTLS_SERVER_PORT: &str = "8089";
+const DEFAULT_ENROLL_PATH: &str = "/Marti/api/tls/signClient/v2";
+
 #[derive(Deserialize)]
 struct EnrollmentResponse {
     #[serde(rename = "signedCert")]
@@ -25,6 +28,23 @@ fn extract_tag_value(xml: &str, tag_name: &str) -> Option<String> {
     let start = xml.find(&open_tag)? + open_tag.len();
     let end = xml[start..].find(&close_tag)? + start;
     Some(xml[start..end].trim().to_string())
+}
+
+fn normalize_certificate_pem(certificate: &str) -> String {
+    let trimmed = certificate.trim();
+    if trimmed.contains("-----BEGIN CERTIFICATE-----") {
+        if trimmed.ends_with('\n') {
+            trimmed.to_string()
+        } else {
+            format!("{}\n", trimmed)
+        }
+    } else {
+        wrap_pem_body(
+            trimmed,
+            "-----BEGIN CERTIFICATE-----",
+            "-----END CERTIFICATE-----",
+        )
+    }
 }
 
 fn wrap_pem_body(base64_body: &str, begin: &str, end: &str) -> String {
@@ -89,10 +109,20 @@ fn fetch_enrollment_config(host: &str, enroll_port: &str) -> Result<EnrollmentCo
         .text()
         .map_err(|e| format!("failed to read config response from {}: {}", url, e))?;
 
-    let server_port = extract_tag_value(&response_text, "serverPort")
-        .ok_or_else(|| "missing serverPort in /Marti/api/tls/config response".to_string())?;
-    let enroll_path = extract_tag_value(&response_text, "enrollPath")
-        .ok_or_else(|| "missing enrollPath in /Marti/api/tls/config response".to_string())?;
+    let server_port = extract_tag_value(&response_text, "serverPort").unwrap_or_else(|| {
+        info!(
+            "Enrollment config did not include serverPort; using default TAK mTLS port {}",
+            DEFAULT_MTLS_SERVER_PORT
+        );
+        DEFAULT_MTLS_SERVER_PORT.to_string()
+    });
+    let enroll_path = extract_tag_value(&response_text, "enrollPath").unwrap_or_else(|| {
+        info!(
+            "Enrollment config did not include enrollPath; using default TAK enrollment path {}",
+            DEFAULT_ENROLL_PATH
+        );
+        DEFAULT_ENROLL_PATH.to_string()
+    });
 
     info!(
         "Enrollment config received: server_port={} enroll_path={}",
@@ -173,14 +203,11 @@ fn enroll_client_certificate(
         enrollment.ca0.len()
     );
 
-    let cert_pem = wrap_pem_body(
-        &enrollment.signed_cert,
-        "-----BEGIN CERTIFICATE-----",
-        "-----END CERTIFICATE-----",
-    );
+    let ca_cert_pem = normalize_certificate_pem(&enrollment.ca0);
+    let cert_pem = normalize_certificate_pem(&enrollment.signed_cert);
     let key_pem = key_pair.serialize_pem();
 
-    Ok((enrollment.ca0, cert_pem, key_pem))
+    Ok((ca_cert_pem, cert_pem, key_pem))
 }
 
 pub fn enroll_and_connect(
@@ -222,4 +249,53 @@ pub fn enroll_and_connect(
         &client_cert_pem,
         &client_key_pem,
     )
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{extract_tag_value, normalize_certificate_pem, wrap_pem_body};
+
+    #[test]
+    fn extracts_tak_enrollment_config_tag_values() {
+        let xml = "<tlsConfig><serverPort>8089</serverPort><enrollPath>/Marti/api/tls/signClient/v2</enrollPath></tlsConfig>";
+
+        assert_eq!(
+            extract_tag_value(xml, "serverPort").as_deref(),
+            Some("8089")
+        );
+        assert_eq!(
+            extract_tag_value(xml, "enrollPath").as_deref(),
+            Some("/Marti/api/tls/signClient/v2")
+        );
+    }
+
+    #[test]
+    fn missing_config_tag_values_are_none_for_opentakserver_config() {
+        let xml =
+            "<tlsConfig><nameEntries><nameEntry name=\"OpenTAKServer\"/></nameEntries></tlsConfig>";
+
+        assert!(extract_tag_value(xml, "serverPort").is_none());
+        assert!(extract_tag_value(xml, "enrollPath").is_none());
+    }
+
+    #[test]
+    fn normalizes_base64_certificate_body_to_pem() {
+        let pem = normalize_certificate_pem("QUJDREVGRw==");
+
+        assert_eq!(
+            pem,
+            wrap_pem_body(
+                "QUJDREVGRw==",
+                "-----BEGIN CERTIFICATE-----",
+                "-----END CERTIFICATE-----"
+            )
+        );
+    }
+
+    #[test]
+    fn preserves_existing_certificate_pem() {
+        let pem = "-----BEGIN CERTIFICATE-----\nQUJDREVGRw==\n-----END CERTIFICATE-----\n";
+
+        assert_eq!(normalize_certificate_pem(pem), pem);
+    }
 }
