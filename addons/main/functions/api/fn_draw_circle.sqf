@@ -10,6 +10,7 @@
 // 4: Stroke color as signed ARGB int <NUMBER> (default: -1)
 // 5: Fill color as signed ARGB int <NUMBER> (default: -1761607681)
 // 6: Stroke weight <NUMBER> (default: 3)
+// 7: Optional registration scope <STRING> (default: "")
 //
 // Example:
 // [player, 300, "Mortar Risk Area"] call armatak_fnc_draw_circle;
@@ -23,7 +24,8 @@ params [
 	["_staleSeconds", 86400, [0]],
 	["_strokeColor", -1, [0]],
 	["_fillColor", -1761607681, [0]],
-	["_strokeWeight", 3, [0]]
+	["_strokeWeight", 3, [0]],
+	["_scope", "", [""]]
 ];
 
 [
@@ -37,5 +39,6 @@ params [
 	_fillColor,
 	_strokeWeight,
 	"",
-	"u-d-c-c"
+	"u-d-c-c",
+	_scope
 ] call armatak_fnc_draw_ellipse;

@@ -13,6 +13,7 @@
 // 7: Stroke style <STRING> (default: "solid")
 // 8: MilSym SIDC for tactical overlay <STRING> (default: "")
 // 9: CoT type <STRING> (default: "u-d-f")
+// 10: Optional registration scope <STRING> (default: "")
 //
 // Example:
 // [[pos player, screenToWorld [0.5, 0.5]], "Phase Line Blue"] call armatak_fnc_draw_polyline;
@@ -29,7 +30,8 @@ params [
 	["_strokeWeight", 3, [0]],
 	["_strokeStyle", "solid", [""]],
 	["_milsym", "", [""]],
-	["_cotType", "u-d-f", [""]]
+	["_cotType", "u-d-f", [""]],
+	["_scope", "", [""]]
 ];
 
 if ((count _points) < 2) exitWith {""};
@@ -76,3 +78,6 @@ private _payload = [
 ];
 
 "armatak" callExtension ["tcp_socket:draw:free", [_payload]];
+[_scope, _uuid, _cotType, _center select 0, _center select 1, _center select 2] call armatak_fnc_register_cot;
+
+_uuid

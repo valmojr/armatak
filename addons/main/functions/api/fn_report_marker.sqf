@@ -11,6 +11,7 @@
 // 3: Callsign <STRING> (default: "Report")
 // 4: Remarks <STRING> (default: "")
 // 5: Stale time in seconds <NUMBER> (default: 3600)
+// 6: Optional registration scope <STRING> (default: "")
 //
 // Example:
 // [cursorObject, "enemy", "tank", "Enemy Tank", "Reported enemy tank"] call armatak_fnc_report_marker;
@@ -25,12 +26,18 @@ params [
 	["_kindOrCallsign", "infantry", [""]],
 	["_callsignOrRemarks", "Report", [""]],
 	["_remarksOrStaleSeconds", "", ["", 0]],
-	["_staleSeconds", 3600, [0]]
+	["_staleSeconds", 3600, [0, ""]],
+	["_scope", "", [""]]
 ];
 
 private _type = "";
 private _callsign = _callsignOrRemarks;
 private _remarks = _remarksOrStaleSeconds;
+
+if (_staleSeconds isEqualType "") then {
+	_scope = _staleSeconds;
+	_staleSeconds = 3600;
+};
 
 if ((_affiliationOrType select [0, 2]) isEqualTo "a-") then {
 	_type = _affiliationOrType;
@@ -93,3 +100,6 @@ private _payload = [
 ];
 
 "armatak" callExtension ["tcp_socket:cot:report_marker", [_payload]];
+[_scope, _uuid, _type, _realLocation select 0, _realLocation select 1, _realLocation select 2] call armatak_fnc_register_cot;
+
+_uuid

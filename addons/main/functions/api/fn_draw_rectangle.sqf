@@ -13,6 +13,7 @@
 // 7: Fill color as signed ARGB int <NUMBER> (default: -1761607681)
 // 8: Stroke weight <NUMBER> (default: 3)
 // 9: MilSym SIDC for tactical overlay <STRING> (default: "")
+// 10: Optional registration scope <STRING> (default: "")
 //
 // Example:
 // [screenToWorld [0.5, 0.5], 200, 500, 30, "Engagement Area"] call armatak_fnc_draw_rectangle;
@@ -29,7 +30,8 @@ params [
 	["_strokeColor", -1, [0]],
 	["_fillColor", -1761607681, [0]],
 	["_strokeWeight", 3, [0]],
-	["_milsym", "", [""]]
+	["_milsym", "", [""]],
+	["_scope", "", [""]]
 ];
 
 private _centerPos = if (_center isEqualType objNull) then {
@@ -87,3 +89,6 @@ private _payload = [
 ];
 
 "armatak" callExtension ["tcp_socket:draw:rectangle", [_payload]];
+[_scope, _uuid, "u-d-r", _centerReal select 0, _centerReal select 1, _centerReal select 2] call armatak_fnc_register_cot;
+
+_uuid

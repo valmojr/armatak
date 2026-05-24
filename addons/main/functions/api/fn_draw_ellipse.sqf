@@ -14,6 +14,7 @@
 // 8: Stroke weight <NUMBER> (default: 3)
 // 9: MilSym SIDC for tactical overlay <STRING> (default: "")
 // 10: CoT type <STRING> (default: "u-d-c-e")
+// 11: Optional registration scope <STRING> (default: "")
 //
 // Example:
 // [screenToWorld [0.5, 0.5], 250, 100, 45, "Support by Fire"] call armatak_fnc_draw_ellipse;
@@ -31,7 +32,8 @@ params [
 	["_fillColor", -1761607681, [0]],
 	["_strokeWeight", 3, [0]],
 	["_milsym", "", [""]],
-	["_cotType", "u-d-c-e", [""]]
+	["_cotType", "u-d-c-e", [""]],
+	["_scope", "", [""]]
 ];
 
 private _position = if (_center isEqualType objNull) then {
@@ -63,3 +65,6 @@ private _payload = [
 ];
 
 "armatak" callExtension ["tcp_socket:draw:ellipse", [_payload]];
+[_scope, _uuid, _cotType, _realLocation select 0, _realLocation select 1, _realLocation select 2] call armatak_fnc_register_cot;
+
+_uuid
