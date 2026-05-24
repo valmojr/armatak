@@ -40,6 +40,9 @@ class CfgFunctions {
 			class draw_polyline {
 				file = "\armatak\armatak\addons\main\functions\api\fn_draw_polyline.sqf";
 			};
+			class draw_route {
+				file = "\armatak\armatak\addons\main\functions\api\fn_draw_route.sqf";
+			};
 			class draw_tactical_graphic {
 				file = "\armatak\armatak\addons\main\functions\api\fn_draw_tactical_graphic.sqf";
 			};
@@ -170,4 +173,3 @@ class CfgFunctions {
 		};
 	};
 };
-
