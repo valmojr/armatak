@@ -27,7 +27,7 @@ switch (str _side) do {
 	};
 };
 
-_unit_type = _unit call BIS_fnc_objectType;
+private _unit_type = _unit call BIS_fnc_objectType;
 
 if ((_unit_type select 0) == "Soldier") then {
 	switch (_unit_type select 1) do {
@@ -71,7 +71,7 @@ if ((_unit_type select 0) == "Soldier") then {
 };
 
 if ((typeOf (vehicle _unit) != typeOf _unit) or ((_unit_type select 0) == "Vehicle")) then {
-	_vehicle_type = (vehicle _unit) call BIS_fnc_objectType select 1;
+	private _vehicle_type = (vehicle _unit) call BIS_fnc_objectType select 1;
 	switch (_vehicle_type) do {
 		case "Car": {
 			_type = "G-U-C-I-M";
@@ -111,10 +111,10 @@ if ((typeOf (vehicle _unit) != typeOf _unit) or ((_unit_type select 0) == "Vehic
 
 _role = "a-" + _affiliation + "-" + _type;
 
-armatak_attribute_marker_type = _unit getVariable "armatak_attribute_marker_type";
+private _markerTypeOverride = _unit getVariable ["armatak_attribute_marker_type", ""];
 
-if (!isNil "armatak_attribute_marker_type" or armatak_attribute_marker_type != '') then {
-	_role = armatak_attribute_marker_type;
+if (_markerTypeOverride isNotEqualTo "") then {
+	_role = _markerTypeOverride;
 };
 
 _role

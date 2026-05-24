@@ -19,11 +19,15 @@
 	 * Public: Yes
 */
 
-params["_latitude", "_longitude", "_altitude"];
+params [
+	["_latitude", 0, [0]],
+	["_longitude", 0, [0]],
+	["_altitude", 0, [0]]
+];
 
-_position = [_latitude, _longitude, _altitude];
+private _position = [_latitude, _longitude, _altitude];
 
-_realLocation = null;
+private _realLocation = [0, 0, _altitude];
 
 switch (toLower worldName) do {
 	case "altis": {
