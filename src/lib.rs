@@ -100,7 +100,8 @@ pub fn init() -> Extension {
                         .command("ellipse", tcp::draw::send_ellipse_cot)
                         .command("rectangle", tcp::draw::send_rectangle_cot)
                         .command("free", tcp::draw::send_freedraw_cot)
-                        .command("vector", tcp::draw::send_vectordraw_cot),
+                        .command("vector", tcp::draw::send_vectordraw_cot)
+                        .command("route", tcp::draw::send_route_cot),
                 ),
         )
         .group(

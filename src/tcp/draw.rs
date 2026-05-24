@@ -1,4 +1,5 @@
 use arma_rs::Context;
+use log::info;
 
 use crate::{cot, tcp::send_payload};
 
@@ -70,4 +71,20 @@ pub fn send_vectordraw_cot(
     send_payload(ctx, payload);
 
     "Sending Tactical Graphic CoT to TCP server"
+}
+
+pub fn send_route_cot(
+    ctx: Context,
+    route_payload: cot::draws::route::RoutePayload,
+) -> &'static str {
+    let (now, stale) = payload_stale(route_payload.stale_seconds);
+    let payload = route_payload.to_xml(&now, &stale);
+    info!(
+        "Sending ATAK route '{}' ({} bytes)",
+        route_payload.callsign,
+        payload.len()
+    );
+    send_payload(ctx, payload);
+
+    "Sending Route CoT to TCP server"
 }
