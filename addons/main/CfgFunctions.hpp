@@ -22,6 +22,12 @@ class CfgFunctions {
 			class report_marker {
 				file = "\armatak\armatak\addons\main\functions\api\fn_report_marker.sqf";
 			};
+			class register_cot {
+				file = "\armatak\armatak\addons\main\functions\api\fn_register_cot.sqf";
+			};
+			class delete_registered_cots {
+				file = "\armatak\armatak\addons\main\functions\api\fn_delete_registered_cots.sqf";
+			};
 			class draw_circle {
 				file = "\armatak\armatak\addons\main\functions\api\fn_draw_circle.sqf";
 			};
