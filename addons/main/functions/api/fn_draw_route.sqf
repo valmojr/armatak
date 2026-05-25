@@ -64,25 +64,64 @@ private _pad = {
 	_text
 };
 
+private _formatCotTime = {
+	params ["_dateParts"];
+
+	format [
+		"%1-%2-%3T%4:%5:%6.%7Z",
+		_dateParts param [0, 1970, [0]],
+		[_dateParts param [1, 1, [0]], 2] call _pad,
+		[_dateParts param [2, 1, [0]], 2] call _pad,
+		[_dateParts param [3, 0, [0]], 2] call _pad,
+		[_dateParts param [4, 0, [0]], 2] call _pad,
+		[_dateParts param [5, 0, [0]], 2] call _pad,
+		[_dateParts param [6, 0, [0]], 3] call _pad
+	]
+};
+
+private _addSecondsUtc = {
+	params ["_dateParts", "_secondsToAdd"];
+
+	private _year = _dateParts param [0, 1970, [0]];
+	private _month = _dateParts param [1, 1, [0]];
+	private _day = _dateParts param [2, 1, [0]];
+	private _hour = _dateParts param [3, 0, [0]];
+	private _minute = _dateParts param [4, 0, [0]];
+	private _second = (_dateParts param [5, 0, [0]]) + (floor _secondsToAdd);
+	private _millisecond = _dateParts param [6, 0, [0]];
+
+	while {_second >= 60} do {
+		_second = _second - 60;
+		_minute = _minute + 1;
+	};
+	while {_minute >= 60} do {
+		_minute = _minute - 60;
+		_hour = _hour + 1;
+	};
+	while {_hour >= 24} do {
+		_hour = _hour - 24;
+		_day = _day + 1;
+
+		private _daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+		private _isLeapYear = ((_year mod 4) isEqualTo 0) && {((_year mod 100) isNotEqualTo 0) || {(_year mod 400) isEqualTo 0}};
+		if (_isLeapYear) then {_daysInMonth set [1, 29];};
+
+		if (_day > (_daysInMonth select (_month - 1))) then {
+			_day = 1;
+			_month = _month + 1;
+			if (_month > 12) then {
+				_month = 1;
+				_year = _year + 1;
+			};
+		};
+	};
+
+	[_year, _month, _day, _hour, _minute, _second, _millisecond]
+};
+
 private _nowDate = systemTimeUTC;
-private _year = _nowDate param [0, 1970, [0]];
-private _month = _nowDate param [1, 1, [0]];
-private _day = _nowDate param [2, 1, [0]];
-private _hour = _nowDate param [3, 0, [0]];
-private _minute = _nowDate param [4, 0, [0]];
-private _second = _nowDate param [5, 0, [0]];
-private _millisecond = _nowDate param [6, 0, [0]];
-private _now = format [
-	"%1-%2-%3T%4:%5:%6.%7Z",
-	_year,
-	[_month, 2] call _pad,
-	[_day, 2] call _pad,
-	[_hour, 2] call _pad,
-	[_minute, 2] call _pad,
-	[_second, 2] call _pad,
-	[_millisecond, 3] call _pad
-];
-private _stale = "9999-12-31T23:59:59.999Z";
+private _now = [_nowDate] call _formatCotTime;
+private _stale = [[_nowDate, _staleSeconds max 60] call _addSecondsUtc] call _formatCotTime;
 
 private _links = "";
 private _routeWaypoints = [];
