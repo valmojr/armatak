@@ -1,5 +1,7 @@
 params["_unit"];
 
+if (_unit getVariable ["armatak_disable_sensor_data", false]) exitWith {};
+
 _target = getSensorTargets (_unit);
 
 {
