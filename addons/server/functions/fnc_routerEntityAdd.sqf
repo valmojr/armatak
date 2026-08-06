@@ -36,7 +36,7 @@ switch (false) do {
 
 		GVAR(syncedUnits) pushBack _unit;
 
-		missionNamespace setVariable ["armatak_server_syncedUnits", GVAR(syncedUnits)];
+		missionNamespace setVariable ["armatak_server_syncedUnits", GVAR(syncedUnits), true];
 		SETVAR(_unit,GVAR(isRouting),true);
 
 		deleteVehicle _logic;
