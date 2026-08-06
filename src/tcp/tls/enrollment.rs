@@ -84,7 +84,12 @@ fn response_error_details(response: reqwest::blocking::Response) -> String {
     }
 }
 
-fn fetch_enrollment_config(host: &str, enroll_port: &str) -> Result<EnrollmentConfig, String> {
+fn fetch_enrollment_config(
+    host: &str,
+    enroll_port: &str,
+    username: &str,
+    password: &str,
+) -> Result<EnrollmentConfig, String> {
     let url = format!(
         "https://{}:{}/Marti/api/tls/config",
         host.trim(),
@@ -94,6 +99,7 @@ fn fetch_enrollment_config(host: &str, enroll_port: &str) -> Result<EnrollmentCo
 
     let response = enrollment_http_client()?
         .get(&url)
+        .basic_auth(username.trim(), Some(password.to_string()))
         .send()
         .map_err(|e| format!("failed to fetch {}: {}", url, e))?;
 
@@ -228,7 +234,7 @@ pub fn enroll_and_connect(
         host, enroll_port, server_name, normalized_client_uid
     );
 
-    let enrollment_config = fetch_enrollment_config(host, enroll_port)?;
+    let enrollment_config = fetch_enrollment_config(host, enroll_port, username, password)?;
     let (ca_cert_pem, client_cert_pem, client_key_pem) = enroll_client_certificate(
         host,
         enroll_port,
