@@ -158,6 +158,11 @@ mod tests {
     }
 
     #[test]
+    fn returns_none_when_config_closing_tag_is_missing() {
+        assert_eq!(extract_tag_value("<serverPort>9443", "serverPort"), None);
+    }
+
+    #[test]
     fn trims_extracted_config_values() {
         let xml = "<certificateConfig><serverPort> 8089 </serverPort><enrollPath> /Marti/api/tls/signClient/v2 </enrollPath></certificateConfig>";
 
