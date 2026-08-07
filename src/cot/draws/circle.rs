@@ -124,3 +124,40 @@ impl ShapeCircleCoT {
         )
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::CircleCoTPayload;
+    use arma_rs::FromArma;
+
+    #[test]
+    fn parses_circle_payload_maps_shape_and_serializes_cot() {
+        let payload = CircleCoTPayload::from_arma(
+            r#"["circle-1",-30.1,-51.2,20,100,50,30,"Area Alpha","creator-1","Falcon"]"#
+                .to_string(),
+        )
+        .expect("circle payload should parse");
+
+        assert_eq!(payload.uuid, "circle-1");
+        assert_eq!(payload.center_lat, -30.1);
+        assert_eq!(payload.center_lon, -51.2);
+        assert_eq!(payload.center_hae, 20.0);
+        assert_eq!(payload.major, 100.0);
+        assert_eq!(payload.minor, 50.0);
+        assert_eq!(payload.angle, 30.0);
+
+        let shape = payload.to_cot();
+        assert_eq!(shape.uid, "circle-1");
+        assert_eq!(shape.callsign, "Area Alpha");
+        assert_eq!(shape.creator_uid, "creator-1");
+        assert_eq!(shape.creator_callsign, "Falcon");
+
+        let xml = shape.to_xml("2026-08-07T17:00:00.000Z", "2026-08-07T18:00:00.000Z");
+        assert!(xml.contains("uid=\"circle-1\" type=\"u-d-c-c\""));
+        assert!(xml.contains("<point lat=\"-30.1\" lon=\"-51.2\" hae=\"20\""));
+        assert!(xml.contains("<ellipse major=\"100\" minor=\"50\" angle=\"30\" />"));
+        assert!(xml.contains("<link uid=\"creator-1\" type=\"self\" relation=\"p-p-CenterAnchor\" />"));
+        assert!(xml.contains("<contact callsign=\"Area Alpha\" />"));
+        assert!(xml.contains("<creator uid=\"creator-1\" callsign=\"Falcon\""));
+    }
+}
