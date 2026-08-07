@@ -44,11 +44,7 @@ pub(crate) fn parse_enrollment_config(xml: &str) -> EnrollmentConfig {
 pub(crate) fn normalize_certificate_pem(certificate: &str) -> String {
     let trimmed = certificate.trim();
     if trimmed.contains("-----BEGIN CERTIFICATE-----") {
-        if trimmed.ends_with('\n') {
-            trimmed.to_string()
-        } else {
-            format!("{}\n", trimmed)
-        }
+        format!("{}\n", trimmed)
     } else {
         wrap_pem_body(
             trimmed,
@@ -191,7 +187,7 @@ mod tests {
     }
 
     #[test]
-    fn preserves_existing_pem_and_adds_trailing_newline_when_needed() {
+    fn preserves_existing_pem_and_adds_a_single_trailing_newline() {
         let with_newline =
             "-----BEGIN CERTIFICATE-----\nQUJD\n-----END CERTIFICATE-----\n";
         let without_newline = "-----BEGIN CERTIFICATE-----\nQUJD\n-----END CERTIFICATE-----";
