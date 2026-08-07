@@ -170,7 +170,7 @@ mod tests {
     fn fixed_string_reserves_a_nul_terminator_and_handles_zero_length() {
         assert_eq!(fixed_string::<5>("abcdef"), [b'a', b'b', b'c', b'd', 0]);
         assert_eq!(fixed_string::<5>("ab"), [b'a', b'b', 0, 0, 0]);
-        assert_eq!(fixed_string::<0>("ab"), []);
+        assert_eq!(fixed_string::<0>("ab"), [0u8; 0]);
     }
 
     #[test]
