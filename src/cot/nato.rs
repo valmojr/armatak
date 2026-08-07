@@ -91,3 +91,60 @@ impl MarkerCoTPayload {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::MarkerCoTPayload;
+    use arma_rs::FromArma;
+
+    #[test]
+    fn parses_marker_with_video_and_maps_it_to_cot() {
+        let payload = MarkerCoTPayload::from_arma(
+            r#"["marker-1","a-f-G-U-C",-30.1,-51.2,100.0,"Falcon",180,10.5,"rtsp://video.example.test:8554/live"]"#
+                .to_string(),
+        )
+        .expect("marker with video should parse");
+
+        assert_eq!(
+            payload.video_url.as_deref(),
+            Some("rtsp://video.example.test:8554/live")
+        );
+
+        let cot = payload.to_cot();
+        assert_eq!(cot.uuid.as_deref(), Some("marker-1"));
+        assert_eq!(cot.r#type.as_deref(), Some("a-f-G-U-C"));
+        assert_eq!(cot.point_lat, -30.1);
+        assert_eq!(cot.point_lon, -51.2);
+        assert_eq!(cot.point_hae, 100.0);
+        assert_eq!(cot.contact_callsign, "Falcon");
+        assert_eq!(cot.track_course, Some(180));
+        assert_eq!(cot.track_speed, Some(10.5));
+        assert_eq!(
+            cot.video_url.as_deref(),
+            Some("rtsp://video.example.test:8554/live")
+        );
+    }
+
+    #[test]
+    fn treats_blank_video_url_as_absent() {
+        let payload = MarkerCoTPayload::from_arma(
+            r#"["marker-2","a-f-G-U-C",1,2,3,"Raven",90,5,"   "]"#.to_string(),
+        )
+        .expect("marker with blank video should parse");
+
+        assert!(payload.video_url.is_none());
+    }
+
+    #[test]
+    fn accepts_legacy_marker_payload_without_video_field() {
+        let payload = MarkerCoTPayload::from_arma(
+            r#"["marker-3","a-f-G-U-C",1,2,3,"Viper",45,2.5]"#.to_string(),
+        )
+        .expect("legacy marker should parse");
+
+        assert_eq!(payload.uuid, "marker-3");
+        assert_eq!(payload.r#type, "a-f-G-U-C");
+        assert_eq!(payload.contact_callsign, "Viper");
+        assert!(payload.video_url.is_none());
+    }
+}
