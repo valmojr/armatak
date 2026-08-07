@@ -59,3 +59,43 @@ impl ExternalPositionPayload {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::ExternalPositionPayload;
+    use arma_rs::FromArma;
+
+    #[test]
+    fn parses_external_position_and_maps_it_to_generic_cot() {
+        let payload = ExternalPositionPayload::from_arma(
+            r#"["gps-1",-30.1,-51.2,75.0,"Falcon",270,11.5,"external GPS"]"#
+                .to_string(),
+        )
+        .expect("external position should parse");
+
+        assert_eq!(payload.uuid, "gps-1");
+        assert_eq!(payload.point_lat, -30.1);
+        assert_eq!(payload.point_lon, -51.2);
+        assert_eq!(payload.point_hae, 75.0);
+        assert_eq!(payload.contact_callsign, "Falcon");
+        assert_eq!(payload.track_course, 270);
+        assert_eq!(payload.track_speed, 11.5);
+        assert_eq!(payload.remarker, "external GPS");
+
+        let cot = payload.to_cot();
+        assert_eq!(cot.uuid.as_deref(), Some("gps-1"));
+        assert_eq!(cot.r#type, None);
+        assert_eq!(cot.point_lat, -30.1);
+        assert_eq!(cot.point_lon, -51.2);
+        assert_eq!(cot.point_hae, 75.0);
+        assert_eq!(cot.contact_callsign, "Falcon");
+        assert_eq!(cot.track_course, Some(270));
+        assert_eq!(cot.track_speed, Some(11.5));
+        assert_eq!(cot.remarker.as_deref(), Some("external GPS"));
+        assert!(cot.group_name.is_none());
+        assert!(cot.group_role.is_none());
+        assert!(cot.link_uid.is_none());
+        assert!(cot.video_url.is_none());
+        assert!(cot.stale_seconds.is_none());
+    }
+}
