@@ -188,3 +188,69 @@ impl FromArma for UasSystemPayload {
         })
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::{UasSystemPayload, UasTelemetryPayload};
+    use arma_rs::FromArma;
+
+    #[test]
+    fn parses_and_clamps_uas_telemetry_payload() {
+        let payload = UasTelemetryPayload::from_arma(
+            r#"["127.0.0.1:14550",0,999,-1,-30.1,-51.2,100.5,25.25,361.0,12.5,1.0,2.0,3.0,1]"#
+                .to_string(),
+        )
+        .expect("telemetry payload should parse");
+
+        assert_eq!(payload.address, "127.0.0.1:14550");
+        assert_eq!(payload.system_id, 1);
+        assert_eq!(payload.component_id, 255);
+        assert_eq!(payload.vehicle_type, 0);
+        assert_eq!(payload.lat_deg, -30.1);
+        assert_eq!(payload.lon_deg, -51.2);
+        assert_eq!(payload.alt_msl_m, 100.5);
+        assert_eq!(payload.rel_alt_m, 25.25);
+        assert_eq!(payload.heading_deg, 361.0);
+        assert_eq!(payload.groundspeed_mps, 12.5);
+        assert_eq!(payload.roll_deg, 1.0);
+        assert_eq!(payload.pitch_deg, 2.0);
+        assert_eq!(payload.yaw_deg, 3.0);
+        assert!(payload.flying);
+    }
+
+    #[test]
+    fn parses_and_clamps_full_uas_system_payload() {
+        let payload = UasSystemPayload::from_arma(
+            r#"["10.0.0.1:14550","00112233-4455-6677-8899-aabbccddeeff","Falcon",300,-30.1,-51.2,100.5,25.25,90.0,12.5,1.0,2.0,3.0,0,1,4.0,5.0,6.0,"rtsp://video.example.test:8554/live",60.0,40.0,-30.2,-51.3,50.0,1,200]"#
+                .to_string(),
+        )
+        .expect("system payload should parse");
+
+        assert_eq!(payload.address, "10.0.0.1:14550");
+        assert_eq!(payload.entity_uuid, "00112233-4455-6677-8899-aabbccddeeff");
+        assert_eq!(payload.callsign, "Falcon");
+        assert_eq!(payload.vehicle_type, 255);
+        assert_eq!(payload.lat_deg, -30.1);
+        assert_eq!(payload.lon_deg, -51.2);
+        assert_eq!(payload.alt_msl_m, 100.5);
+        assert_eq!(payload.rel_alt_m, 25.25);
+        assert_eq!(payload.heading_deg, 90.0);
+        assert_eq!(payload.groundspeed_mps, 12.5);
+        assert_eq!(payload.roll_deg, 1.0);
+        assert_eq!(payload.pitch_deg, 2.0);
+        assert_eq!(payload.yaw_deg, 3.0);
+        assert!(!payload.flying);
+        assert!(payload.landed);
+        assert_eq!(payload.gimbal_roll_deg, 4.0);
+        assert_eq!(payload.gimbal_pitch_deg, 5.0);
+        assert_eq!(payload.gimbal_yaw_deg, 6.0);
+        assert_eq!(payload.video_uri, "rtsp://video.example.test:8554/live");
+        assert_eq!(payload.hfov_deg, 60.0);
+        assert_eq!(payload.vfov_deg, 40.0);
+        assert_eq!(payload.image_lat_deg, -30.2);
+        assert_eq!(payload.image_lon_deg, -51.3);
+        assert_eq!(payload.image_alt_msl_m, 50.0);
+        assert!(payload.has_turret_camera);
+        assert_eq!(payload.battery_remaining_pct, 100);
+    }
+}
