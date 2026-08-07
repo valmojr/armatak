@@ -39,7 +39,7 @@ jobs:
         run: cargo test --all-targets --locked
 
       - name: Report whole-extension coverage
-        run: cargo llvm-cov --all-targets --locked --summary-only
+        run: cargo llvm-cov --all-targets --locked --summary-only --show-missing-lines
 
       - name: Enforce 100% coverage on deterministic core
         run: |
