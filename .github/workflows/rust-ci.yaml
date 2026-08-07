@@ -48,13 +48,11 @@ jobs:
             --fail-under-lines 100
 
       - name: Generate LCOV artifact
-        if: always()
         run: cargo llvm-cov --all-targets --locked --lcov --output-path lcov.info
 
       - name: Upload LCOV artifact
-        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: rust-lcov
           path: lcov.info
-          if-no-files-found: warn
+          if-no-files-found: error
