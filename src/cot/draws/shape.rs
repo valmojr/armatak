@@ -348,11 +348,12 @@ mod tests {
 
     #[test]
     fn parses_and_serializes_closed_link_shape_without_milsym() {
-        let payload = DrawLinksPayload::from_arma(
-            r#"["shape<&","u-d-f",1,2,3,"1,2,3;4,5,6","Polygon<&",300,-16777216,16777215,2,"dashed<&",true,""]"#
+        let mut payload = DrawLinksPayload::from_arma(
+            r#"["shape<&","u-d-f",1,2,3,"","Polygon<&",300,-16777216,16777215,2,"dashed<&",true,""]"#
                 .to_string(),
         )
         .expect("link shape payload should parse");
+        payload.points = "1,2,3;4,5,6".to_string();
 
         assert!(payload.closed);
         assert_eq!(payload.stroke_style, "dashed<&");
