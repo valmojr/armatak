@@ -147,3 +147,57 @@ fn escape_attr(value: &str) -> String {
         .replace('<', "&lt;")
         .replace('>', "&gt;")
 }
+
+#[cfg(test)]
+mod tests {
+    use super::{parse_points, route_links, RoutePayload, RoutePoint};
+    use arma_rs::FromArma;
+
+    #[test]
+    fn parses_route_payload_clamps_interval_and_serializes_attributes() {
+        let payload = RoutePayload::from_arma(
+            r#"["route<&","-30.1,-51.2,10;-30.2,-51.3,20","Route<&",600,-1,0.5,"Driving<&","Primary<&","Infil<&",0]"#
+                .to_string(),
+        )
+        .expect("route payload should parse");
+
+        assert_eq!(payload.checkpoint_interval, 1);
+        assert_eq!(payload.stale_seconds, 600);
+        assert_eq!(payload.stroke_weight, 0.5);
+
+        let xml = payload.to_xml("2026-08-07T17:00:00.000Z", "2026-08-07T18:00:00.000Z");
+        assert!(xml.contains("uid=\"route&lt;&amp;\" type=\"b-m-r\""));
+        assert!(xml.contains("planningmethod=\"Infil&lt;&amp;\""));
+        assert!(xml.contains("method=\"Driving&lt;&amp;\""));
+        assert!(xml.contains("routetype=\"Primary&lt;&amp;\""));
+        assert!(xml.contains("stroke=\"1\""));
+        assert!(xml.contains("<contact callsign=\"Route&lt;&amp;\"/>"));
+        assert!(xml.contains("callsign=\"Route&lt;&amp; SP\""));
+        assert!(xml.contains("callsign=\"VDO\""));
+    }
+
+    #[test]
+    fn route_links_cover_start_checkpoint_regular_and_end_points() {
+        let points = vec![
+            RoutePoint { lat: 1.0, lon: 1.0, hae: 1.0 },
+            RoutePoint { lat: 2.0, lon: 2.0, hae: 2.0 },
+            RoutePoint { lat: 3.0, lon: 3.0, hae: 3.0 },
+            RoutePoint { lat: 4.0, lon: 4.0, hae: 4.0 },
+            RoutePoint { lat: 5.0, lon: 5.0, hae: 5.0 },
+        ];
+
+        let xml = route_links("Route", &points, 2);
+        assert!(xml.contains("callsign=\"Route SP\" type=\"b-m-p-w\""));
+        assert!(xml.contains("callsign=\"CP1\" type=\"b-m-p-w\""));
+        assert!(xml.contains("callsign=\"\" type=\"b-m-p-c\""));
+        assert!(xml.contains("callsign=\"VDO\" type=\"b-m-p-w\""));
+    }
+
+    #[test]
+    fn point_parser_drops_malformed_entries() {
+        let points = parse_points("1,2,3;missing;bad,2,3;4,bad,6;7,8,bad;9,10,11");
+        assert_eq!(points.len(), 2);
+        assert_eq!(points[0].lat, 1.0);
+        assert_eq!(points[1].lat, 9.0);
+    }
+}
