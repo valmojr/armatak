@@ -5,61 +5,17 @@ use serde::Deserialize;
 use uuid::Uuid;
 
 use super::connector::connect_mtls_from_pem;
+use super::protocol::{
+    enrollment_config_url, enrollment_sign_url, normalize_certificate_pem,
+    parse_enrollment_config, EnrollmentConfig,
+};
 use crate::tcp::transport::TransportStream;
-
-const DEFAULT_MTLS_SERVER_PORT: &str = "8089";
-const DEFAULT_ENROLL_PATH: &str = "/Marti/api/tls/signClient/v2";
 
 #[derive(Deserialize)]
 struct EnrollmentResponse {
     #[serde(rename = "signedCert")]
     signed_cert: String,
     ca0: String,
-}
-
-struct EnrollmentConfig {
-    server_port: String,
-    enroll_path: String,
-}
-
-fn extract_tag_value(xml: &str, tag_name: &str) -> Option<String> {
-    let open_tag = format!("<{}>", tag_name);
-    let close_tag = format!("</{}>", tag_name);
-    let start = xml.find(&open_tag)? + open_tag.len();
-    let end = xml[start..].find(&close_tag)? + start;
-    Some(xml[start..end].trim().to_string())
-}
-
-fn normalize_certificate_pem(certificate: &str) -> String {
-    let trimmed = certificate.trim();
-    if trimmed.contains("-----BEGIN CERTIFICATE-----") {
-        if trimmed.ends_with('\n') {
-            trimmed.to_string()
-        } else {
-            format!("{}\n", trimmed)
-        }
-    } else {
-        wrap_pem_body(
-            trimmed,
-            "-----BEGIN CERTIFICATE-----",
-            "-----END CERTIFICATE-----",
-        )
-    }
-}
-
-fn wrap_pem_body(base64_body: &str, begin: &str, end: &str) -> String {
-    let mut wrapped = String::new();
-    let normalized = base64_body.trim().replace(['\r', '\n'], "");
-
-    wrapped.push_str(begin);
-    wrapped.push('\n');
-    for chunk in normalized.as_bytes().chunks(64) {
-        wrapped.push_str(std::str::from_utf8(chunk).unwrap_or_default());
-        wrapped.push('\n');
-    }
-    wrapped.push_str(end);
-    wrapped.push('\n');
-    wrapped
 }
 
 fn enrollment_http_client() -> Result<Client, String> {
@@ -90,11 +46,7 @@ fn fetch_enrollment_config(
     username: &str,
     password: &str,
 ) -> Result<EnrollmentConfig, String> {
-    let url = format!(
-        "https://{}:{}/Marti/api/tls/config",
-        host.trim(),
-        enroll_port.trim()
-    );
+    let url = enrollment_config_url(host, enroll_port);
     info!("Fetching TAK enrollment config from {}", url);
 
     let response = enrollment_http_client()?
@@ -114,31 +66,14 @@ fn fetch_enrollment_config(
     let response_text = response
         .text()
         .map_err(|e| format!("failed to read config response from {}: {}", url, e))?;
-
-    let server_port = extract_tag_value(&response_text, "serverPort").unwrap_or_else(|| {
-        info!(
-            "Enrollment config did not include serverPort; using default TAK mTLS port {}",
-            DEFAULT_MTLS_SERVER_PORT
-        );
-        DEFAULT_MTLS_SERVER_PORT.to_string()
-    });
-    let enroll_path = extract_tag_value(&response_text, "enrollPath").unwrap_or_else(|| {
-        info!(
-            "Enrollment config did not include enrollPath; using default TAK enrollment path {}",
-            DEFAULT_ENROLL_PATH
-        );
-        DEFAULT_ENROLL_PATH.to_string()
-    });
+    let config = parse_enrollment_config(&response_text);
 
     info!(
         "Enrollment config received: server_port={} enroll_path={}",
-        server_port, enroll_path
+        config.server_port, config.enroll_path
     );
 
-    Ok(EnrollmentConfig {
-        server_port,
-        enroll_path,
-    })
+    Ok(config)
 }
 
 fn enroll_client_certificate(
@@ -170,13 +105,7 @@ fn enroll_client_certificate(
         .map_err(|e| format!("failed to generate CSR: {}", e))?;
     let csr_der = csr.der().as_ref().to_vec();
 
-    let url = format!(
-        "https://{}:{}{}?clientUid={}",
-        host.trim(),
-        enroll_port.trim(),
-        enroll_path.trim(),
-        client_uid.trim()
-    );
+    let url = enrollment_sign_url(host, enroll_port, enroll_path, client_uid);
     info!(
         "Submitting client certificate enrollment request for {} to {}",
         client_uid, url
@@ -255,53 +184,4 @@ pub fn enroll_and_connect(
         &client_cert_pem,
         &client_key_pem,
     )
-}
-
-#[cfg(test)]
-mod tests {
-    use super::{extract_tag_value, normalize_certificate_pem, wrap_pem_body};
-
-    #[test]
-    fn extracts_tak_enrollment_config_tag_values() {
-        let xml = "<tlsConfig><serverPort>8089</serverPort><enrollPath>/Marti/api/tls/signClient/v2</enrollPath></tlsConfig>";
-
-        assert_eq!(
-            extract_tag_value(xml, "serverPort").as_deref(),
-            Some("8089")
-        );
-        assert_eq!(
-            extract_tag_value(xml, "enrollPath").as_deref(),
-            Some("/Marti/api/tls/signClient/v2")
-        );
-    }
-
-    #[test]
-    fn missing_config_tag_values_are_none_for_opentakserver_config() {
-        let xml =
-            "<tlsConfig><nameEntries><nameEntry name=\"OpenTAKServer\"/></nameEntries></tlsConfig>";
-
-        assert!(extract_tag_value(xml, "serverPort").is_none());
-        assert!(extract_tag_value(xml, "enrollPath").is_none());
-    }
-
-    #[test]
-    fn normalizes_base64_certificate_body_to_pem() {
-        let pem = normalize_certificate_pem("QUJDREVGRw==");
-
-        assert_eq!(
-            pem,
-            wrap_pem_body(
-                "QUJDREVGRw==",
-                "-----BEGIN CERTIFICATE-----",
-                "-----END CERTIFICATE-----"
-            )
-        );
-    }
-
-    #[test]
-    fn preserves_existing_certificate_pem() {
-        let pem = "-----BEGIN CERTIFICATE-----\nQUJDREVGRw==\n-----END CERTIFICATE-----\n";
-
-        assert_eq!(normalize_certificate_pem(pem), pem);
-    }
 }
