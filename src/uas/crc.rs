@@ -100,3 +100,70 @@ pub(crate) fn build_v2_packet(
     packet.push((crc >> 8) as u8);
     packet
 }
+
+#[cfg(test)]
+mod tests {
+    use super::{build_v1_packet, build_v2_packet, calculate_crc_extra, mavlink_crc, FieldSpec};
+
+    fn assert_packet_crc(packet: &[u8], crc_extra: u8) {
+        let checksum_offset = packet.len() - 2;
+        let expected = mavlink_crc(&packet[1..checksum_offset], crc_extra);
+        let actual = u16::from_le_bytes([packet[checksum_offset], packet[checksum_offset + 1]]);
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn crc_extra_is_deterministic_for_scalar_and_array_fields() {
+        let fields = [
+            FieldSpec {
+                ty: "uint32_t",
+                name: "time_boot_ms",
+                array_len: 0,
+            },
+            FieldSpec {
+                ty: "char",
+                name: "name",
+                array_len: 16,
+            },
+        ];
+
+        let first = calculate_crc_extra("ARMATAK_TEST", &fields);
+        let second = calculate_crc_extra("ARMATAK_TEST", &fields);
+        let no_fields = calculate_crc_extra("ARMATAK_TEST", &[]);
+
+        assert_eq!(first, second);
+        assert_ne!(first, no_fields);
+    }
+
+    #[test]
+    fn builds_valid_mavlink_v1_packet() {
+        let payload = [0x10, 0x20, 0x30];
+        let packet = build_v1_packet(7, 9, 42, &payload, 77);
+
+        assert_eq!(packet[0], 0xFE);
+        assert_eq!(packet[1], payload.len() as u8);
+        assert_eq!(packet[3], 7);
+        assert_eq!(packet[4], 9);
+        assert_eq!(packet[5], 42);
+        assert_eq!(&packet[6..9], &payload);
+        assert_eq!(packet.len(), payload.len() + 8);
+        assert_packet_crc(&packet, 77);
+    }
+
+    #[test]
+    fn builds_valid_mavlink_v2_packet_with_three_byte_message_id() {
+        let payload = [0xAA, 0xBB];
+        let packet = build_v2_packet(11, 13, 0x01_02_03, &payload, 99);
+
+        assert_eq!(packet[0], 0xFD);
+        assert_eq!(packet[1], payload.len() as u8);
+        assert_eq!(packet[2], 0);
+        assert_eq!(packet[3], 0);
+        assert_eq!(packet[5], 11);
+        assert_eq!(packet[6], 13);
+        assert_eq!(&packet[7..10], &[0x03, 0x02, 0x01]);
+        assert_eq!(&packet[10..12], &payload);
+        assert_eq!(packet.len(), payload.len() + 12);
+        assert_packet_crc(&packet, 99);
+    }
+}
