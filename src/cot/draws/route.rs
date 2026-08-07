@@ -155,11 +155,12 @@ mod tests {
 
     #[test]
     fn parses_route_payload_clamps_interval_and_serializes_attributes() {
-        let payload = RoutePayload::from_arma(
-            r#"["route<&","-30.1,-51.2,10;-30.2,-51.3,20","Route<&",600,-1,0.5,"Driving<&","Primary<&","Infil<&",0]"#
+        let mut payload = RoutePayload::from_arma(
+            r#"["route<&","","Route<&",600,-1,0.5,"Driving<&","Primary<&","Infil<&",0]"#
                 .to_string(),
         )
         .expect("route payload should parse");
+        payload.points = "-30.1,-51.2,10;-30.2,-51.3,20".to_string();
 
         assert_eq!(payload.checkpoint_interval, 1);
         assert_eq!(payload.stale_seconds, 600);
