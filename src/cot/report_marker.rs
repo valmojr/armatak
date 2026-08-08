@@ -61,3 +61,37 @@ impl ReportMarkerCoTPayload {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::ReportMarkerCoTPayload;
+    use arma_rs::FromArma;
+
+    #[test]
+    fn parses_report_marker_and_maps_type_remarks_and_stale_time() {
+        let payload = ReportMarkerCoTPayload::from_arma(
+            r#"["report-1","b-m-p-s-p-i",-30.1,-51.2,42.0,"SPOTREP",900,"Observed vehicle"]"#
+                .to_string(),
+        )
+        .expect("report marker should parse");
+
+        assert_eq!(payload.uuid, "report-1");
+        assert_eq!(payload.r#type, "b-m-p-s-p-i");
+        assert_eq!(payload.stale_seconds, 900);
+        assert_eq!(payload.remarks, "Observed vehicle");
+
+        let cot = payload.to_cot();
+        assert_eq!(cot.uuid.as_deref(), Some("report-1"));
+        assert_eq!(cot.r#type.as_deref(), Some("b-m-p-s-p-i"));
+        assert_eq!(cot.point_lat, -30.1);
+        assert_eq!(cot.point_lon, -51.2);
+        assert_eq!(cot.point_hae, 42.0);
+        assert_eq!(cot.contact_callsign, "SPOTREP");
+        assert_eq!(cot.remarker.as_deref(), Some("Observed vehicle"));
+        assert_eq!(cot.stale_seconds, Some(900));
+        assert!(cot.group_name.is_none());
+        assert!(cot.track_course.is_none());
+        assert!(cot.link_uid.is_none());
+        assert!(cot.video_url.is_none());
+    }
+}

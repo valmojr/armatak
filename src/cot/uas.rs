@@ -328,3 +328,131 @@ impl UasSensorCoTPayload {
         xml
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::{
+        escape_xml, parse_rtsp_url, UasPlatformCoTPayload, UasSensorCoTPayload,
+        UasVideoCoTPayload,
+    };
+    use arma_rs::FromArma;
+
+    #[test]
+    fn escapes_uas_xml_values_and_parses_rtsp_components() {
+        assert_eq!(escape_xml("A&B\"<C>'"), "A&amp;B&quot;&lt;C&gt;&apos;");
+        assert_eq!(
+            parse_rtsp_url("rtsp://video.example.test:8554/live/main"),
+            Some((
+                "video.example.test".to_string(),
+                "8554".to_string(),
+                "/live/main".to_string(),
+            ))
+        );
+        assert!(parse_rtsp_url("https://video.example.test:8554/live").is_none());
+        assert!(parse_rtsp_url("rtsp://video.example.test:8554").is_none());
+        assert!(parse_rtsp_url("rtsp://video.example.test/live").is_none());
+    }
+
+    #[test]
+    fn parses_and_serializes_uas_platform_with_embedded_video_url() {
+        let payload = UasPlatformCoTPayload::from_arma(
+            r#"["uas<&","a-f-A-M-F-Q","Falcon<&",-30.1,-51.2,100,180,12.5,90,-15,60,40,1200,181,2.5,1.5,3.2,"Quad<&|armatak_video_url=rtsp://video.example.test:8554/live",1,"operator<&"]"#
+                .to_string(),
+        )
+        .expect("UAS platform payload should parse");
+
+        assert_eq!(payload.uid, "uas<&");
+        assert_eq!(payload.vehicle_type_tag, "Quad<&|armatak_video_url=rtsp://video.example.test:8554/live");
+
+        let xml = payload.to_xml();
+        assert!(xml.contains("uid=\"uas&lt;&amp;\""));
+        assert!(xml.contains("typeTag=\"Quad&lt;&amp;\""));
+        assert!(xml.contains("isFlying=\"true\""));
+        assert!(xml.contains("<track course=\"180\" slope=\"0.0\" speed=\"12.5\"/>"));
+        assert!(xml.contains("<sensor elevation=\"-15\" vfov=\"40\""));
+        assert!(xml.contains("<attitude roll=\"1.5\" pitch=\"2.5\" yaw=\"181\"/>"));
+        assert!(xml.contains("<_route sender=\"operator&lt;&amp;\"/>"));
+        assert!(xml.contains("<ConnectionEntry protocol=\"rtsp\""));
+        assert!(xml.contains("address=\"video.example.test\""));
+        assert!(xml.contains("port=\"8554\""));
+        assert!(xml.contains("path=\"/live\""));
+    }
+
+    #[test]
+    fn serializes_uas_platform_without_video_as_explicit_empty_video_detail() {
+        let payload = UasPlatformCoTPayload {
+            uid: "uas-2".to_string(),
+            cot_type: "a-f-A-M-F-Q".to_string(),
+            callsign: "Raven".to_string(),
+            point_lat: 1.0,
+            point_lon: 2.0,
+            point_hae: 3.0,
+            track_course: 0,
+            track_speed: 0.0,
+            sensor_azimuth: 0,
+            sensor_elevation: 0,
+            sensor_fov: 30,
+            sensor_vfov: 20,
+            sensor_range: 100,
+            attitude_yaw: 0,
+            attitude_pitch: 0.0,
+            attitude_roll: 0.0,
+            hal: 1.0,
+            vehicle_type_tag: "Quadrotor".to_string(),
+            is_flying: 0,
+            link_uid: "operator-2".to_string(),
+        };
+
+        let xml = payload.to_xml();
+        assert!(xml.contains("typeTag=\"Quadrotor\""));
+        assert!(xml.contains("isFlying=\"false\""));
+        assert!(xml.contains("<__video></__video>"));
+    }
+
+    #[test]
+    fn parses_and_serializes_standalone_uas_video_event() {
+        let payload = UasVideoCoTPayload::from_arma(
+            r#"["video<&","Falcon<&","rtsp://video.example.test:8554/live/main"]"#
+                .to_string(),
+        )
+        .expect("UAS video payload should parse");
+
+        let xml = payload.to_xml();
+        assert!(xml.contains("type=\"b-i-v\""));
+        assert!(xml.contains("uid=\"video&lt;&amp;\""));
+        assert!(xml.contains("path=\"/live/main\""));
+        assert!(xml.contains("address=\"video.example.test\""));
+        assert!(xml.contains("port=\"8554\""));
+        assert!(xml.contains("alias=\"Falcon&lt;&amp;\""));
+    }
+
+    #[test]
+    fn rejects_invalid_uas_video_url() {
+        let payload = UasVideoCoTPayload {
+            uid: "video-2".to_string(),
+            callsign: "Raven".to_string(),
+            video_url: "https://video.example.test/live".to_string(),
+        };
+
+        assert_eq!(payload.to_xml(), "");
+    }
+
+    #[test]
+    fn parses_and_serializes_uas_sensor_event() {
+        let payload = UasSensorCoTPayload::from_arma(
+            r#"["sensor<&","video<&","Sensor<&",-30.1,-51.2,25,270,45,850]"#
+                .to_string(),
+        )
+        .expect("UAS sensor payload should parse");
+
+        let xml = payload.to_xml();
+        assert!(xml.contains("type=\"b-m-p-s-p-loc\""));
+        assert!(xml.contains("uid=\"sensor&lt;&amp;\""));
+        assert!(xml.contains("lat=\"-30.1\" lon=\"-51.2\" hae=\"25\""));
+        assert!(xml.contains("fov=\"45\""));
+        assert!(xml.contains("range=\"850\""));
+        assert!(xml.contains("azimuth=\"270\""));
+        assert!(xml.contains("<__video uid=\"video&lt;&amp;\"/>"));
+        assert!(xml.contains("<contact callsign=\"Sensor&lt;&amp;\"/>"));
+    }
+}

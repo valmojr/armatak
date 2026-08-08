@@ -62,3 +62,38 @@ impl EudCoTPayload {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::EudCoTPayload;
+    use arma_rs::FromArma;
+
+    #[test]
+    fn parses_eud_payload_and_maps_all_tactical_fields() {
+        let payload = EudCoTPayload::from_arma(
+            r#"["eud-1",-30.1,-51.2,75.0,"Falcon","Cyan","Team Member",90,4.5]"#
+                .to_string(),
+        )
+        .expect("EUD payload should parse");
+
+        assert_eq!(payload.uuid, "eud-1");
+        assert_eq!(payload.contact_callsign, "Falcon");
+        assert_eq!(payload.group_name, "Cyan");
+        assert_eq!(payload.group_role, "Team Member");
+
+        let cot = payload.to_cot();
+        assert_eq!(cot.uuid.as_deref(), Some("eud-1"));
+        assert_eq!(cot.point_lat, -30.1);
+        assert_eq!(cot.point_lon, -51.2);
+        assert_eq!(cot.point_hae, 75.0);
+        assert_eq!(cot.contact_callsign, "Falcon");
+        assert_eq!(cot.group_name.as_deref(), Some("Cyan"));
+        assert_eq!(cot.group_role.as_deref(), Some("Team Member"));
+        assert_eq!(cot.track_course, Some(90));
+        assert_eq!(cot.track_speed, Some(4.5));
+        assert!(cot.link_uid.is_none());
+        assert!(cot.remarker.is_none());
+        assert!(cot.video_url.is_none());
+        assert!(cot.stale_seconds.is_none());
+    }
+}

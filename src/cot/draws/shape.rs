@@ -315,3 +315,62 @@ fn escape_attr(value: &str) -> String {
         .replace('<', "&lt;")
         .replace('>', "&gt;")
 }
+
+#[cfg(test)]
+mod tests {
+    use super::{parse_points, DrawEllipsePayload, DrawLinksPayload};
+    use arma_rs::FromArma;
+
+    const NOW: &str = "2026-08-07T17:00:00.000Z";
+    const STALE: &str = "2026-08-07T18:00:00.000Z";
+
+    #[test]
+    fn parses_and_serializes_ellipse_shape_with_milsym() {
+        let payload = DrawEllipsePayload::from_arma(
+            r#"["ellipse<&","u-d-c-e",-30.1,-51.2,10,100,50,25,"Ellipse<&",600,-1,-1761607681,3,"SFGPUCI----K<&"]"#
+                .to_string(),
+        )
+        .expect("ellipse payload should parse");
+
+        assert_eq!(payload.uuid, "ellipse<&");
+        assert_eq!(payload.stale_seconds, 600);
+        assert_eq!(payload.major, 100.0);
+        assert_eq!(payload.minor, 50.0);
+
+        let xml = payload.to_xml(NOW, STALE);
+        assert!(xml.contains("uid=\"ellipse&lt;&amp;\" type=\"u-d-c-e\""));
+        assert!(xml.contains("<ellipse major=\"100\" minor=\"50\" angle=\"25\" />"));
+        assert!(xml.contains("<color>ffffffff</color>"));
+        assert!(xml.contains("<color>96ffffff</color>"));
+        assert!(xml.contains("<contact callsign=\"Ellipse&lt;&amp;\" />"));
+        assert!(xml.contains("<__milsym id=\"SFGPUCI----K&lt;&amp;\" />"));
+    }
+
+    #[test]
+    fn parses_and_serializes_closed_link_shape_without_milsym() {
+        let mut payload = DrawLinksPayload::from_arma(
+            r#"["shape<&","u-d-f",1,2,3,"","Polygon<&",300,-16777216,16777215,2,"dashed<&",true,""]"#
+                .to_string(),
+        )
+        .expect("link shape payload should parse");
+        payload.points = "1,2,3;4,5,6".to_string();
+
+        assert!(payload.closed);
+        assert_eq!(payload.stroke_style, "dashed<&");
+
+        let xml = payload.to_xml(NOW, STALE);
+        assert!(xml.contains("uid=\"shape&lt;&amp;\" type=\"u-d-f\""));
+        assert_eq!(xml.matches("<link point=\"1,2,3\" />").count(), 2);
+        assert_eq!(xml.matches("<link point=\"4,5,6\" />").count(), 1);
+        assert!(xml.contains("<strokeStyle value=\"dashed&lt;&amp;\" />"));
+        assert!(!xml.contains("<__milsym"));
+    }
+
+    #[test]
+    fn point_parser_drops_invalid_shape_points() {
+        let points = parse_points("1,2,3;missing;bad,2,3;4,bad,6;7,8,bad;9,10,11");
+        assert_eq!(points.len(), 2);
+        assert_eq!(points[0].lat, 1.0);
+        assert_eq!(points[1].lon, 10.0);
+    }
+}

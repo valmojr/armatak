@@ -145,3 +145,39 @@ impl MessageCot {
         xml
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::{MessageCot, MessagePayload};
+    use arma_rs::FromArma;
+
+    #[test]
+    fn parses_chat_payload_and_serializes_geochat_event() {
+        let payload = MessagePayload::from_arma(
+            r#"["Falcon","Operations Room","Message received",-30.1,-51.2,15.0,"sender-1"]"#
+                .to_string(),
+        )
+        .expect("chat payload should parse");
+
+        assert_eq!(payload.sender_callsign, "Falcon");
+        assert_eq!(payload.chatroom, "Operations Room");
+        assert_eq!(payload.message_text, "Message received");
+        assert_eq!(payload.sender_uid, "sender-1");
+
+        let cot = MessageCot::from_payload(payload);
+        let xml = cot.to_xml();
+
+        assert!(xml.starts_with("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"));
+        assert!(xml.contains("type=\"b-t-f\""));
+        assert!(xml.contains("uid=\"GeoChat.sender-1.Operations_Room."));
+        assert!(xml.contains("lat=\"-30.1\" lon=\"-51.2\" hae=\"15\""));
+        assert!(xml.contains("chatroom=\"Operations Room\""));
+        assert!(xml.contains("senderCallsign=\"Falcon\""));
+        assert!(xml.contains("<chatgrp uid0=\"sender-1\" uid1=\"Operations Room\" id=\"Operations Room\" />"));
+        assert!(xml.contains("<link uid=\"sender-1\" type=\"a-f-G-U-C\" relation=\"p-p\" />"));
+        assert!(xml.contains("<__serverdestination destinations=\"0.0.0.0:0:tcp:sender-1\" />"));
+        assert!(xml.contains("<remarks source=\"ARMATAK.sender-1\" to=\"Operations Room\""));
+        assert!(xml.contains(">Message received</remarks>"));
+        assert!(xml.ends_with("</detail></event>"));
+    }
+}

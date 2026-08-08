@@ -93,3 +93,99 @@ pub(crate) fn should_send_video_stream_information(video_uri: &str) -> bool {
         || trimmed.starts_with("mpegts://")
         || trimmed.starts_with("tcp://")
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const UUID: &str = "00112233-4455-6677-8899-aabbccddeeff";
+
+    #[test]
+    fn maps_arma_vehicle_types_to_mavlink_types() {
+        assert_eq!(map_vehicle_type(1), MAV_TYPE_FIXED_WING);
+        assert_eq!(map_vehicle_type(2), MAV_TYPE_QUADROTOR);
+        assert_eq!(map_vehicle_type(3), MAV_TYPE_HELICOPTER);
+        assert_eq!(map_vehicle_type(99), 99);
+    }
+
+    #[test]
+    fn normalizes_headings_to_zero_through_360() {
+        assert_eq!(normalize_heading_deg(0.0), 0.0);
+        assert_eq!(normalize_heading_deg(370.0), 10.0);
+        assert_eq!(normalize_heading_deg(-10.0), 350.0);
+        assert_eq!(normalize_heading_deg(720.0), 0.0);
+    }
+
+    #[test]
+    fn stable_system_id_is_deterministic_and_in_mavlink_range() {
+        let first = stable_system_id(UUID);
+        let second = stable_system_id(UUID);
+
+        assert_eq!(first, second);
+        assert!((1..=250).contains(&first));
+        assert!((1..=250).contains(&stable_system_id("")));
+    }
+
+    #[test]
+    fn stable_identity_trims_runtime_status_suffixes_and_falls_back_to_uuid() {
+        assert_eq!(stable_mavlink_identity(" Falcon ", UUID), "Falcon");
+        assert_eq!(stable_mavlink_identity("Falcon [ON]", UUID), "Falcon");
+        assert_eq!(stable_mavlink_identity("Falcon [OFF]", UUID), "Falcon");
+        assert_eq!(stable_mavlink_identity("   ", UUID), UUID);
+    }
+
+    #[test]
+    fn converts_uuid_to_fixed_binary_identifiers() {
+        assert_eq!(
+            uid64_from_uuid(UUID),
+            u64::from_le_bytes([0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77])
+        );
+
+        let uid2 = uid2_from_uuid(UUID);
+        assert_eq!(
+            &uid2[..16],
+            &[
+                0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb,
+                0xcc, 0xdd, 0xee, 0xff,
+            ]
+        );
+        let checksum = UUID
+            .as_bytes()
+            .iter()
+            .fold(0u16, |acc, value| acc.wrapping_add(*value as u16));
+        assert_eq!(&uid2[16..], &checksum.to_le_bytes());
+    }
+
+    #[test]
+    fn malformed_or_short_uuid_components_are_zero_filled() {
+        let invalid = uuid16("gg");
+        assert_eq!(invalid, [0; 16]);
+
+        let short = uuid16("01");
+        assert_eq!(short[0], 1);
+        assert!(short[1..].iter().all(|byte| *byte == 0));
+    }
+
+    #[test]
+    fn fixed_string_reserves_a_nul_terminator_and_handles_zero_length() {
+        assert_eq!(fixed_string::<5>("abcdef"), [b'a', b'b', b'c', b'd', 0]);
+        assert_eq!(fixed_string::<5>("ab"), [b'a', b'b', 0, 0, 0]);
+        assert_eq!(fixed_string::<0>("ab"), [0u8; 0]);
+    }
+
+    #[test]
+    fn identifies_supported_video_stream_schemes_case_insensitively() {
+        for uri in [
+            " RTSP://host/live ",
+            "rtp://host/live",
+            "udp://239.1.1.1:1234",
+            "mpegts://host/live",
+            "tcp://host:1234",
+        ] {
+            assert!(should_send_video_stream_information(uri), "{uri}");
+        }
+
+        assert!(!should_send_video_stream_information("https://host/live"));
+        assert!(!should_send_video_stream_information(""));
+    }
+}

@@ -122,3 +122,82 @@ impl CursorOverTime {
         return xml;
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::CursorOverTime;
+
+    fn minimal_marker() -> CursorOverTime {
+        CursorOverTime {
+            uuid: None,
+            r#type: None,
+            point_lat: -30.0,
+            point_lon: -51.0,
+            point_hae: 10.0,
+            point_ce: None,
+            point_le: None,
+            contact_callsign: "Falcon".to_string(),
+            group_name: None,
+            group_role: None,
+            track_course: None,
+            track_speed: None,
+            link_uid: None,
+            remarker: None,
+            video_url: None,
+            stale_seconds: None,
+        }
+    }
+
+    #[test]
+    fn serializes_minimal_marker_with_tak_defaults() {
+        let xml = minimal_marker().convert_to_xml();
+
+        assert!(xml.starts_with("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"));
+        assert!(xml.contains("<event type=\"a-f-G-U-C-I\" version=\"2.0\""));
+        assert!(xml.contains("<point ce=\"9999999\" le=\"9999999\" hae=\"10\" lat=\"-30\" lon=\"-51\" />"));
+        assert!(xml.contains("<contact callsign=\"Falcon\" />"));
+        assert!(xml.contains("<uid Droid=\"Falcon\"/>"));
+        assert!(!xml.contains("<link "));
+        assert!(!xml.contains("<track "));
+        assert!(!xml.contains("<__group "));
+        assert!(!xml.contains("<remarks>"));
+        assert!(!xml.contains("<__video>"));
+        assert!(xml.ends_with("</detail></event>"));
+    }
+
+    #[test]
+    fn serializes_all_optional_marker_details() {
+        let marker = CursorOverTime {
+            uuid: Some("marker-1".to_string()),
+            r#type: Some("a-f-G-U-C".to_string()),
+            point_lat: 1.25,
+            point_lon: 2.5,
+            point_hae: 100.0,
+            point_ce: Some(3.0),
+            point_le: Some(4.0),
+            contact_callsign: "Raven".to_string(),
+            group_name: Some("Cyan".to_string()),
+            group_role: Some("Team Member".to_string()),
+            track_course: Some(180),
+            track_speed: Some(12.5),
+            link_uid: Some("parent-1".to_string()),
+            remarker: Some("test remark".to_string()),
+            video_url: Some("rtsp://video.example.test:8554/live".to_string()),
+            stale_seconds: Some(0),
+        };
+
+        let xml = marker.convert_to_xml();
+
+        assert!(xml.contains("type=\"a-f-G-U-C\""));
+        assert!(xml.contains("uid=\"marker-1\""));
+        assert!(xml.contains("<point ce=\"3\" le=\"4\" hae=\"100\" lat=\"1.25\" lon=\"2.5\" />"));
+        assert!(xml.contains("<precisionlocation altsrc=\"DTED0\" />"));
+        assert!(xml.contains("<link uid=\"parent-1\" type=\"a-f-G-U-C\" relation=\"p-p\" />"));
+        assert!(xml.contains("<hideLabel />"));
+        assert!(xml.contains("<track course=\"180\" speed=\"12.5\" />"));
+        assert!(xml.contains("<status battery=\"89\" />"));
+        assert!(xml.contains("<__group name=\"Cyan\" role=\"Team Member\" />"));
+        assert!(xml.contains("<remarks>ARMATAK | test remark</remarks>"));
+        assert!(xml.contains("<ConnectionEntry protocol=\"rtsp\""));
+    }
+}
