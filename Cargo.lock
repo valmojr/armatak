@@ -80,6 +80,7 @@ dependencies = [
  "rustls",
  "rustls-pemfile",
  "serde",
+ "uas-cot",
  "uuid",
 ]
 
@@ -1114,6 +1115,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2b15c43186be67a4fd63bee50d0303afffcef381492ebe2c5d87f324e1b8815c"
 
 [[package]]
+name = "remoteid"
+version = "0.3.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "212a4b231e5b2a71fd5c1fb52a103d2ec345d1e55676a4508c866505b71a4807"
+
+[[package]]
 name = "reqwest"
 version = "0.12.28"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1673,6 +1680,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a68c24b707f02dd18f1e4ccceb9d49f2058c2fb86384ef9972592904d7a28867"
 dependencies = [
  "unsafe-any-ors",
+]
+
+[[package]]
+name = "uas-cot"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5b44248cded3d775c9d6907cf2ba1e9a7a72e4ab9c73cef3f3e9c46b48285461"
+dependencies = [
+ "remoteid",
 ]
 
 [[package]]
