@@ -11,6 +11,40 @@ fn escape_xml(value: &str) -> String {
         .replace('\'', "&apos;")
 }
 
+/// The MIL-STD-2525 affiliation letter in a CoT atom type `a-<x>-...`, or
+/// `'u'` (unknown) when the caller's string is not a valid atom type.
+fn uas_affiliation(raw: &str) -> char {
+    raw.split('-')
+        .nth(1)
+        .and_then(|s| s.chars().next())
+        .filter(|c| {
+            matches!(
+                c,
+                'p' | 'u' | 'a' | 'f' | 'n' | 's' | 'j' | 'k' | 'h' | 'o' | 'w'
+            )
+        })
+        .unwrap_or('u')
+}
+
+/// A valid UAS/drone CoT type for the platform marker. The caller passes
+/// `cot_type` straight from an Arma field, so a mistyped or non-UAS value
+/// would otherwise reach TAK clients verbatim. A UAS platform is an air
+/// track in the drone function (`a-<affiliation>-A-M-F-Q`); `uas-cot`'s
+/// `rid::aircraft_type` builds that canonical type, keeping only the
+/// affiliation the caller sent.
+fn canonical_uas_cot_type(raw: &str) -> String {
+    let affiliation = uas_affiliation(raw);
+    let canonical = uas_cot::rid::aircraft_type(
+        uas_cot::remoteid::UaType::HelicopterOrMultirotor,
+        affiliation,
+    );
+    if raw == canonical {
+        raw.to_string()
+    } else {
+        canonical
+    }
+}
+
 fn parse_rtsp_url(url: &str) -> Option<(String, String, String)> {
     let without_proto = url.strip_prefix("rtsp://")?;
     let slash_pos = without_proto.find('/')?;
@@ -119,7 +153,7 @@ impl FromArma for UasPlatformCoTPayload {
 impl UasPlatformCoTPayload {
     pub fn to_xml(&self) -> String {
         let uid = escape_xml(&self.uid);
-        let cot_type = escape_xml(&self.cot_type);
+        let cot_type = escape_xml(&canonical_uas_cot_type(&self.cot_type));
         let callsign = escape_xml(&self.callsign);
         let link_uid = escape_xml(&self.link_uid);
         let (vehicle_type_tag, video_url) =
@@ -326,5 +360,58 @@ impl UasSensorCoTPayload {
         xml.push_str("</detail>");
         xml.push_str("</event>");
         xml
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn payload(cot_type: &str) -> UasPlatformCoTPayload {
+        UasPlatformCoTPayload {
+            uid: "drone-1".into(),
+            cot_type: cot_type.into(),
+            callsign: "HAWK".into(),
+            point_lat: 45.0,
+            point_lon: -122.0,
+            point_hae: 100.0,
+            track_course: 0,
+            track_speed: 0.0,
+            sensor_azimuth: 0,
+            sensor_elevation: 0,
+            sensor_fov: 0,
+            sensor_vfov: 0,
+            sensor_range: 0,
+            attitude_yaw: 0,
+            attitude_pitch: 0.0,
+            attitude_roll: 0.0,
+            hal: 0.0,
+            vehicle_type_tag: String::new(),
+            is_flying: 1,
+            link_uid: "eud-1".into(),
+        }
+    }
+
+    #[test]
+    fn invalid_cot_type_is_replaced_with_a_valid_uas_type() {
+        // An Arma caller can pass anything in the cot_type field. Before this
+        // change it was emitted verbatim; now a non-UAS value is normalised
+        // to a valid drone air track and never reaches the TAK map as-is.
+        assert_eq!(canonical_uas_cot_type("DRONE1"), "a-u-A-M-F-Q");
+        assert_eq!(canonical_uas_cot_type(""), "a-u-A-M-F-Q");
+        // A ground/combat type is normalised to the drone air track, keeping
+        // the affiliation letter.
+        assert_eq!(canonical_uas_cot_type("a-h-G-U-C-F"), "a-h-A-M-F-Q");
+
+        let xml = payload("DRONE1").to_xml();
+        assert!(xml.contains("type=\"a-u-A-M-F-Q\""));
+        assert!(!xml.contains("type=\"DRONE1\""));
+    }
+
+    #[test]
+    fn valid_uas_type_is_kept() {
+        assert_eq!(canonical_uas_cot_type("a-f-A-M-F-Q"), "a-f-A-M-F-Q");
+        let xml = payload("a-f-A-M-F-Q").to_xml();
+        assert!(xml.contains("type=\"a-f-A-M-F-Q\""));
     }
 }

@@ -14,6 +14,7 @@ rcgen = { version = "0.13.2", default-features = false, features = ["crypto", "p
 rustls = "0.23.23"
 rustls-pemfile = "2.2.0"
 serde = { version = "1.0.210", features = ["derive"] }
+uas-cot = { version = "0.6.0", default-features = false, features = ["remoteid"] }
 
 [dependencies.uuid]
 version = "1.10.0"
